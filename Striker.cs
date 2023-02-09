@@ -11,10 +11,20 @@ namespace Stricker
     {
         public const int Height = 25;
         public const int Width = 40;
-		public string[,] Map = new string[Height, Width];
+		
+        //Ostacoli = "Obs"
+        //Nemico = "Enem"
+        //Player = "Pl"
+        //Empty = "E"
         public static void Main(string[] args)
         {
+            String[,] Map = new String[Height, Width];
+            Graphic.Initialize_Map(Map);
+            Graphic.Draw_Obstacles_Randomly(Map);
+            Graphic.Draw_Frame();
+            Graphic.Draw_Map(Map);
             Console.CursorVisible = false;
+            Console.ReadKey();
         }
 		static void Start()
 		{

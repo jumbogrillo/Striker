@@ -8,6 +8,9 @@ namespace Stricker
 {
 	internal class Graphic
 	{
+		public static int Width = Striker.Width;
+		public static int Height = Striker.Height;
+
 		const int Margin_Top = 3;
 		const int Margin_Left = Margin_Top * 2;
 		const int Min_num_obst = 6;
@@ -25,13 +28,57 @@ namespace Stricker
 			Console.ResetColor();
 		}
 
-		public static void Draw_People()
-		{
-
+		public static void Initialize_Map(String[,] map)
+        {
+			for (int i = 0; i < Height; i++)
+			{
+				for (int j = 0; j < Width; j++)
+				{
+					map[i, j] = "E";
+				}
+			}
 		}
 
-		public static void Draw_Frame(int width = Striker.Width, int height = Striker.Height, int margin_top = Margin_Top, int margin_left = Margin_Left)
+		public static void Draw_Map(String[,] map, ConsoleColor backGround = ConsoleColor.DarkGray, ConsoleColor enemy = ConsoleColor.Red, ConsoleColor player = ConsoleColor.DarkBlue, ConsoleColor obs = ConsoleColor.Gray)
 		{
+			Console.SetCursorPosition(Margin_Left +1 , Margin_Top +1 );
+            for (int i = 0; i < Height; i++)
+            {
+                for (int j = 0; j < Width; j++)
+                {
+                    if (map[i,j] == "E")
+                    {
+						Console.BackgroundColor = backGround;						
+						Console.Write("  ");
+						Console.ResetColor();
+                    }
+					else if (map[i, j] == "Pl")
+                    {
+						Console.BackgroundColor = player;
+						Console.Write("  ");
+						Console.ResetColor();
+					}
+					else if (map[i,j] == "Enem")
+                    {
+						Console.BackgroundColor = enemy;
+						Console.Write("  ");
+						Console.ResetColor();
+					}
+					else if (map[i,j] == "Obs")
+                    {
+						Console.BackgroundColor = obs;
+						Console.Write("  ");
+						Console.ResetColor();
+					}
+                }
+				Console.SetCursorPosition(Margin_Left + 1, Console.CursorTop + 1);
+            }
+		}
+
+		public static void Draw_Frame(int width = Striker.Width + 1, int height = Striker.Height + 2, int margin_top = Margin_Top, int margin_left = Margin_Left, ConsoleColor fore = ConsoleColor.DarkYellow, ConsoleColor back = ConsoleColor.DarkGray)
+		{
+			Console.BackgroundColor = back;
+			Console.ForegroundColor = fore;
 			width *= 2;
 			Console.SetCursorPosition(margin_left, margin_top);
 			Console.Write("╔");
@@ -60,14 +107,55 @@ namespace Stricker
 				Console.SetCursorPosition(margin_left + width - 1, margin_top + i);
 				Console.Write("║");
 			}
+			Console.ResetColor();
 		}
 
 		public static void Draw_Obstacles_Randomly(String[,] map, int min_num_obst = Min_num_obst, int max_num_obst = Max_num_obst)
 		{
+			Random Random = new Random();
+			int n_obs = Random.Next(min_num_obst, max_num_obst + 1);
 
+            for (int i = 0; i < n_obs; i++)
+            {
+				int x = Random.Next(0, Height - 1);
+				int y = Random.Next(0, Width - 1);
+				int n = Random.Next(0, 10);
+
+                for (int j = 0; j < n; j++)
+                {
+					int pos = Random.Next(0,10);
+                    switch (pos) 
+					{
+						case 1:
+							map[x, y] = "Obs";
+							break;
+						case 2:
+							map[x, y +1] = "Obs";
+							break;
+						case 3:
+							map[x, y +2] = "Obs";
+							break;
+						case 4:
+							map[x +1, y] = "Obs";
+							break;
+						case 5:
+							map[x + 1, y + 1] = "Obs";
+							break;
+						case 6:
+							map[x +1, y + 2] = "Obs";
+							break;
+						case 7:
+							map[x + 2, y] = "Obs";
+							break;
+						case 8:
+							map[x + 2, y + 1] = "Obs";
+							break;
+						case 9:
+							map[x +2 , y + 2] = "Obs";
+							break;
+					}
+                }
+            }
 		}
-
-		//era boolean
-		void Draw_Obstacle_sqr(String[,] map, int x, int y) { }
 	}
 }
