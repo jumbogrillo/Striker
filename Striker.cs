@@ -22,6 +22,7 @@ namespace Stricker
             Graphic.Draw_Obstacles_Randomly(Map);
             Graphic.Draw_Frame();
             Graphic.Draw_Map(Map);
+            Graphic.Draw_Score(0);
             Console.CursorVisible = false;
             Console.ReadKey();
 			Graphic.Draw_Frame();

@@ -117,8 +117,8 @@ namespace Stricker
 
             for (int i = 0; i < n_obs; i++)
             {
-				int x = Random.Next(0, Height - 1);
-				int y = Random.Next(0, Width - 1);
+				int x = Random.Next(0, Height - 2);
+				int y = Random.Next(0, Width - 2);
 				int n = Random.Next(0, 10);
 
                 for (int j = 0; j < n; j++)
@@ -156,6 +156,59 @@ namespace Stricker
 					}
                 }
             }
+		}
+
+		public static void Draw_Score(int score, ConsoleColor bg = ConsoleColor.White)
+        {
+			Console.SetCursorPosition( 30 + Width * 2, Margin_Top);
+
+			Console.BackgroundColor = bg;
+
+			int a = Console.CursorLeft;
+			int b = Console.CursorTop;
+
+			if (score % 10 == 0) bg = ConsoleColor.DarkYellow;
+
+			Draw_0(a,b);
+			Draw_0(a - 11, b);
+
+			//if(score < 10)
+			{
+
+            }
+        }
+
+		public static void Draw_0(int a , int b)
+        {
+			Console.SetCursorPosition(a,b);
+			Console.SetCursorPosition(Console.CursorLeft + 2, Console.CursorTop);
+			Console.Write("    ");
+
+			Console.SetCursorPosition(Console.CursorLeft, Console.CursorTop + 1);
+			Console.Write("  ");
+			Console.SetCursorPosition(Console.CursorLeft - 2, Console.CursorTop + 1);
+			Console.Write("  ");
+			Console.SetCursorPosition(Console.CursorLeft - 2, Console.CursorTop + 1);
+			Console.Write("  ");
+			Console.SetCursorPosition(Console.CursorLeft - 2, Console.CursorTop + 1);
+			Console.Write("  ");
+			Console.SetCursorPosition(Console.CursorLeft - 2, Console.CursorTop + 1);
+			Console.Write("  ");
+
+
+			Console.SetCursorPosition(Console.CursorLeft - 6, Console.CursorTop + 1);
+			Console.Write("    ");
+
+			Console.SetCursorPosition(a, b + 1);
+			Console.Write("  ");
+			Console.SetCursorPosition(Console.CursorLeft - 2, Console.CursorTop + 1);
+			Console.Write("  ");
+			Console.SetCursorPosition(Console.CursorLeft - 2, Console.CursorTop + 1);
+			Console.Write("  ");
+			Console.SetCursorPosition(Console.CursorLeft - 2, Console.CursorTop + 1);
+			Console.Write("  ");
+			Console.SetCursorPosition(Console.CursorLeft - 2, Console.CursorTop + 1);
+			Console.Write("  ");
 		}
 	}
 }
