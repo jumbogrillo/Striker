@@ -46,6 +46,7 @@
     <Compile Include="Graphic.cs" />
     <Compile Include="Music.cs" />
     <Compile Include="Player.cs" />
+    <Compile Include="Shoot.cs" />
     <Compile Include="Striker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

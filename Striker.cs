@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Threading;
 
 namespace Stricker
@@ -11,10 +7,18 @@ namespace Stricker
     {
         public const int Height = 25;
         public const int Width = 40;
-		public string[,] Map = new string[Height, Width];
+		public static string[,] Map = new string[Height, Width];
+		static bool Playing = true;
+		static Player player = new Player(Map, Height, Width, ConsoleColor.White);
         public static void Main(string[] args)
         {
             Console.CursorVisible = false;
+			Graphic.Draw_Frame();
+			while (Playing)
+			{
+				player.Move();
+			}
+			Console.ReadKey();
         }
 		static void Start()
 		{
