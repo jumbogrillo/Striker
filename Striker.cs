@@ -9,6 +9,8 @@ namespace Stricker
 {
     internal class Striker
     {
+        public const int Height = 25;
+        public const int Width = 40;
         public static void Main(string[] args)
         {
             Console.CursorVisible = false;

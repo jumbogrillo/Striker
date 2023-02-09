@@ -10,6 +10,8 @@ namespace Stricker
 	{
 		const int Margin_Top = 3;
 		const int Margin_Left = Margin_Top * 2;
+		const int Min_num_obst = 6;
+		const int Max_num_obst = 10;
 
 		public static void Rect(int x, int y, int width = 1, int height = 1, ConsoleColor bg = ConsoleColor.White)
 		{
@@ -28,7 +30,7 @@ namespace Stricker
 
 		}
 
-		public static void Draw_Frame(int width = 40, int height = 25, int margin_top = Margin_Top, int margin_left = Margin_Left)
+		public static void Draw_Frame(int width = Striker.Width, int height = Striker.Height, int margin_top = Margin_Top, int margin_left = Margin_Left)
 		{
 			width *= 2;
 			Console.SetCursorPosition(margin_left, margin_top);
@@ -59,5 +61,13 @@ namespace Stricker
 				Console.Write("║");
 			}
 		}
+
+		public static void Draw_Obstacles_Randomly(String[,] map, int min_num_obst = Min_num_obst, int max_num_obst = Max_num_obst)
+		{
+
+		}
+
+		//era boolean
+		void Draw_Obstacle_sqr(String[,] map, int x, int y) { }
 	}
 }
