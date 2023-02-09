@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Threading;
 
 namespace Stricker
@@ -16,6 +12,9 @@ namespace Stricker
         //Nemico = "Enem"
         //Player = "Pl"
         //Empty = "E"
+		public static string[,] Map = new string[Height, Width];
+		static bool Playing = true;
+		static Player player = new Player(Map, Height, Width, ConsoleColor.White);
         public static void Main(string[] args)
         {
             String[,] Map = new String[Height, Width];
@@ -25,6 +24,12 @@ namespace Stricker
             Graphic.Draw_Map(Map);
             Console.CursorVisible = false;
             Console.ReadKey();
+			Graphic.Draw_Frame();
+			while (Playing)
+			{
+				player.Move();
+			}
+			Console.ReadKey();
         }
 		static void Start()
 		{
