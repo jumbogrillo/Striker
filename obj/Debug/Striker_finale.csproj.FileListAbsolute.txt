@@ -13,3 +13,11 @@ C:\Users\Utente\Desktop\Striker_finale\obj\Debug\Striker_finale.csproj.AssemblyR
 C:\Users\Utente\Desktop\Striker_finale\obj\Debug\Striker_finale.csproj.CoreCompileInputs.cache
 C:\Users\Utente\Desktop\Striker_finale\obj\Debug\Striker_finale.exe
 C:\Users\Utente\Desktop\Striker_finale\obj\Debug\Striker_finale.pdb
+C:\Users\Marco\Desktop\Striker_finale\bin\Debug\Striker_finale.exe.config
+C:\Users\Marco\Desktop\Striker_finale\bin\Debug\Striker_finale.exe
+C:\Users\Marco\Desktop\Striker_finale\bin\Debug\Striker_finale.pdb
+C:\Users\Marco\Desktop\Striker_finale\obj\Debug\Striker_finale.csproj.AssemblyReference.cache
+C:\Users\Marco\Desktop\Striker_finale\obj\Debug\Striker_finale.csproj.SuggestedBindingRedirects.cache
+C:\Users\Marco\Desktop\Striker_finale\obj\Debug\Striker_finale.csproj.CoreCompileInputs.cache
+C:\Users\Marco\Desktop\Striker_finale\obj\Debug\Striker_finale.exe
+C:\Users\Marco\Desktop\Striker_finale\obj\Debug\Striker_finale.pdb

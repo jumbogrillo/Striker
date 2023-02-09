@@ -11,45 +11,49 @@ namespace Stricker
     {
         public const int Height = 25;
         public const int Width = 40;
+		public string[,] Map = new string[Height, Width];
         public static void Main(string[] args)
         {
             Console.CursorVisible = false;
-            Thread title = new Thread(Title);
-            title.Start();
-            Thread sottofondo = new Thread(Music.SoundTrack);
-            bool musica = false;
-            if (Console.ReadKey().Key != ConsoleKey.M)
-            {
-                sottofondo.Start();
-                musica = true;
-            }
-            title.Abort();
-            Console.ResetColor();
-
-            Console.Clear();
-            int indexmenu = 0;
-            bool next = false;
-            ConsoleKey input;
-            while (!next)
-            {
-                Console.SetCursorPosition(40, indexmenu);
-                Console.Clear();
-                Menu(indexmenu);
-                input = Console.ReadKey().Key;
-                if (input == ConsoleKey.UpArrow && indexmenu > 0)
-                {
-                    indexmenu--;
-                }
-                else if (input == ConsoleKey.DownArrow && indexmenu < 2)
-                {
-                    indexmenu++;
-                }
-                else if (input == ConsoleKey.Enter)
-                {
-                    next = true;
-                }
-            }
         }
+		static void Start()
+		{
+			Thread title = new Thread(Title);
+			title.Start();
+			Thread sottofondo = new Thread(Music.SoundTrack);
+			bool musica = false;
+			if (Console.ReadKey().Key != ConsoleKey.M)
+			{
+				sottofondo.Start();
+				musica = true;
+			}
+			title.Abort();
+			Console.ResetColor();
+
+			Console.Clear();
+			int indexmenu = 0;
+			bool next = false;
+			ConsoleKey input;
+			while (!next)
+			{
+				Console.SetCursorPosition(40, indexmenu);
+				Console.Clear();
+				Menu(indexmenu);
+				input = Console.ReadKey().Key;
+				if (input == ConsoleKey.UpArrow && indexmenu > 0)
+				{
+					indexmenu--;
+				}
+				else if (input == ConsoleKey.DownArrow && indexmenu < 2)
+				{
+					indexmenu++;
+				}
+				else if (input == ConsoleKey.Enter)
+				{
+					next = true;
+				}
+			}
+		}
         public static void Menu(int index)
         {
             Console.WriteLine(@"   
