@@ -21,3 +21,11 @@ C:\Users\Marco\Desktop\Striker_finale\obj\Debug\Striker_finale.csproj.SuggestedB
 C:\Users\Marco\Desktop\Striker_finale\obj\Debug\Striker_finale.csproj.CoreCompileInputs.cache
 C:\Users\Marco\Desktop\Striker_finale\obj\Debug\Striker_finale.exe
 C:\Users\Marco\Desktop\Striker_finale\obj\Debug\Striker_finale.pdb
+C:\Users\giaco\OneDrive\Documenti\GitHub\Striker_finale\bin\Debug\Striker_finale.exe.config
+C:\Users\giaco\OneDrive\Documenti\GitHub\Striker_finale\bin\Debug\Striker_finale.exe
+C:\Users\giaco\OneDrive\Documenti\GitHub\Striker_finale\bin\Debug\Striker_finale.pdb
+C:\Users\giaco\OneDrive\Documenti\GitHub\Striker_finale\obj\Debug\Striker_finale.csproj.AssemblyReference.cache
+C:\Users\giaco\OneDrive\Documenti\GitHub\Striker_finale\obj\Debug\Striker_finale.csproj.SuggestedBindingRedirects.cache
+C:\Users\giaco\OneDrive\Documenti\GitHub\Striker_finale\obj\Debug\Striker_finale.csproj.CoreCompileInputs.cache
+C:\Users\giaco\OneDrive\Documenti\GitHub\Striker_finale\obj\Debug\Striker_finale.exe
+C:\Users\giaco\OneDrive\Documenti\GitHub\Striker_finale\obj\Debug\Striker_finale.pdb
