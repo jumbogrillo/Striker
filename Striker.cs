@@ -14,6 +14,7 @@ namespace Stricker
         
         public static void Main(string[] args)
         {
+            //Console.SetWindowSize(200,200);
             Console.CursorVisible = false;
             Start();
             Console.Clear();
@@ -25,6 +26,7 @@ namespace Stricker
             Graphic.Draw_Score(0);
             Console.ReadKey();
 			Graphic.Draw_Frame();
+
 			while (Playing)
 			{
 				player.Move();
