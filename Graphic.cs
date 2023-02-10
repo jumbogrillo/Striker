@@ -513,5 +513,73 @@ namespace Stricker
 			Console.SetCursorPosition(Console.CursorLeft - 2, Console.CursorTop + 1);
 			Console.Write("  ");
 		}
+
+		public static void Draw_Life_Bar(int life)
+        {
+			int life_bar_width = Width - (Width % 5) - 4;
+			int margin_left_bar = Margin_Left + Convert.ToInt32((Width - life_bar_width) / 2);
+			int margin_top_bar = Margin_Top - 2;
+			int life_bar_unit = life_bar_width / 5;
+
+			Console.SetCursorPosition(margin_left_bar, margin_top_bar);
+			Console.BackgroundColor = ConsoleColor.Black;
+			for (int i = 0; i < life_bar_width * 2 + 3; i++)            
+			{
+				
+				Console.Write(" ");
+            }
+
+			Console.SetCursorPosition(margin_left_bar, margin_top_bar);
+
+            switch (life)
+            {
+				case 1:
+					Console.BackgroundColor = ConsoleColor.DarkRed;
+					break;
+				case 2:
+					Console.BackgroundColor = ConsoleColor.Red;
+					break;
+				case 3:
+					Console.BackgroundColor = ConsoleColor.DarkYellow;
+					break;
+				case 4:
+					Console.BackgroundColor = ConsoleColor.DarkGreen;
+					break;
+				case 5:
+					Console.BackgroundColor = ConsoleColor.Green;
+					break;
+			}
+
+            for (int i = 0; i < life; i++)
+            {
+                for (int j = 0; j < life_bar_unit; j++)
+                {
+					Console.Write("  ");
+                }
+				Console.Write(" ");
+            }
+
+			Console.ResetColor();
+
+			Console.SetCursorPosition(margin_left_bar - 1, margin_top_bar);
+			Console.Write("║");
+			Console.SetCursorPosition(margin_left_bar - 1, margin_top_bar-1);
+			Console.Write("╔");
+            for (int i = 0; i < life_bar_width * 2 + 2; i++)
+            {
+				Console.Write("═");
+            }
+			Console.Write("╗");
+			Console.SetCursorPosition(Console.CursorLeft - 1, Console.CursorTop + 1);
+			Console.Write("║");
+			Console.SetCursorPosition(margin_left_bar - 1, margin_top_bar + 1);
+			Console.Write("╚");
+			
+			for (int i = 0; i < life_bar_width * 2 + 2; i++)
+			{
+				Console.Write("═");
+			}
+			Console.Write("╝");
+		}
 	}
 }
