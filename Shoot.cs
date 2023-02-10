@@ -6,16 +6,17 @@ using System.Threading.Tasks;
 
 namespace Striker
 {
-	class Shoot
+	public class Shoot
 	{
 		public string Direction { get; set; }
+		public string Alliance { get; set; }
 		public int Speed { get; set; }
 		public int Damage { get; set; }
 		public string[,] Map { get; set; }
 		public int Width { get; set; }
 		public int Height { get; set; }
 		public int[] Position { get; set; }
-		public Shoot(string[,] map, int width, int height, int[] position, string direction, int speed, int damage)
+		public Shoot(string[,] map, int width, int height, int[] position, string direction, string alliance, int speed, int damage)
 		{
 			Direction = direction;
 			Speed = speed;

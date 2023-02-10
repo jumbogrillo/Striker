@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Striker_finale;
+using System;
+using System.Collections.Generic;
 using System.Threading;
 
 namespace Stricker
@@ -9,38 +11,40 @@ namespace Stricker
         public const int Width = 40;
         public static string[,] Map = new string[Height, Width];
         static bool Playing = true;
-        static Player player = new Player(Map, Height, Width, ConsoleColor.White);
+        static Player player = new Player(Map, Width, Height);
+		static List<Enemy> enemies = new List<Enemy>();
         static ConsoleColor PlayerColor = ConsoleColor.Red;
         
         public static void Main(string[] args)
         {
             Console.SetWindowPosition(0,0);
-            //Console.SetWindowSize(200,200);
+            Console.SetWindowSize(200,200);
             Console.CursorVisible = false;
-            Start();
-            Console.Clear();
+            //Start();
+            //Console.Clear();
             String[,] Map = new String[Height, Width];
             Graphic.Initialize_Map(Map);
             Graphic.Draw_Obstacles_Randomly(Map);
-            Graphic.Draw_Frame();
+            //Graphic.Draw_Frame();
             Graphic.Draw_Map(Map);
-            Graphic.Draw_Score(22);
+            //Graphic.Draw_Score(22);
             Graphic.Draw_Life_Bar(1);
-
+			/*
             int k = 5;
             while (true)
             {
                 Graphic.Draw_Life_Bar(k);
                 Console.ReadKey();
                 k--;
-            }
+            }*/
 
             Console.ReadKey();
 			Graphic.Draw_Frame();            
 
 			while (Playing)
 			{
-				player.Move();
+				Graphic.Draw_Map(Map);
+				player.Move(Map);
 			}
 			Console.ReadKey();
         }
