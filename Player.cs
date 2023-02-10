@@ -1,4 +1,5 @@
 ﻿using Striker;
+using Striker_finale;
 using System;
 using System.Collections.Generic;
 
@@ -6,57 +7,57 @@ namespace Stricker
 {
 	class Player
 	{
-		private int[] position = new int[2];
-		private ConsoleColor color;
-		private int score;
-		private int combo;
-		private int speed;
-		private int life;
-
-		public int[] Position { get => position; set => position = value; }
-		public ConsoleColor Color { get => color; set => color = value; }
-		public int Score { get => score; set => score = value; }
-		public int Combo { get => combo; set => combo = value; }
-		public int Speed { get => speed; set => speed = value; }
-		public int Life { get => life; set => life = value; }
-		public string[,] Map { get; set; }
+		public int[] Position { get; set; }
+		public int Score { get; set; }
+		public int Combo { get; set; }
+		public int Speed { get; set; }
+		public int Life { get; set; }
 		public int Width { get; set; }
 		public int Height { get; set; }
-		public List<Shoot> Shooting { get; set; } 
-		public Player(string[,] map, int width, int height, ConsoleColor bg)
+		public List<Shoot> Shots { get; set; } 
+		public Player(string[,] map, int width, int height)
 		{
-			Color = bg;
-			Map = map;
 			Width = width;
 			Height = height;
 			Position = new int[] { Width / 2, Height / 2 };
-			Map[Position[0], Position[1]] = "player";
-			Shooting = new List<Shoot>();
+			map[Position[0], Position[1]] = "Pl";
+			Shots = new List<Shoot>();
 		}
-		public void Move()
+		public void Move(string[,] map)
 		{
 			if (Console.KeyAvailable)
 			{
 				var key = Console.ReadKey(true).Key;
-				if (key == ConsoleKey.A | key == ConsoleKey.D | key == ConsoleKey.D | key == ConsoleKey.S) Map[Position[0], Position[1]] = "e";
-				if (key == ConsoleKey.A & Position[0] > 0) Position[0]--;
-				if (key == ConsoleKey.D & Position[0] < Width - 1) Position[0]++;
-				if (key == ConsoleKey.D & Position[1] > 0) Position[1]--;
-				if (key == ConsoleKey.S & Position[1] < Height - 1) Position[1]++;
-				if(key == ConsoleKey.LeftArrow)Shooting.Add(new Shoot(Map, Width, Height, Position, "left", 1, 1));
-				Map[Position[0], Position[1]] = "player";
+				if (key == ConsoleKey.A | key == ConsoleKey.D | key == ConsoleKey.W | key == ConsoleKey.S) map[Position[1], Position[0]] = "E";
+				if (key == ConsoleKey.A & Position[0] > 0) if (map[Position[1], Position[0] - 1] == "E") Position[0]--;
+				if (key == ConsoleKey.D & Position[0] < Width - 1) if (map[Position[1], Position[0] + 1] == "E") Position[0]++;
+				if (key == ConsoleKey.W & Position[1] > 0) if (map[Position[1] - 1, Position[0]] == "E") Position[1]--;
+				if (key == ConsoleKey.S & Position[1] < Height - 1) if (map[Position[1] + 1, Position[0]] == "E") Position[1]++;
+				if(key == ConsoleKey.LeftArrow) Shots.Add(new Shoot(map, Width, Height, Position, "left", "Pl", 1, 1));
+				map[Position[1], Position[0]] = "Pl";
 			}
 		}
-		public void UpdateShoot()
+		public void UpdateShots()
 		{
-			for(int i = 0; i < Shooting.Count; i++)
+			for(int i = 0; i < Shots.Count; i++)
 			{
-				string collision = Shooting[i].Collision();
-				if (collision == "e") Shooting[i].Update();
-				else if (collision == "obs" | collision == "wall" | collision == "enemy") Shooting.RemoveAt(i);
+				string collision = Shots[i].Collision();
+				if (collision == "E") Shots[i].Update();
+				else if (collision == "Obs" | collision == "wall" | collision == "Enem") Shots.RemoveAt(i);
 			}
 		}
+		public bool Hit(List<Enemy> enemies)
+		{
+			foreach(Enemy enemy in enemies)
+			{
+				if (Distance(enemy.Position[0], enemy.Position[1], Position[0], Position[1]) <= 1) return true;
+				foreach(Shoot shot in enemy.Shots)
+				{
+					
+				}
+			}
+			return false;
+		}
+		private int Distance(int x1, int y1, int x2, int y2) => (int)Math.Sqrt(Math.Pow(x1 - x2, 2) + Math.Pow(y1 - y2, 2));
 	}
-
-
 }
