@@ -98,7 +98,7 @@ namespace Stricker
                                 {
                                     colorindex--;
                                 }
-                                else if (input == ConsoleKey.DownArrow && colorindex < 2)
+                                else if (input == ConsoleKey.DownArrow && colorindex < 3)
                                 {
                                     colorindex++;
                                 }
@@ -123,12 +123,12 @@ namespace Stricker
         public static void Menu(int index)
         {
             Console.WriteLine(@"   
-                                                 _______.___________.______      __   __  ___  _______ .______      
-                                                /       |           |   _  \    |  | |  |/  / |   ____||   _  \     
-                                               |   (----`---|  |----|  |_)  |   |  | |  '  /  |  |__   |  |_)  |    
-                                                \   \       |  |    |      /    |  | |    <   |   __|  |      /     
-                                            .----)   |      |  |    |  |\  \----|  | |  .  \  |  |____ |  |\  \----.
-                                            |_______/       |__|    | _| `._____|__| |__|\__\ |_______|| _| `._____|");
+                                 _______.___________.______      __   __  ___  _______ .______      
+                                /       |           |   _  \    |  | |  |/  / |   ____||   _  \     
+                               |   (----`---|  |----|  |_)  |   |  | |  '  /  |  |__   |  |_)  |    
+                                \   \       |  |    |      /    |  | |    <   |   __|  |      /     
+                            .----)   |      |  |    |  |\  \----|  | |  .  \  |  |____ |  |\  \----.
+                            |_______/       |__|    | _| `._____|__| |__|\__\ |_______|| _| `._____|");
             Console.WriteLine();
             for (int i = 0; i < 3; i++)
             {
@@ -139,43 +139,33 @@ namespace Stricker
                 switch (i)
                 {
                     case 0:
-                        Console.WriteLine(@"    
-                                                                    ╔═══╗               
-                                                                    ║╔═╗║               
-                                                                    ║║ ╚╝╔╗╔══╗╔══╗╔══╗ 
-                                                                    ║║╔═╗╠╣║╔╗║║╔═╝╚ ╗║ 
-                                                                    ║╚╩═║║║║╚╝║║╚═╗║╚╝╚╗
-                                                                    ╚═══╝╚╝╚══╝╚══╝╚═══╝");
+            Console.WriteLine(@"    
+                        ╔═══╗               
+                        ║╔═╗║               
+                        ║║ ╚╝╔╗╔══╗╔══╗╔══╗ 
+                        ║║╔═╗╠╣║╔╗║║╔═╝╚ ╗║ 
+                        ║╚╩═║║║║╚╝║║╚═╗║╚╝╚╗
+                        ╚═══╝╚╝╚══╝╚══╝╚═══╝");
                         break;
                     case 1:
-                        Console.WriteLine(@"
-                                                    ╔═══╗    ╔╗                             ╔════╗             
-                                                    ║╔═╗║    ║║                             ║╔╗╔╗║             
-                                                    ║╚══╗╔══╗║║ ╔══╗╔═══╗╔╗╔══╗╔═╗ ╔══╗     ╚╝║║╚╝╔══╗╔╗╔╗╔══╗ 
-                                                    ╚══╗║║╔╗║║║ ║╔╗║╠══║║╠╣║╔╗║║╔╗╗╚ ╗║       ║║  ║╔╗║║╚╝║╚ ╗║ 
-                                                    ║╚═╝║║║═╣║╚╗║║═╣║║══╣║║║╚╝║║║║║║╚╝╚╗     ╔╝╚╗ ║║═╣║║║║║╚╝╚╗
-                                                    ╚═══╝╚══╝╚═╝╚══╝╚═══╝╚╝╚══╝╚╝╚╝╚═══╝     ╚══╝ ╚══╝╚╩╩╝╚═══╝
-                                                           
-                                                           
-");
-
-
-
+            Console.WriteLine(@"
+                        ╔═══╗    ╔╗                             ╔════╗             
+                        ║╔═╗║    ║║                             ║╔╗╔╗║             
+                        ║╚══╗╔══╗║║ ╔══╗╔═══╗╔╗╔══╗╔═╗ ╔══╗     ╚╝║║╚╝╔══╗╔╗╔╗╔══╗ 
+                        ╚══╗║║╔╗║║║ ║╔╗║╠══║║╠╣║╔╗║║╔╗╗╚ ╗║       ║║  ║╔╗║║╚╝║╚ ╗║ 
+                        ║╚═╝║║║═╣║╚╗║║═╣║║══╣║║║╚╝║║║║║║╚╝╚╗     ╔╝╚╗ ║║═╣║║║║║╚╝╚╗
+                        ╚═══╝╚══╝╚═╝╚══╝╚═══╝╚╝╚══╝╚╝╚╝╚═══╝     ╚══╝ ╚══╝╚╩╩╝╚═══╝");
 
                         break;
                     case 2:
-                        Console.WriteLine(@"
-                                                                        ╔═══╗          
-                                                                        ║╔══╝          
-                                                                        ║╚══╗╔══╗╔══╗╔╗
-                                                                        ║╔══╝║══╣║╔═╝╠╣
-                                                                        ║╚══╗╠══║║╚═╗║║
-                                                                        ╚═══╝╚══╝╚══╝╚╝
-
-
-
-");
-                        break;
+        Console.WriteLine(@"
+                        ╔═══╗          
+                        ║╔══╝          
+                        ║╚══╗╔══╗╔══╗╔╗
+                        ║╔══╝║══╣║╔═╝╠╣
+                        ║╚══╗╠══║║╚═╗║║
+                        ╚═══╝╚══╝╚══╝╚╝");
+            break;
                 }
                 Console.ResetColor();
             }
@@ -212,9 +202,7 @@ namespace Stricker
                 Console.ResetColor();
                 Console.SetCursorPosition(45, 9);
                 Console.Write(@"Premi un tasto per giocare");
-                Console.SetCursorPosition(45, 10);
-                Console.Write("(Full screen è consigliato)");
-                Console.SetCursorPosition(42, 12);
+                Console.SetCursorPosition(42, 10);
                 Console.Write("Premi M per giocare senza sonoro");
                 title_color++;
                 Thread.Sleep(100);
@@ -231,29 +219,76 @@ namespace Stricker
             {
                 if (i == index)
                 {
-                    Console.WriteLine("Seleziona il colore del tuo player:");
+                    Console.SetCursorPosition(36, 5);
+                    Console.WriteLine(@"
+        (~ _ | _ _ . _  _  _   .|   _ _ | _  _ _    _  _  _  .|  _|_   _    _  _  _ _ _  _  _  _  _ . _    
+        _)(/_|(/_/_|(_)| |(_|  ||  (_(_)|(_)| (/_  |_)(/_|   ||   ||_|(_)  |_)(/_| _\(_)| |(_|(_|(_||(_)...
+                                                   |                       |                   _| _|      ");
+
+                    if (i > 0)
+                    {
+                        Console.WriteLine(@"  
+                                                     /\ 
+                                                    |/\|");
+                    }
                     switch (i)
                     {
                         case 0:
                             Console.ForegroundColor = ConsoleColor.Red;
                             PlayerColor = ConsoleColor.Red;
-                            Console.WriteLine("Rosso");
+                            Console.WriteLine(@" 
+
+
+
+                                          _____
+                                         |  __ \                    
+                                         | |__) |___  ___ ___  ___  
+                                         |  _  // _ \/ __/ __|/ _ \ 
+                                         | | \ \ (_) \__ \__ \ (_) |
+                                         |_|  \_\___/|___/___/\___/");
                             break;
                         case 1:
                             Console.ForegroundColor = ConsoleColor.Yellow;
                             PlayerColor = ConsoleColor.Yellow;
-                            Console.WriteLine("Giallo");
+                            Console.WriteLine(@"  
+                                           _____ _       _ _       
+                                          / ____(_)     | | |      
+                                         | |  __ _  __ _| | | ___  
+                                         | | |_ | |/ _` | | |/ _ \ 
+                                         | |__| | | (_| | | | (_) |
+                                          \_____|_|\__,_|_|_|\___/");
                             break;
                         case 2:
                             Console.ForegroundColor = ConsoleColor.Blue;
                             PlayerColor = ConsoleColor.Blue;
-                            Console.WriteLine("Blu");
+                            Console.WriteLine(@"  
+                                                ____  _       
+                                                |  _ \| |      
+                                                | |_) | |_   _ 
+                                                |  _ <| | | | |
+                                                | |_) | | |_| |
+                                                |____/|_|\__,_|");
                             break;
                         case 3:
                             Console.ForegroundColor = ConsoleColor.Green;
                             PlayerColor = ConsoleColor.Green;
-                            Console.WriteLine("Verde");
+                            Console.WriteLine(@"
+                                         __      __          _      
+                                         \ \    / /         | |     
+                                          \ \  / /__ _ __ __| | ___ 
+                                           \ \/ / _ \ '__/ _` |/ _ \
+                                            \  /  __/ | | (_| |  __/
+                                             \/ \___|_|  \__,_|\___|");
                             break;
+                    }
+                    Console.ResetColor();
+                    if (i < 3)
+                    {
+                        Console.WriteLine(@"       
+
+
+                                                    |\/|
+                                                     \/ ");
                     }
 
                 }
