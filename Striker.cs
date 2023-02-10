@@ -7,12 +7,7 @@ namespace Stricker
     {
         public const int Height = 25;
         public const int Width = 40;
-<<<<<<< HEAD
-        public string[,] Map = new string[Height, Width];
         static ConsoleColor PlayerColor = ConsoleColor.Red;
-        public static void Main(string[] args)
-        {
-=======
 		
         //Ostacoli = "Obs"
         //Nemico = "Enem"
@@ -51,7 +46,6 @@ namespace Stricker
 			}
 			title.Abort();
 			Console.ResetColor();
->>>>>>> 2921f0c6671c9d138302c3f41e8ba08d2ee750aa
 
             Console.CursorVisible = false;
             Thread title = new Thread(Title);
