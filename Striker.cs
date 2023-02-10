@@ -7,29 +7,22 @@ namespace Stricker
     {
         public const int Height = 25;
         public const int Width = 40;
-<<<<<<< HEAD
-        public string[,] Map = new string[Height, Width];
+        public static string[,] Map = new string[Height, Width];
+        static bool Playing = true;
+        static Player player = new Player(Map, Height, Width, ConsoleColor.White);
         static ConsoleColor PlayerColor = ConsoleColor.Red;
+        
         public static void Main(string[] args)
         {
-=======
-		
-        //Ostacoli = "Obs"
-        //Nemico = "Enem"
-        //Player = "Pl"
-        //Empty = "E"
-		public static string[,] Map = new string[Height, Width];
-		static bool Playing = true;
-		static Player player = new Player(Map, Height, Width, ConsoleColor.White);
-        public static void Main(string[] args)
-        {
+            Console.CursorVisible = false;
+            Start();
+            Console.Clear();
             String[,] Map = new String[Height, Width];
             Graphic.Initialize_Map(Map);
             Graphic.Draw_Obstacles_Randomly(Map);
             Graphic.Draw_Frame();
             Graphic.Draw_Map(Map);
             Graphic.Draw_Score(0);
-            Console.CursorVisible = false;
             Console.ReadKey();
 			Graphic.Draw_Frame();
 			while (Playing)
@@ -51,20 +44,7 @@ namespace Stricker
 			}
 			title.Abort();
 			Console.ResetColor();
->>>>>>> 2921f0c6671c9d138302c3f41e8ba08d2ee750aa
-
             Console.CursorVisible = false;
-            Thread title = new Thread(Title);
-            title.Start();
-            Thread sottofondo = new Thread(Music.SoundTrack);
-            bool musica = false;
-            if (Console.ReadKey().Key != ConsoleKey.M)
-            {
-                sottofondo.Start();
-                musica = true;
-            }
-            title.Abort();
-            Console.ResetColor();
 
         Menu:
             int index = 0;
@@ -120,8 +100,7 @@ namespace Stricker
                                 Console.ResetColor();
                                 break;
                             case 2:
-                                backmenu = true;
-                                next = true;
+                                Environment.Exit(0);
                                 break;
                         }
                     }
