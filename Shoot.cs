@@ -25,11 +25,11 @@ namespace Striker
 			Width = width;
 			Height = height;
 			Position = position;
-			Map[Position[0], Position[1]] = "shoot";
+			Map[Position[0], Position[1]] = "Sh";
 		}
 		public void Update()
 		{
-			Map[Position[0], Position[1]] = "e";
+			Map[Position[0], Position[1]] = "E";
 			switch (Direction)
 			{
 				case "left": Position[0]--;break;
@@ -37,7 +37,7 @@ namespace Striker
 				case "up":Position[0]--;break;
 				case "down":Position[0]++;break;
 			}
-			Map[Position[0], Position[1]] = "shoot";
+			Map[Position[0], Position[1]] = "Sh";
 		}
 		public string Collision()
 		{

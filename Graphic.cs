@@ -74,7 +74,7 @@ namespace Stricker
                     {
 						Console.BackgroundColor = backGround;
 						Console.ForegroundColor = shoot;
-						Console.Write(" •");
+						Console.Write(" ·");
 						Console.ResetColor();
                     }
                 }

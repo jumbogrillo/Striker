@@ -17,26 +17,18 @@ namespace Stricker
         
         public static void Main(string[] args)
         {
-            Console.SetWindowPosition(0,0);
-            Console.SetWindowSize(200,200);
+            //Console.SetWindowPosition(0,0);
+            //Console.SetWindowSize(200,200);
             Console.CursorVisible = false;
-            //Start();
-            //Console.Clear();
+            Start();
+            Console.Clear();
             String[,] Map = new String[Height, Width];
             Graphic.Initialize_Map(Map);
+            Graphic.Draw_Score(0);
             Graphic.Draw_Obstacles_Randomly(Map);
             //Graphic.Draw_Frame();
             Graphic.Draw_Map(Map);
-            //Graphic.Draw_Score(22);
-            Graphic.Draw_Life_Bar(1);
-			/*
-            int k = 5;
-            while (true)
-            {
-                Graphic.Draw_Life_Bar(k);
-                Console.ReadKey();
-                k--;
-            }*/
+            Graphic.Draw_Life_Bar(5);
 
             Console.ReadKey();
 			Graphic.Draw_Frame();            
