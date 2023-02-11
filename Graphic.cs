@@ -39,7 +39,7 @@ namespace Stricker
 			}
 		}
 
-		public static void Draw_Map(String[,] map, ConsoleColor backGround = ConsoleColor.DarkGray, ConsoleColor enemy = ConsoleColor.Red, ConsoleColor player = ConsoleColor.DarkBlue, ConsoleColor obs = ConsoleColor.Gray)
+		public static void Draw_Map(String[,] map, ConsoleColor backGround = ConsoleColor.DarkGray, ConsoleColor enemy = ConsoleColor.Red, ConsoleColor player = ConsoleColor.DarkBlue, ConsoleColor obs = ConsoleColor.Gray, ConsoleColor shoot = ConsoleColor.White)
 		{
 			Console.SetCursorPosition(Margin_Left +1 , Margin_Top +1 );
             for (int i = 0; i < Height; i++)
@@ -70,6 +70,13 @@ namespace Stricker
 						Console.Write("  ");
 						Console.ResetColor();
 					}
+					else if (map[i,j] == "Sh")
+                    {
+						Console.BackgroundColor = backGround;
+						Console.ForegroundColor = shoot;
+						Console.Write(" •");
+						Console.ResetColor();
+                    }
                 }
 				Console.SetCursorPosition(Margin_Left + 1, Console.CursorTop + 1);
             }
