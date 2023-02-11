@@ -8,15 +8,17 @@ namespace Stricker
     internal class Striker
     {
         public const int Height = 25;
-        public const int Width = 40;
+        public const int Width = 40;        
         public static string[,] Map = new string[Height, Width];
         static bool Playing = true;
         static Player player = new Player(Map, Width, Height);
 		static List<Enemy> enemies = new List<Enemy>();
-        static ConsoleColor PlayerColor = ConsoleColor.Red;
+        static ConsoleColor PlayerColor = ConsoleColor.DarkBlue, EnemyColor = ConsoleColor.Red,
+            BGColor = ConsoleColor.DarkGray, ObsColor = ConsoleColor.Gray, ShColor = ConsoleColor.White;
         
         public static void Main(string[] args)
         {
+            int Life = 0, Score = 0;
             //Console.SetWindowPosition(0,0);
             //Console.SetWindowSize(200,200);
             Console.CursorVisible = false;
@@ -27,7 +29,7 @@ namespace Stricker
             Graphic.Draw_Score(0);
             Graphic.Draw_Obstacles_Randomly(Map);
             //Graphic.Draw_Frame();
-            Graphic.Draw_Map(Map);
+            Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);
             Graphic.Draw_Life_Bar(5);
 
             Console.ReadKey();
@@ -35,8 +37,10 @@ namespace Stricker
 
 			while (Playing)
 			{
-				Graphic.Draw_Map(Map);
-				player.Move(Map);
+				Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);
+                Graphic.Draw_Life_Bar(Life);
+                Graphic.Draw_Score(Score);
+                player.Move(Map);
 			}
 			Console.ReadKey();
         }
@@ -118,6 +122,7 @@ namespace Stricker
         }
         public static void Menu(int index)
         {
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.WriteLine(@"   
                                  _______.___________.______      __   __  ___  _______ .______      
                                 /       |           |   _  \    |  | |  |/  / |   ____||   _  \     
@@ -126,6 +131,7 @@ namespace Stricker
                             .----)   |      |  |    |  |\  \----|  | |  .  \  |  |____ |  |\  \----.
                             |_______/       |__|    | _| `._____|__| |__|\__\ |_______|| _| `._____|");
             Console.WriteLine();
+            Console.ResetColor();
             for (int i = 0; i < 3; i++)
             {
                 if (index == i)
@@ -230,8 +236,12 @@ namespace Stricker
                     switch (i)
                     {
                         case 0:
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            PlayerColor = ConsoleColor.Red;
+                            Console.ForegroundColor = ConsoleColor.DarkRed;
+                            PlayerColor = ConsoleColor.DarkRed;
+                            EnemyColor = ConsoleColor.DarkMagenta;
+                            BGColor = ConsoleColor.Gray;
+                            ObsColor = ConsoleColor.DarkGray;
+                            ShColor = ConsoleColor.Black;
                             Console.WriteLine(@" 
 
 
@@ -244,8 +254,12 @@ namespace Stricker
                                          |_|  \_\___/|___/___/\___/");
                             break;
                         case 1:
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            PlayerColor = ConsoleColor.Yellow;
+                            Console.ForegroundColor = ConsoleColor.DarkYellow;
+                            PlayerColor = ConsoleColor.DarkYellow;
+                            EnemyColor = ConsoleColor.Magenta;
+                            BGColor = ConsoleColor.DarkBlue;
+                            ObsColor = ConsoleColor.DarkCyan;
+                            ShColor = ConsoleColor.Black;
                             Console.WriteLine(@"  
                                            _____ _       _ _       
                                           / ____(_)     | | |      
@@ -255,8 +269,12 @@ namespace Stricker
                                           \_____|_|\__,_|_|_|\___/");
                             break;
                         case 2:
-                            Console.ForegroundColor = ConsoleColor.Blue;
-                            PlayerColor = ConsoleColor.Blue;
+                            Console.ForegroundColor = ConsoleColor.DarkBlue;
+                            PlayerColor = ConsoleColor.DarkBlue;
+                            EnemyColor = ConsoleColor.Red;
+                            BGColor = ConsoleColor.DarkGray;
+                            ObsColor = ConsoleColor.Gray;
+                            ShColor = ConsoleColor.White;
                             Console.WriteLine(@"  
                                                 ____  _       
                                                 |  _ \| |      
@@ -266,8 +284,12 @@ namespace Stricker
                                                 |____/|_|\__,_|");
                             break;
                         case 3:
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            PlayerColor = ConsoleColor.Green;
+                            Console.ForegroundColor = ConsoleColor.DarkGreen;
+                            PlayerColor = ConsoleColor.DarkGreen;
+                            EnemyColor = ConsoleColor.DarkMagenta;
+                            BGColor = ConsoleColor.DarkGray;
+                            ObsColor = ConsoleColor.DarkCyan;
+                            ShColor = ConsoleColor.Black;
                             Console.WriteLine(@"
                                          __      __          _      
                                          \ \    / /         | |     
