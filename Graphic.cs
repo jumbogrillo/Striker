@@ -13,8 +13,8 @@ namespace Stricker
 
 		const int Margin_Top = 3;
 		const int Margin_Left = Margin_Top * 2;
-		const int Min_num_obst = 6;
-		const int Max_num_obst = 10;
+		const int Min_num_obst = 20;
+		const int Max_num_obst = 70; // per rendere il gioco più spicy
 
 		public static void Rect(int x, int y, int width = 1, int height = 1, ConsoleColor bg = ConsoleColor.White)
 		{
@@ -183,7 +183,7 @@ namespace Stricker
 			int a = Console.CursorLeft;
 			int b = Console.CursorTop;
 
-			//if (score % 10 == 0) bg = ConsoleColor.DarkYellow;
+			if (score % 10 == 0) bg = ConsoleColor.DarkYellow;
 
 			String _score = score.ToString();
 
@@ -301,11 +301,6 @@ namespace Stricker
 				}
 			}
         }
-
-
-
-
-
 
 		static void Draw_0(int a, int b, ConsoleColor bg = ConsoleColor.White)
         {

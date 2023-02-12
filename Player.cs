@@ -56,7 +56,7 @@ namespace Stricker
 				{
 					if (collision == "Enem")
 					{
-						Score += 10 + Combo;
+						Score += 10 * (Combo + 1);
 						Combo++;
 						Graphic.Draw_Score(this.Score);
 						map[enemies[FindEnemy(enemies, Shots[i].Position)].Position[1], enemies[FindEnemy(enemies, Shots[i].Position)].Position[0]] = "E";

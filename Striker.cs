@@ -25,7 +25,7 @@ namespace Stricker
             Console.SetWindowSize(300,200);
             Console.CursorVisible = false;
             Music.TItle();
-            //Start();
+            Start();
             Console.Clear();
             
 			Graphic.Initialize_Map(Map);
@@ -37,7 +37,21 @@ namespace Stricker
 			while (player.Life > 0)
 			{
                 if (Time.ElapsedMilliseconds % 5000 < 100)enemies.Add(new Enemy(Map, Width, Height));
-				if (player.Hit(enemies))
+                if (player.Combo > 0)
+                {
+                    Console.SetCursorPosition(102,12);
+                    Console.Write($"Combo X{player.Combo}");
+                    if(player.Combo % 5 == 0 && player.Life < 5)
+                    {
+                        player.Life++;
+                        Console.Write("LIFE ++");
+                        Music.TItle();
+                        Thread.Sleep(3000);
+                        Console.SetCursorPosition(90, 16);
+                        Console.WriteLine(" ");
+                    }
+                }
+                if (player.Hit(enemies))
 				{
 					player.Life--;
 					Graphic.Draw_Life_Bar(player.Life);
