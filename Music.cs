@@ -30,5 +30,6 @@ namespace Stricker
             SoundPlayer sottofondo = new SoundPlayer(file);
             sottofondo.Play();
         }
+		public static void Sound(string file)=> new SoundPlayer($"{Directory.GetCurrentDirectory()}\\{file}.wav").Play();
     }
 }

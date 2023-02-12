@@ -2,6 +2,7 @@
 using Striker_finale;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Threading;
 
 namespace Stricker
@@ -11,7 +12,6 @@ namespace Stricker
 		public int[] Position { get; set; }
 		public int Score { get; set; }
 		public int Combo { get; set; }
-		public int Speed { get; set; }
 		public int Life { get; set; }
 		public int Width { get; set; }
 		public int Height { get; set; }
@@ -35,19 +35,36 @@ namespace Stricker
 				if (key == ConsoleKey.D & Position[0] < Width - 1) { if (map[Position[1], Position[0] + 1] == "E") Position[0]++; }
 				if (key == ConsoleKey.W & Position[1] > 0) { if (map[Position[1] - 1, Position[0]] == "E") Position[1]--; }
 				if (key == ConsoleKey.S & Position[1] < Height - 1) { if (map[Position[1] + 1, Position[0]] == "E") Position[1]++; }
-				if (key == ConsoleKey.LeftArrow) { Shots.Add(new Shoot(map, Width, Height, new int[] { Position[0], Position[1] }, "L", "Pl", 1, 1)); if (musica) { Music.Shoot(); } }
-				if (key == ConsoleKey.RightArrow) { Shots.Add(new Shoot(map, Width, Height, new int[] { Position[0], Position[1] }, "R", "Pl", 1, 1)); if (musica) { Music.Shoot(); } }
-				if (key == ConsoleKey.UpArrow) { Shots.Add(new Shoot(map, Width, Height, new int[] { Position[0], Position[1] }, "U", "Pl", 1, 1)); if (musica) { Music.Shoot(); } }
-				if (key == ConsoleKey.DownArrow) { Shots.Add(new Shoot(map, Width, Height, new int[] { Position[0], Position[1] }, "D", "Pl", 1, 1)); if (musica) { Music.Shoot(); } }
+				if (key == ConsoleKey.LeftArrow) { Shots.Add(new Shoot(map, Width, Height, new int[] { Position[0], Position[1] }, "L", "Pl", 20, 1)); if (musica) { Music.Shoot(); } }
+				if (key == ConsoleKey.RightArrow) { Shots.Add(new Shoot(map, Width, Height, new int[] { Position[0], Position[1] }, "R", "Pl", 2, 1)); if (musica) { Music.Shoot(); } }
+				if (key == ConsoleKey.UpArrow) { Shots.Add(new Shoot(map, Width, Height, new int[] { Position[0], Position[1] }, "U", "Pl", 100, 1)); if (musica) { Music.Shoot(); } }
+				if (key == ConsoleKey.DownArrow) { Shots.Add(new Shoot(map, Width, Height, new int[] { Position[0], Position[1] }, "D", "Pl", 20, 1)); if (musica) { Music.Shoot(); } }
 				map[Position[1], Position[0]] = "Pl";
 			}
 		}
-		public void UpdateShots()
+		private int FindEnemy(List<Enemy> enemies, int[] position)
+		{
+			for (int i = 0; i < enemies.Count; i++)
+				if (position[0] == enemies[i].Position[0] & position[1] == enemies[i].Position[1]) return i;
+			return 0;
+		}
+		public void UpdateShots(string[,] map, List<Enemy> enemies)
 		{
 			for (int i = 0; i < Shots.Count; i++)
 			{
 				string collision = Shots[i].Collision();
-				if (collision == "wall" | collision == "Enem" | collision == "Obs") Shots.RemoveAt(i);
+				if (collision == "wall" | collision == "Enem" | collision == "Obs")
+				{
+					if (collision == "Enem")
+					{
+						Score += 10 + Combo;
+						Combo++;
+						map[enemies[FindEnemy(enemies, Shots[i].Position)].Position[1], enemies[FindEnemy(enemies, Shots[i].Position)].Position[0]] = "E";
+						enemies.RemoveAt(FindEnemy(enemies, Shots[i].Position));
+					}
+					else Combo = 0;
+					Shots.RemoveAt(i);
+				}
 				else Shots[i].Update();
 			}
 		}
@@ -61,6 +78,6 @@ namespace Stricker
 			}
 			return false;
 		}
-		private int Distance(int x1, int y1, int x2, int y2) => (int)Math.Sqrt(Math.Pow(x1 - x2, 2) + Math.Pow(y1 - y2, 2));
+		public int Distance(int x1, int y1, int x2, int y2) => (int)Math.Sqrt(Math.Pow(x1 - x2, 2) + Math.Pow(y1 - y2, 2));
 	}
 }

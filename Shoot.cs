@@ -34,7 +34,7 @@ namespace Striker
 		}
 		public void Update()
 		{
-			if (Speed > Count) Count++;
+			if (10 / Speed > Count) Count++;
 			else
 			{
 				Count = 0;
@@ -51,8 +51,7 @@ namespace Striker
 				case "U": this.Position[1]--; break;
 				case "D": this.Position[1]++; break;
 			}
-			StateBeforeShot = Collision();
-			if(StateBeforeShot == "E")Map[Position[1], Position[0]] = "Sh";
+			if(Collision() == "E")Map[Position[1], Position[0]] = "Sh";
 		}
 		public string Collision()
 		{

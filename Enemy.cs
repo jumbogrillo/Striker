@@ -33,13 +33,53 @@ namespace Striker_finale
 		}
 		public void Move(string[,] map, Player player)
 		{
-			if (Math.Abs(Position[0] - player.Position[0]) > Math.Abs(Position[1] - player.Position[1]))// La distanza delle y è minore
+			map[Position[1], Position[0]] = "E";
+			// Segue il player
+			if (Math.Abs(this.Position[0] - player.Position[0]) > Math.Abs(this.Position[1] - player.Position[1]))AlignX(map, player);
+			else AlignY(map, player);
+			Shot(map, player);
+			map[Position[1], Position[0]] = "Enem";
+		}
+		private void AlignX(string[,] map, Player player)
+		{
+			if (player.Position[0] > this.Position[0])
 			{
-				if (Position[1] < player.Position[1] & Position[1] + 1 < Height & map[Position[1] + 1, Position[0]] == "E") Position[1]++;
-				else if (Position[1] > 0 & map[Position[1] - 1, Position[0]] == "E") Position[1]--;
+				if (this.Position[0] < Width - 1) if (map[this.Position[1], this.Position[0] + 1] == "E") this.Position[0]++;
 			}
-			else if (Position[0] < player.Position[0] & Position[0] + 1 < Width & map[Position[1], Position[0] - 1] == "E") Position[0]++;
-			else if (Position[0] > 0 & map[Position[1], Position[0] + 1] == "E") Position[0]--;
+			else
+			{
+				if (this.Position[0] > 0) if (map[this.Position[1], this.Position[0] - 1] == "E") this.Position[0]--;
+			}
+		} 
+		private void AlignY(string[,] map, Player player)
+		{
+
+			if (player.Position[1] > this.Position[1])
+			{
+				if (this.Position[1] < Height - 1) if (map[this.Position[1] + 1, this.Position[0]] == "E") this.Position[1]++;
+			}
+			else
+			{
+				if (this.Position[1] > 0) if (map[this.Position[1] - 1, this.Position[0]] == "E") this.Position[1]--;
+			}
+		}
+		private void Shot(string[,] map, Player player)
+		{
+			if (this.Position[0] == player.Position[0] | this.Position[1] == player.Position[1]) Shots.Add(new Shoot(map, Width, Height, new int[] { Position[0], Position[1] }, DirectionToShot(player), "Enem", 10, 1));
+		}
+		private string DirectionToShot(Player player)
+		{
+			if (this.Position[0] == player.Position[0])// Stessa x direzione o su o giù
+			{
+				if (this.Position[1] < player.Position[1]) return "D";
+				else return "U";
+			}
+			else if (this.Position[1] == player.Position[1])
+			{
+				if (this.Position[0] < player.Position[0]) return "R";
+				else return "L";
+			}
+			return "R";
 		}
 	}
 }

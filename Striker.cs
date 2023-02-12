@@ -25,7 +25,7 @@ namespace Stricker
             Console.SetWindowSize(300,200);
             Console.CursorVisible = false;
             Music.TItle();
-            Start();
+            //Start();
             Console.Clear();
             
 			Graphic.Initialize_Map(Map);
@@ -39,11 +39,13 @@ namespace Stricker
 				if (Time.ElapsedMilliseconds % 5000 < 100)enemies.Add(new Enemy(Map, Width, Height));
 				if (player.Hit(enemies))
 				{
+					player.Life--;
 					Graphic.Draw_Life_Bar(player.Life);
 					Graphic.Draw_Score(player.Score);
 				}
+				foreach(Enemy enemy in enemies)enemy.Move(Map, player);
 				Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);
-				player.UpdateShots();
+				player.UpdateShots(Map, enemies);
                 player.Move(Map, musica);
 			}
 			Console.ReadKey();
