@@ -1,6 +1,7 @@
 ﻿using Striker_finale;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
 
 namespace Stricker
@@ -8,37 +9,38 @@ namespace Stricker
     internal class Striker
     {
         public const int Height = 25;
-        public const int Width = 40;        
-        public static string[,] Map = new string[Height, Width];
-        static bool Playing = true;
-        static Player player = new Player(Map, Width, Height);
+        public const int Width = 40;
+		static Stopwatch Time = new Stopwatch();
+		static String[,] Map = new String[Height, Width];
+		static Player player = new Player(Map, Width, Height);
 		static List<Enemy> enemies = new List<Enemy>();
-        static ConsoleColor PlayerColor = ConsoleColor.DarkBlue, EnemyColor = ConsoleColor.Red,
+		static ConsoleColor PlayerColor = ConsoleColor.DarkBlue, EnemyColor = ConsoleColor.Red,
             BGColor = ConsoleColor.DarkGray, ObsColor = ConsoleColor.Gray, ShColor = ConsoleColor.White;
         
         public static void Main(string[] args)
         {
+			Time.Start();
             Console.SetWindowPosition(0,0);
             Console.SetWindowSize(300,200);
             Console.CursorVisible = false;
             Music.TItle();
             //Start();
             Console.Clear();
-            String[,] Map = new String[Height, Width];
-            Graphic.Initialize_Map(Map);
+            
+			Graphic.Initialize_Map(Map);
             Graphic.Draw_Obstacles_Randomly(Map);
             Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);
             //Graphic.Draw_Life_Bar(5);
-			Graphic.Draw_Frame();            
-
+			Graphic.Draw_Frame();
 			while (player.Life > 0)
 			{
-				Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);
+				if (Time.ElapsedMilliseconds % 5000 < 100)enemies.Add(new Enemy(Map, Width, Height));
 				if (player.Hit(enemies))
 				{
 					Graphic.Draw_Life_Bar(player.Life);
 					Graphic.Draw_Score(player.Score);
 				}
+				Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);
 				player.UpdateShots();
                 player.Move(Map);
 			}

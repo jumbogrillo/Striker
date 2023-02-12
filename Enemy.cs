@@ -25,8 +25,8 @@ namespace Striker_finale
 			do
 			{
 				vertical = new Random().Next(0, 2) == 1;
-				x = vertical ? new Random().Next(0, 2) * Width : new Random().Next(0, Width);
-				y = vertical ? new Random().Next(0, Height) * Height : new Random().Next(0, 2) * Height;
+				x = vertical ? new Random().Next(0, 2) * (Width - 1) : new Random().Next(0, Width);
+				y = vertical ? new Random().Next(0, Height) : new Random().Next(0, 2) * (Height - 1);
 			} while (map[y, x] != "E");
 			Position = new int[] { x, y };
 			map[y, x] = "Enem";
