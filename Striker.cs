@@ -21,11 +21,11 @@ namespace Stricker
         public static void Main(string[] args)
         {
 			Time.Start();
-            Console.SetWindowPosition(0,0);
-            Console.SetWindowSize(300,200);
+            //Console.SetWindowPosition(0,0);
+            //Console.SetWindowSize(300,200);
             Console.CursorVisible = false;
             Music.TItle();
-            //Start();
+            Start();
             Console.Clear();
             
 			Graphic.Initialize_Map(Map);
@@ -36,12 +36,12 @@ namespace Stricker
 			Graphic.Draw_Frame();
 			while (player.Life > 0)
 			{
-				if (Time.ElapsedMilliseconds % 5000 < 100)enemies.Add(new Enemy(Map, Width, Height));
+                Graphic.Draw_Score(player.Score);
+                if (Time.ElapsedMilliseconds % 5000 < 100)enemies.Add(new Enemy(Map, Width, Height));
 				if (player.Hit(enemies))
 				{
 					player.Life--;
 					Graphic.Draw_Life_Bar(player.Life);
-					Graphic.Draw_Score(player.Score);
 				}
 				foreach (Enemy enemy in enemies)
 				{
@@ -52,6 +52,7 @@ namespace Stricker
 				player.UpdateShots(Map, enemies);
                 player.Move(Map, musica);
 			}
+            
 			Console.ReadKey();
         }
 		static void Start()
