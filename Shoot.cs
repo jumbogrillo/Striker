@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Stricker;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Striker
@@ -16,6 +18,8 @@ namespace Striker
 		public int Width { get; set; }
 		public int Height { get; set; }
 		public int[] Position { get; set; }
+		public string StateBeforeShot { get; set; }
+		public int Count { get; set; }
 		public Shoot(string[,] map, int width, int height, int[] position, string direction, string alliance, int speed, int damage)
 		{
 			Direction = direction;
@@ -25,24 +29,35 @@ namespace Striker
 			Width = width;
 			Height = height;
 			Position = position;
-			Map[Position[0], Position[1]] = "Sh";
+			Alliance = alliance;
+			StateBeforeShot = Map[position[1], position[0]];
 		}
 		public void Update()
 		{
-			Map[Position[0], Position[1]] = "E";
+			if (Speed > Count) Count++;
+			else
+			{
+				Count = 0;
+				Move();
+			}
+		}
+		public void Move()
+		{
+			if( Map[Position[1], Position[0]] == "Sh") Map[Position[1], Position[0]] = "E";
 			switch (Direction)
 			{
-				case "left": Position[0]--;break;
-				case "right":Position[0]++;break;
-				case "up":Position[0]--;break;
-				case "down":Position[0]++;break;
+				case "L": this.Position[0]--; break;
+				case "R": this.Position[0]++; break;
+				case "U": this.Position[1]--; break;
+				case "D": this.Position[1]++; break;
 			}
-			Map[Position[0], Position[1]] = "Sh";
+			StateBeforeShot = Collision();
+			if(StateBeforeShot == "E")Map[Position[1], Position[0]] = "Sh";
 		}
 		public string Collision()
 		{
 			if (Position[0] < 0 | Position[1] < 0 | Position[0] >= Width | Position[1] >= Height) return "wall";
-			return Map[Position[0], Position[1]];
+			return Map[Position[1], Position[0]];
 		}
 	}
 }

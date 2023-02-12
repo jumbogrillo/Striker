@@ -18,27 +18,28 @@ namespace Stricker
         
         public static void Main(string[] args)
         {
-            int Life = 0, Score = 0;
-            //Console.SetWindowPosition(0,0);
-            //Console.SetWindowSize(200,200);
+            Console.SetWindowPosition(0,0);
+            Console.SetWindowSize(300,200);
             Console.CursorVisible = false;
             Music.TItle();
-            Start();
+            //Start();
             Console.Clear();
             String[,] Map = new String[Height, Width];
             Graphic.Initialize_Map(Map);
-            Graphic.Draw_Score(0);
             Graphic.Draw_Obstacles_Randomly(Map);
-            //Graphic.Draw_Frame();
             Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);
-            Graphic.Draw_Life_Bar(5);
+            //Graphic.Draw_Life_Bar(5);
 			Graphic.Draw_Frame();            
 
-			while (Playing)
+			while (player.Life > 0)
 			{
 				Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);
-                Graphic.Draw_Life_Bar(Life);
-                Graphic.Draw_Score(Score);
+				if (player.Hit(enemies))
+				{
+					Graphic.Draw_Life_Bar(player.Life);
+					Graphic.Draw_Score(player.Score);
+				}
+				player.UpdateShots();
                 player.Move(Map);
 			}
 			Console.ReadKey();
