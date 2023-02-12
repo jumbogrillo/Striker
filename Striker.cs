@@ -22,6 +22,7 @@ namespace Stricker
             //Console.SetWindowPosition(0,0);
             //Console.SetWindowSize(200,200);
             Console.CursorVisible = false;
+            Music.TItle();
             Start();
             Console.Clear();
             String[,] Map = new String[Height, Width];
@@ -31,8 +32,6 @@ namespace Stricker
             //Graphic.Draw_Frame();
             Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);
             Graphic.Draw_Life_Bar(5);
-
-            Console.ReadKey();
 			Graphic.Draw_Frame();            
 
 			while (Playing)
@@ -49,12 +48,62 @@ namespace Stricker
 			Thread title = new Thread(Title);
 			title.Start();
 			Thread sottofondo = new Thread(Music.SoundTrack);
-			bool musica = false;
-			if (Console.ReadKey().Key != ConsoleKey.M)
-			{
-				sottofondo.Start();
-				musica = true;
-			}
+			bool musica = true;
+            ConsoleKey startinput;
+            bool startchoose = false;
+            while (!startchoose)
+            {
+                startinput = Console.ReadKey(false).Key;
+                if (startinput == ConsoleKey.M)
+                {
+                    if (!musica)
+                    {
+                        musica = true;
+                        Console.SetCursorPosition(30, 14);
+                        Console.ForegroundColor = ConsoleColor.DarkYellow;
+                        Console.Write(@"           
+           .=%@@.       .:    
+         -#@@@@@.       #@%:  
+      :*@@@@@@@@.   .*+  =@@- 
++++++%@@@@@@@@@@.    +@@: :@@:
+@@@@@@@@@@@@@@@@.-@#. =@@  *@#
+@@@@@@@@@@@@@@@@. *@*  @@- -@@
+@@@@@@@@@@@@@@@@..%@= .@@: =@%
+@@@@@@@@@@@@@@@@..+- .#@*  %@+
+     =#@@@@@@@@@.   .@@+  *@% 
+       .+%@@@@@@.    .  :%@#  
+          :*@@@@.       *#-   ");
+                    }
+                    else
+                    {
+                        musica = false;
+                        Console.SetCursorPosition(30, 14);
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write(@"  
+   :%+               .     
+   .*@+    .+%-       :+@#:   
+     .*@+.+@%@+   .#*-   +@*  
+       =*@*.=@+    .=%%-  -@# 
+#%%%%%@%:.*@*+= .*=   *@-  =@+
+@%         .*@+. -%@.  %@   @@
+@%          :+*@+.=@-  *@.  %@
+@%=====:    =@+.*@*=  .@%   @%
+-=====+@#-  =@+  .*@+.#%.  *@:
+        =%%=+@+    =*@*.  *@= 
+          -#@@=   .#*-  :+@#:  
+             ");
+                    }
+                    
+                }
+                else
+                {
+                    if (musica)
+                    {
+                        Music.SoundTrack();
+                    }
+                    startchoose = true;
+                }
+            }
 			title.Abort();
 			Console.ResetColor();
             Console.CursorVisible = false;
@@ -70,7 +119,7 @@ namespace Stricker
                 Console.SetCursorPosition(40, index);
                 Console.Clear();
                 Menu(index);
-                input = Console.ReadKey().Key;
+                input = Console.ReadKey(false).Key;
                 if (input == ConsoleKey.UpArrow && index > 0)
                 {
                     index--;
@@ -176,12 +225,13 @@ namespace Stricker
         {
             //TITLE LOGO
             int title_color = 0;
+            Console.ForegroundColor= ConsoleColor.Yellow;
             while (true)
             {
                 Console.SetCursorPosition(0, 0);
                 if (title_color == 0)
                 {
-                    Console.ForegroundColor = ConsoleColor.DarkGray;
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
                 }
 
                 Console.WriteLine($@" 
@@ -206,8 +256,9 @@ namespace Stricker
                 Console.Write(@"Premi un tasto per giocare");
                 Console.SetCursorPosition(42, 10);
                 Console.Write("Premi M per giocare senza sonoro");
+                Console.ForegroundColor = ConsoleColor.Yellow;
                 title_color++;
-                Thread.Sleep(100);
+                Thread.Sleep(200);
                 if (title_color == 2)
                 {
                     title_color = 0;
@@ -236,22 +287,22 @@ namespace Stricker
                     switch (i)
                     {
                         case 0:
-                            Console.ForegroundColor = ConsoleColor.DarkRed;
-                            PlayerColor = ConsoleColor.DarkRed;
-                            EnemyColor = ConsoleColor.DarkMagenta;
-                            BGColor = ConsoleColor.Gray;
-                            ObsColor = ConsoleColor.DarkGray;
-                            ShColor = ConsoleColor.Black;
-                            Console.WriteLine(@" 
+                            Console.ForegroundColor = ConsoleColor.DarkBlue;
+                            PlayerColor = ConsoleColor.DarkBlue;
+                            EnemyColor = ConsoleColor.Red;
+                            BGColor = ConsoleColor.DarkGray;
+                            ObsColor = ConsoleColor.Gray;
+                            ShColor = ConsoleColor.White;
+                            Console.WriteLine(@"
 
 
 
-                                          _____
-                                         |  __ \                    
-                                         | |__) |___  ___ ___  ___  
-                                         |  _  // _ \/ __/ __|/ _ \ 
-                                         | | \ \ (_) \__ \__ \ (_) |
-                                         |_|  \_\___/|___/___/\___/");
+                                               ____  _       
+                                              |  _ \| |      
+                                              | |_) | |_   _ 
+                                              |  _ <| | | | |
+                                              | |_) | | |_| |
+                                              |____/|_|\__,_| ");
                             break;
                         case 1:
                             Console.ForegroundColor = ConsoleColor.DarkYellow;
@@ -269,20 +320,21 @@ namespace Stricker
                                           \_____|_|\__,_|_|_|\___/");
                             break;
                         case 2:
-                            Console.ForegroundColor = ConsoleColor.DarkBlue;
-                            PlayerColor = ConsoleColor.DarkBlue;
-                            EnemyColor = ConsoleColor.Red;
-                            BGColor = ConsoleColor.DarkGray;
-                            ObsColor = ConsoleColor.Gray;
-                            ShColor = ConsoleColor.White;
-                            Console.WriteLine(@"  
-                                                ____  _       
-                                                |  _ \| |      
-                                                | |_) | |_   _ 
-                                                |  _ <| | | | |
-                                                | |_) | | |_| |
-                                                |____/|_|\__,_|");
+                            Console.ForegroundColor = ConsoleColor.DarkRed;
+                            PlayerColor = ConsoleColor.DarkRed;
+                            EnemyColor = ConsoleColor.DarkMagenta;
+                            BGColor = ConsoleColor.Gray;
+                            ObsColor = ConsoleColor.DarkGray;
+                            ShColor = ConsoleColor.Black;
+                            Console.WriteLine(@" 
+                                          _____
+                                         |  __ \                    
+                                         | |__) |___  ___ ___  ___  
+                                         |  _  // _ \/ __/ __|/ _ \ 
+                                         | | \ \ (_) \__ \__ \ (_) |
+                                         |_|  \_\___/|___/___/\___/");
                             break;
+                           
                         case 3:
                             Console.ForegroundColor = ConsoleColor.DarkGreen;
                             PlayerColor = ConsoleColor.DarkGreen;
@@ -305,8 +357,8 @@ namespace Stricker
                         Console.WriteLine(@"       
 
 
-                                                    |\/|
-                                                     \/ ");
+                                                   |\/|
+                                                    \/ ");
                     }
 
                 }
