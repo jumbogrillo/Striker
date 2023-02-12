@@ -43,7 +43,11 @@ namespace Stricker
 					Graphic.Draw_Life_Bar(player.Life);
 					Graphic.Draw_Score(player.Score);
 				}
-				foreach(Enemy enemy in enemies)enemy.Move(Map, player);
+				foreach (Enemy enemy in enemies)
+				{
+					enemy.Update(Map, player);
+					enemy.UpdateShots(Map);
+				}
 				Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);
 				player.UpdateShots(Map, enemies);
                 player.Move(Map, musica);

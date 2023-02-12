@@ -10,8 +10,12 @@ namespace Striker_finale
 {
 	class Enemy : Player
 	{
+		public int Speed { get; set; }
+		private int Count { get; set; }
 		public Enemy(string[,] map, int width, int height) : base(map, width, height)
 		{
+			Count = 0;
+			Speed = 2;
 			Position = new int[2];
 			Shots = new List<Shoot>();
 			Width = width;
@@ -30,6 +34,15 @@ namespace Striker_finale
 			} while (map[y, x] != "E");
 			Position = new int[] { x, y };
 			map[y, x] = "Enem";
+		}
+		public void Update(string[,] map, Player player)
+		{
+			if (10 / Speed > Count) Count++;
+			else
+			{
+				Count = 0;
+				Move(map, player);
+			}
 		}
 		public void Move(string[,] map, Player player)
 		{
@@ -80,6 +93,18 @@ namespace Striker_finale
 				else return "L";
 			}
 			return "R";
+		}
+		public void UpdateShots(string[,] map)
+		{
+			for (int i = 0; i < Shots.Count; i++)
+			{
+				string collision = Shots[i].Collision();
+				if (collision == "wall" | collision == "Pl" | collision == "Obs")
+				{
+					Shots.RemoveAt(i);
+				}
+				else Shots[i].Update();
+			}
 		}
 	}
 }
