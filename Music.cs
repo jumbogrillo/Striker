@@ -24,5 +24,11 @@ namespace Stricker
             SoundPlayer sottofondo = new SoundPlayer(file); 
             sottofondo.Play();
         }
+        public static void Shoot()
+        {
+            var file = cartella + "\\src\\shoot.wav";
+            SoundPlayer sottofondo = new SoundPlayer(file);
+            sottofondo.Play();
+        }
     }
 }

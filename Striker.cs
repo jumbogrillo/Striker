@@ -6,11 +6,12 @@ using System.Threading;
 
 namespace Stricker
 {
-    internal class Striker
+    public class Striker
     {
         public const int Height = 25;
         public const int Width = 40;
-		static Stopwatch Time = new Stopwatch();
+        static bool musica = true;
+        static Stopwatch Time = new Stopwatch();
 		static String[,] Map = new String[Height, Width];
 		static Player player = new Player(Map, Width, Height);
 		static List<Enemy> enemies = new List<Enemy>();
@@ -19,39 +20,45 @@ namespace Stricker
         
         public static void Main(string[] args)
         {
-			Time.Start();
-            Console.SetWindowPosition(0,0);
-            Console.SetWindowSize(300,200);
+            //Console.SetWindowPosition(0,0);
+            //Console.SetWindowSize(300,200);
             Console.CursorVisible = false;
             Music.TItle();
-            //Start();
+            Start();
             Console.Clear();
-            
-			Graphic.Initialize_Map(Map);
+            String[,] Map = new String[Height, Width];
+            Graphic.Initialize_Map(Map);
             Graphic.Draw_Obstacles_Randomly(Map);
             Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);
-            //Graphic.Draw_Life_Bar(5);
+            Graphic.Draw_Life_Bar(5);
+            Graphic.Draw_Score(player.Score);
 			Graphic.Draw_Frame();
 			while (player.Life > 0)
 			{
-				if (Time.ElapsedMilliseconds % 5000 < 100)enemies.Add(new Enemy(Map, Width, Height));
+				Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);
 				if (player.Hit(enemies))
 				{
-					Graphic.Draw_Life_Bar(player.Life);
+                    Graphic.Draw_Life_Bar(player.Life);
 					Graphic.Draw_Score(player.Score);
 				}
 				Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);
 				player.UpdateShots();
-                player.Move(Map);
+                player.Move(Map, musica);
 			}
-			Console.ReadKey();
+            GameOverScreen();
+            var info = new System.Diagnostics.ProcessStartInfo(Environment.GetCommandLineArgs()[0]);
+            System.Diagnostics.Process.Start(info);
+            //Console.ReadKey();
         }
-		static void Start()
+		static void Start(bool menu = false)
 		{
+            if (menu)
+            {
+                goto Menu;
+            }
 			Thread title = new Thread(Title);
 			title.Start();
 			Thread sottofondo = new Thread(Music.SoundTrack);
-			bool musica = true;
             ConsoleKey startinput;
             bool startchoose = false;
             while (!startchoose)
@@ -102,7 +109,7 @@ namespace Stricker
                 {
                     if (musica)
                     {
-                        Music.SoundTrack();
+                        sottofondo.Start();
                     }
                     startchoose = true;
                 }
@@ -366,6 +373,24 @@ namespace Stricker
 
                 }
             }
+        }
+        public static void GameOverScreen()
+        {
+            Console.Clear();
+            Console.WriteLine(@" 
+                  _______      ___      .___  ___.  _______      ______   ____    ____  _______ .______      
+                 /  _____|    /   \     |   \/   | |   ____|    /  __  \  \   \  /   / |   ____||   _  \     
+                |  |  __     /  ^  \    |  \  /  | |  |__      |  |  |  |  \   \/   /  |  |__   |  |_)  |    
+                |  | |_ |   /  /_\  \   |  |\/|  | |   __|     |  |  |  |   \      /   |   __|  |      /     
+                |  |__| |  /  _____  \  |  |  |  | |  |____    |  `--'  |    \    /    |  |____ |  |\  \----.
+                 \______| /__/     \__\ |__|  |__| |_______|    \______/      \__/     |_______|| _| `._____|");
+            Console.WriteLine("Premi un tasto per terminare...");
+            Console.WriteLine("Premi G per ricaricare il gioco...");
+            if(Console.ReadKey().Key != ConsoleKey.G)
+            {
+                Environment.Exit(0);
+            }
+            
         }
     }
 }
