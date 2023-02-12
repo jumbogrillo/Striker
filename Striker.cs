@@ -10,6 +10,7 @@ namespace Stricker
     {
         public const int Height = 25;
         public const int Width = 40;
+        public static bool musica = true;
 		static Stopwatch Time = new Stopwatch();
 		static String[,] Map = new String[Height, Width];
 		static Player player = new Player(Map, Width, Height);
@@ -24,13 +25,14 @@ namespace Stricker
             Console.SetWindowSize(300,200);
             Console.CursorVisible = false;
             Music.TItle();
-            //Start();
+            Start();
             Console.Clear();
             
 			Graphic.Initialize_Map(Map);
             Graphic.Draw_Obstacles_Randomly(Map);
             Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);
-            //Graphic.Draw_Life_Bar(5);
+            Graphic.Draw_Life_Bar(5);
+            Graphic.Draw_Score(player.Score);   
 			Graphic.Draw_Frame();
 			while (player.Life > 0)
 			{
@@ -42,7 +44,7 @@ namespace Stricker
 				}
 				Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);
 				player.UpdateShots();
-                player.Move(Map);
+                player.Move(Map, musica);
 			}
 			Console.ReadKey();
         }

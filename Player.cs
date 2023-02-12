@@ -25,7 +25,7 @@ namespace Stricker
 			map[Position[1], Position[0]] = "Pl";
 			Shots = new List<Shoot>();
 		}
-		public void Move(string[,] map)
+		public void Move(string[,] map, bool musica)
 		{
 			if (Console.KeyAvailable)
 			{
@@ -35,10 +35,10 @@ namespace Stricker
 				if (key == ConsoleKey.D & Position[0] < Width - 1) { if (map[Position[1], Position[0] + 1] == "E") Position[0]++; }
 				if (key == ConsoleKey.W & Position[1] > 0) { if (map[Position[1] - 1, Position[0]] == "E") Position[1]--; }
 				if (key == ConsoleKey.S & Position[1] < Height - 1) { if (map[Position[1] + 1, Position[0]] == "E") Position[1]++; }
-				if (key == ConsoleKey.LeftArrow) { Shots.Add(new Shoot(map, Width, Height, new int[] { Position[0], Position[1]}, "L", "Pl", 1, 1)); }
-				if (key == ConsoleKey.RightArrow) { Shots.Add(new Shoot(map, Width, Height, new int[] {Position[0], Position[1]}, "R", "Pl", 1, 1)); }
-				if (key == ConsoleKey.UpArrow) { Shots.Add(new Shoot(map, Width, Height, new int[] {Position[0], Position[1]}, "U", "Pl", 1, 1)); }
-				if (key == ConsoleKey.DownArrow) { Shots.Add(new Shoot(map, Width, Height, new int[] {Position[0], Position[1]}, "D", "Pl", 1, 1)); }
+				if (key == ConsoleKey.LeftArrow) { Shots.Add(new Shoot(map, Width, Height, new int[] { Position[0], Position[1] }, "L", "Pl", 1, 1)); if (musica) { Music.Shoot(); } }
+				if (key == ConsoleKey.RightArrow) { Shots.Add(new Shoot(map, Width, Height, new int[] { Position[0], Position[1] }, "R", "Pl", 1, 1)); if (musica) { Music.Shoot(); } }
+				if (key == ConsoleKey.UpArrow) { Shots.Add(new Shoot(map, Width, Height, new int[] { Position[0], Position[1] }, "U", "Pl", 1, 1)); if (musica) { Music.Shoot(); } }
+				if (key == ConsoleKey.DownArrow) { Shots.Add(new Shoot(map, Width, Height, new int[] { Position[0], Position[1] }, "D", "Pl", 1, 1)); if (musica) { Music.Shoot(); } }
 				map[Position[1], Position[0]] = "Pl";
 			}
 		}
