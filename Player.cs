@@ -22,7 +22,6 @@ namespace Stricker
 			Height = height;
 			Life = 5;
 			Position = new int[] { Width / 2, Height / 2 };
-			map[Position[1], Position[0]] = "Pl";
 			Shots = new List<Shoot>();
 		}
 		public void Move(string[,] map, bool musica)
@@ -36,8 +35,8 @@ namespace Stricker
 				if (key == ConsoleKey.W & Position[1] > 0) { if (map[Position[1] - 1, Position[0]] == "E") Position[1]--; }
 				if (key == ConsoleKey.S & Position[1] < Height - 1) { if (map[Position[1] + 1, Position[0]] == "E") Position[1]++; }
 				if (key == ConsoleKey.LeftArrow) { Shots.Add(new Shoot(map, Width, Height, new int[] { Position[0], Position[1] }, "L", "Pl", 20, 1)); if (musica) { Music.Shoot(); } }
-				if (key == ConsoleKey.RightArrow) { Shots.Add(new Shoot(map, Width, Height, new int[] { Position[0], Position[1] }, "R", "Pl", 2, 1)); if (musica) { Music.Shoot(); } }
-				if (key == ConsoleKey.UpArrow) { Shots.Add(new Shoot(map, Width, Height, new int[] { Position[0], Position[1] }, "U", "Pl", 100, 1)); if (musica) { Music.Shoot(); } }
+				if (key == ConsoleKey.RightArrow) { Shots.Add(new Shoot(map, Width, Height, new int[] { Position[0], Position[1] }, "R", "Pl", 20, 1)); if (musica) { Music.Shoot(); } }
+				if (key == ConsoleKey.UpArrow) { Shots.Add(new Shoot(map, Width, Height, new int[] { Position[0], Position[1] }, "U", "Pl", 20, 1)); if (musica) { Music.Shoot(); } }
 				if (key == ConsoleKey.DownArrow) { Shots.Add(new Shoot(map, Width, Height, new int[] { Position[0], Position[1] }, "D", "Pl", 20, 1)); if (musica) { Music.Shoot(); } }
 				map[Position[1], Position[0]] = "Pl";
 			}
@@ -59,7 +58,9 @@ namespace Stricker
 					{
 						Score += 10 + Combo;
 						Combo++;
+						Graphic.Draw_Score(this.Score);
 						map[enemies[FindEnemy(enemies, Shots[i].Position)].Position[1], enemies[FindEnemy(enemies, Shots[i].Position)].Position[0]] = "E";
+						enemies[FindEnemy(enemies, Shots[i].Position)].DeleteAllShotBeforeDeath(map);
 						enemies.RemoveAt(FindEnemy(enemies, Shots[i].Position));
 					}
 					else Combo = 0;

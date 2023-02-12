@@ -2,6 +2,7 @@
 using Striker;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -79,6 +80,11 @@ namespace Striker_finale
 		private void Shot(string[,] map, Player player)
 		{
 			if (this.Position[0] == player.Position[0] | this.Position[1] == player.Position[1]) Shots.Add(new Shoot(map, Width, Height, new int[] { Position[0], Position[1] }, DirectionToShot(player), "Enem", 10, 1));
+		}
+		public void DeleteAllShotBeforeDeath(string[,] map)
+		{
+			for(int i = 0; i < Shots.Count; i++)map[Shots[i].Position[1], Shots[i].Position[0]] = "E";
+			for (int i = 0; i < Shots.Count; i++) Shots.RemoveAt(0);
 		}
 		private string DirectionToShot(Player player)
 		{
