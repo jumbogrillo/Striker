@@ -183,7 +183,7 @@ namespace Stricker
 			int a = Console.CursorLeft;
 			int b = Console.CursorTop;
 
-			if (score % 10 == 0) bg = ConsoleColor.DarkYellow;
+			//if (score % 10 == 0) bg = ConsoleColor.DarkYellow;
 
 			String _score = score.ToString();
 

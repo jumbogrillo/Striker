@@ -49,7 +49,7 @@ namespace Striker_finale
 		{
 			map[Position[1], Position[0]] = "E";
 			// Segue il player
-			if (Math.Abs(this.Position[0] - player.Position[0]) > Math.Abs(this.Position[1] - player.Position[1]))AlignX(map, player);
+			if (Math.Abs(this.Position[0] - player.Position[0]) > Math.Abs(this.Position[1] - player.Position[1])) AlignX(map, player);
 			else AlignY(map, player);
 			Shot(map, player);
 			map[Position[1], Position[0]] = "Enem";

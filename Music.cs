@@ -12,7 +12,7 @@ namespace Stricker
     public class Music
     {
         static string cartella = Directory.GetCurrentDirectory();
-        public static void TItle()
+        public static void Title()
         {
             var file = cartella + "\\src\\smb_coin.wav";
             SoundPlayer sottofondo = new SoundPlayer(file);

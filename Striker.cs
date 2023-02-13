@@ -24,8 +24,9 @@ namespace Stricker
             Console.SetWindowPosition(0,0);
             Console.SetWindowSize(300,200);
             Console.CursorVisible = false;
-            Music.TItle();
+            Music.Title();
             Start();
+            Console.ReadKey();
             Console.Clear();
             
 			Graphic.Initialize_Map(Map);
@@ -39,14 +40,14 @@ namespace Stricker
                 if (Time.ElapsedMilliseconds % 5000 < 100)enemies.Add(new Enemy(Map, Width, Height));
                 if (player.Combo > 0)
                 {
-                    Console.SetCursorPosition(102,12);
+                    Console.SetCursorPosition(102, 12);
                     Console.Write($"Combo X{player.Combo}");
-                    if(player.Combo % 5 == 0 && player.Life < 5)
+                    if (player.Combo % 5 == 0 && player.Life < 5)
                     {
                         player.Life++;
-                        Console.Write("LIFE ++");
-                        Music.TItle();
-                        Thread.Sleep(3000);
+                        player.Combo++;
+                        Graphic.Draw_Life_Bar(player.Life);
+                        Music.Title();
                         Console.SetCursorPosition(90, 16);
                         Console.WriteLine(" ");
                     }
@@ -248,13 +249,13 @@ namespace Stricker
         }
         public static void Title()
         {
-            //TITLE LOGO
-            int title_color = 0;
+            //Title LOGO
+            int Title_color = 0;
             Console.ForegroundColor= ConsoleColor.Yellow;
             while (true)
             {
                 Console.SetCursorPosition(0, 0);
-                if (title_color == 0)
+                if (Title_color == 0)
                 {
                     Console.ForegroundColor = ConsoleColor.DarkYellow;
                 }
@@ -282,11 +283,11 @@ namespace Stricker
                 Console.SetCursorPosition(42, 10);
                 Console.Write("Premi M per giocare senza sonoro");
                 Console.ForegroundColor = ConsoleColor.Yellow;
-                title_color++;
+                Title_color++;
                 Thread.Sleep(200);
-                if (title_color == 2)
+                if (Title_color == 2)
                 {
-                    title_color = 0;
+                    Title_color = 0;
                 }
             }
         }
