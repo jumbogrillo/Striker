@@ -219,6 +219,7 @@ namespace Stricker
         }
         public static void Menu(int index)
         {
+            Console.Clear();
             Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.WriteLine(@"   
                                  _______.___________.______      __   __  ___  _______ .______      
@@ -355,9 +356,9 @@ namespace Stricker
                         case 1:
                             Console.ForegroundColor = ConsoleColor.DarkYellow;
                             PlayerColor = ConsoleColor.DarkYellow;
-                            EnemyColor = ConsoleColor.Magenta;
+                            EnemyColor = ConsoleColor.Gray;
                             BGColor = ConsoleColor.DarkBlue;
-                            ObsColor = ConsoleColor.DarkCyan;
+                            ObsColor = ConsoleColor.DarkGray;
                             ShColor = ConsoleColor.Black;
                             Console.WriteLine(@"  
                                            _____ _       _ _       
@@ -387,8 +388,8 @@ namespace Stricker
                             Console.ForegroundColor = ConsoleColor.DarkGreen;
                             PlayerColor = ConsoleColor.DarkGreen;
                             EnemyColor = ConsoleColor.DarkMagenta;
-                            BGColor = ConsoleColor.DarkGray;
-                            ObsColor = ConsoleColor.DarkCyan;
+                            BGColor = ConsoleColor.Gray;
+                            ObsColor = ConsoleColor.DarkGray;
                             ShColor = ConsoleColor.Black;
                             Console.WriteLine(@"
                                          __      __          _      

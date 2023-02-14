@@ -29,3 +29,10 @@ C:\Users\giaco\OneDrive\Documenti\GitHub\Striker_finale\obj\Debug\Striker_finale
 C:\Users\giaco\OneDrive\Documenti\GitHub\Striker_finale\obj\Debug\Striker_finale.csproj.CoreCompileInputs.cache
 C:\Users\giaco\OneDrive\Documenti\GitHub\Striker_finale\obj\Debug\Striker_finale.exe
 C:\Users\giaco\OneDrive\Documenti\GitHub\Striker_finale\obj\Debug\Striker_finale.pdb
+C:\Users\fabri\OneDrive\Desktop\Striker_finale\bin\Debug\Striker_finale.exe.config
+C:\Users\fabri\OneDrive\Desktop\Striker_finale\bin\Debug\Striker_finale.exe
+C:\Users\fabri\OneDrive\Desktop\Striker_finale\bin\Debug\Striker_finale.pdb
+C:\Users\fabri\OneDrive\Desktop\Striker_finale\obj\Debug\Striker_finale.csproj.AssemblyReference.cache
+C:\Users\fabri\OneDrive\Desktop\Striker_finale\obj\Debug\Striker_finale.csproj.CoreCompileInputs.cache
+C:\Users\fabri\OneDrive\Desktop\Striker_finale\obj\Debug\Striker_finale.exe
+C:\Users\fabri\OneDrive\Desktop\Striker_finale\obj\Debug\Striker_finale.pdb
