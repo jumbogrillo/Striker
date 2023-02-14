@@ -23,8 +23,8 @@ namespace Stricker
         public static void Main(string[] args)
         {
 			Time.Start();
-            //Console.SetWindowPosition(0,0);
-            //Console.SetWindowSize(200,50);
+            Console.SetWindowPosition(0,0);
+            Console.SetWindowSize(140,50);
             Console.CursorVisible = false;
             Music.Title();
             Start();

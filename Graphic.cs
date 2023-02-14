@@ -578,7 +578,7 @@ namespace Stricker
 			}
 			Console.Write("╝");
 		}
-		public static void Draw_Score(int score, int font=0)
+		public static void Draw_Score(int score, int font = 0)
 		{
 			Word(12 + Width * 2, Margin_Top, score.ToString(), font);
 		}
@@ -612,6 +612,56 @@ namespace Stricker
 			string alphabet = "abcdefghijklmnopqrstuvwxyz ".ToUpper();
 			for (int i = 0; i < alphabet.Length; i++) if (alphabet[i] == letter) return true;
 			return false;
+		}
+		public static void Clear(int type = 0, int delay = 0)
+		{
+			Action[] transitions =
+			{
+				delegate ()
+				{
+					for(int i = 0; i < Console.WindowHeight; i++)
+						for(int j = 0; j < Console.WindowWidth; j++){
+							Rect(j, i, " ", size:1, setBG:false); Thread.Sleep(delay); }
+				},
+				delegate ()
+				{
+					for(int i = 0; i < Console.WindowWidth; i++)
+						for(int j = 0; j < Console.WindowHeight; j++){
+							Rect(i, j, " ", size:1, setBG:false); Thread.Sleep(delay); }
+				},
+				delegate ()
+				{
+					int[] center = {Console.WindowWidth / 2, Console.WindowHeight / 2};
+					for(int radius = 0; radius < (int)Math.Sqrt(Math.Pow(center[0], 2) + Math.Pow(center[1], 2)); radius++)
+					{
+						for(double angle = 0; angle < Math.PI * 2; angle += Math.PI / 180)
+						{
+							if(Math.Cos(angle) * radius + center[0] < 0 | Math.Cos(angle) * radius + center[0] >= Console.WindowWidth | Math.Sin(angle) * radius + center[1] < 0 | Math.Sin(angle) * radius + center[1] >= Console.WindowHeight)continue;
+							Rect((int)Math.Cos(angle) * radius + center[0], (int)Math.Sin(angle) * radius + center[1], setBG:false, size:1);
+							Thread.Sleep(delay);
+						}
+					}
+				},
+				delegate ()
+				{
+					for(int i = 0; i < Console.WindowWidth; i++)
+						for(int j = 0; j < Console.WindowHeight; j++)
+							if((i + j) % 2 == 0)
+							{
+								Rect(i, j, setBG:false, size:1);
+								Thread.Sleep(delay);
+							}
+
+					for(int i = 0; i < Console.WindowWidth; i++)
+						for(int j = 0; j < Console.WindowHeight; j++)
+							if((i + j) % 2 != 0)
+							{
+								Rect(i, j, setBG:false, size:1);
+								Thread.Sleep(delay);
+							}
+				}
+			};
+			transitions[type % transitions.Length]();
 		}
 	}
 }
