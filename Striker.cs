@@ -12,6 +12,7 @@ namespace Stricker
         public const int Width = 40;
         public static bool musica = true;
 		public static int Level = 1;
+		public static string CurrentUser;
         public static Thread sottofondo = new Thread(Music.SoundTrack);
         static Stopwatch Time = new Stopwatch();
 		static String[,] Map = new String[Height, Width];
@@ -22,12 +23,13 @@ namespace Stricker
         
         public static void Main(string[] args)
         {
-			Database.Test();
+            Console.CursorVisible = false;
+			Database.DrawClassification();
+			Database.Insert(ref CurrentUser);
 			Console.ReadKey();
 			Time.Start();
             Console.SetWindowPosition(0,0);
             Console.SetWindowSize(140,50);
-            Console.CursorVisible = false;
             Music.Title();
             Start();
             Music.SoundTrack(true);
@@ -85,8 +87,8 @@ namespace Stricker
 				}
                 if(player.Score > 99)
                 {
-                    player.Score = 0;
                     Level++;
+					Reset();
                     goto StartGame;
                 }
 				Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);
@@ -94,6 +96,7 @@ namespace Stricker
                 player.Move(Map, musica);
 			}
             GameOver();
+			Database.Update(CurrentUser, 100 * (Level - 1) + player.Score);
         }
 		static void Start()
 		{
@@ -443,9 +446,6 @@ namespace Stricker
                 Console.ReadKey();
             }
         }
-		static void InsertPlayer()
-		{
 
-		}
     }
 }
