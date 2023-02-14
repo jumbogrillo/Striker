@@ -149,6 +149,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Database.cs" />
     <Compile Include="Enemy.cs" />
     <Compile Include="Graphic.cs" />
     <Compile Include="Music.cs" />

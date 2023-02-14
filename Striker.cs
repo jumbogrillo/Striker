@@ -22,6 +22,8 @@ namespace Stricker
         
         public static void Main(string[] args)
         {
+			Database.Test();
+			Console.ReadKey();
 			Time.Start();
             Console.SetWindowPosition(0,0);
             Console.SetWindowSize(140,50);
@@ -424,7 +426,7 @@ namespace Stricker
         }
         public static void LevelScreen(ConsoleColor color)
         {
-            Graphic.Word(42, 3, "Level",fg:color);
+            Graphic.Word(42, 3, "Level", font:2,fg:color);
             Graphic.Word(60, 13, Level.ToString(),fg:color);
         }
         public static void GameOver()
@@ -441,5 +443,9 @@ namespace Stricker
                 Console.ReadKey();
             }
         }
+		static void InsertPlayer()
+		{
+
+		}
     }
 }
