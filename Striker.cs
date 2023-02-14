@@ -23,26 +23,27 @@ namespace Stricker
         public static void Main(string[] args)
         {
 			Time.Start();
-            Console.SetWindowPosition(0,0);
-            Console.SetWindowSize(200,50);
+            //Console.SetWindowPosition(0,0);
+            //Console.SetWindowSize(200,50);
             Console.CursorVisible = false;
             Music.Title();
             Start();
             Music.SoundTrack(true);
 
         StartGame:
+            player.Combo = 0;
+            Console.Clear();
             for (int i = 0; i < 6; i++)
             {
                 if (i % 2 == 0)
                 {
-                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    LevelScreen(ConsoleColor.Yellow);
                 }
                 else
                 {
-                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    LevelScreen(ConsoleColor.DarkYellow);
                 }
                 Console.BackgroundColor = ConsoleColor.Black;
-                LevelScreen();
                 Thread.Sleep(300);
             }
             Music.Sound("level");
@@ -58,7 +59,7 @@ namespace Stricker
                 if (Time.ElapsedMilliseconds % 5000 < 100)enemies.Add(new Enemy(Map, Width, Height, 2, 1));
                 if (player.Combo > 0)
                 {
-                    Console.SetCursorPosition(102, 12);
+                    Console.SetCursorPosition(102, 13);
                     Console.Write($"Combo X{player.Combo}");
                     if (player.Combo % 5 == 0 && player.Life < 5)
                     {
@@ -90,8 +91,7 @@ namespace Stricker
 				player.UpdateShots(Map, enemies);
                 player.Move(Map, musica);
 			}
-            
-			Console.ReadKey();
+            GameOver();
         }
 		static void Start()
 		{
@@ -422,39 +422,23 @@ namespace Stricker
                 }
             }
         }
-        public static void LevelScreen()
+        public static void LevelScreen(ConsoleColor color)
+        {
+            Graphic.Word(42, 3, "Level",fg:color);
+            Graphic.Word(60, 13, Level.ToString(),fg:color);
+        }
+        public static void GameOver()
         {
             Console.Clear();
-            
-            Console.WriteLine(@"
-                                    .____                      .__   
-                                    |    |    _______  __ ____ |  |  
-                                    |    |  _/ __ \  \/ // __ \|  |  
-                                    |    |__\  ___/\   /\  ___/|  |__
-                                    |_______ \___  >\_/  \___  >____/
-                                            \/   \/          \/      ");
-            switch (Level)
+            Graphic.Word(11, 3, "Game Over");
+            if (musica)
             {
-                case (0):
-                    Console.WriteLine(@" 
-                                                    ____ 
-                                                   /_   |
-                                                    |   |
-                                                    |   |
-                                                    |___|");
-                    break;
-                case (1):
-                    Console.WriteLine(@"
-                                                    ______  
-                                                   /      \ 
-                                                  /$$$$$$  |
-                                                  $$____$$ |
-                                                   /    $$/ 
-                                                  /$$$$$$/  
-                                                  $$ |_____ 
-                                                  $$       |
-                                                  $$$$$$$$/ ");
-                    break;
+                Music.GameOver();
+                Thread.Sleep(7000);
+            }
+            else
+            {
+                Console.ReadKey();
             }
         }
     }

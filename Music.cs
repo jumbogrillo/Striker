@@ -36,6 +36,12 @@ namespace Stricker
             SoundPlayer sottofondo = new SoundPlayer(file);
             sottofondo.Play();
         }
+        public static void GameOver()
+        {
+            var file = cartella + "\\src\\gameover.wav";
+            SoundPlayer sottofondo = new SoundPlayer(file);
+            sottofondo.Play();
+        }
 		public static void Sound(string file)=> new SoundPlayer($"{Directory.GetCurrentDirectory()}\\src\\{file}.wav").Play();
         public static void level()
         {
