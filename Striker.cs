@@ -11,10 +11,11 @@ namespace Stricker
         public const int Height = 25;
         public const int Width = 40;
         public static bool musica = true;
+		public static int Level = 1;
         public static Thread sottofondo = new Thread(Music.SoundTrack);
-        static Stopwatch Time = new Stopwatch();    
+        static Stopwatch Time = new Stopwatch();
 		static String[,] Map = new String[Height, Width];
-		static Player player = new Player(Map, Width, Height);
+		static Player player = new Player(Width, Height);
 		static List<Enemy> enemies = new List<Enemy>();
 		static ConsoleColor PlayerColor = ConsoleColor.DarkBlue, EnemyColor = ConsoleColor.Red,
             BGColor = ConsoleColor.DarkGray, ObsColor = ConsoleColor.Gray, ShColor = ConsoleColor.White;
@@ -22,8 +23,8 @@ namespace Stricker
         public static void Main(string[] args)
         {
 			Time.Start();
-            //Casonsole.SetWindowPosition(0,0);
-            //Console.SetWindowSize(300,200);
+            Console.SetWindowPosition(0,0);
+            Console.SetWindowSize(200,50);
             Console.CursorVisible = false;
             Music.Title();
             Start();
@@ -50,11 +51,11 @@ namespace Stricker
             Graphic.Draw_Obstacles_Randomly(Map);
             Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);
             Graphic.Draw_Life_Bar(5);
-            Graphic.Draw_Score(player.Score);   
+            Graphic.Draw_Score(player.Score, 0);   
 			Graphic.Draw_Frame();
 			while (player.Life > 0)
 			{
-                if (Time.ElapsedMilliseconds % 5000 < 100)enemies.Add(new Enemy(Map, Width, Height));
+                if (Time.ElapsedMilliseconds % 5000 < 100)enemies.Add(new Enemy(Map, Width, Height, 2, 1));
                 if (player.Combo > 0)
                 {
                     Console.SetCursorPosition(102, 12);
@@ -82,7 +83,7 @@ namespace Stricker
                 if(player.Score > 99)
                 {
                     player.Score = 0;
-                    player.Level++;
+                    Level++;
                     goto StartGame;
                 }
 				Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);
@@ -217,6 +218,14 @@ namespace Stricker
                 }
             }
         }
+		static void Reset()
+		{
+			Map = new String[Height, Width];
+			Graphic.Initialize_Map(Map);
+			Graphic.Draw_Obstacles_Randomly(Map);
+			player = new Player(Width, Height);
+			enemies = new List<Enemy>(); 
+		}
         public static void Menu(int index)
         {
             Console.Clear();
@@ -424,7 +433,7 @@ namespace Stricker
                                     |    |__\  ___/\   /\  ___/|  |__
                                     |_______ \___  >\_/  \___  >____/
                                             \/   \/          \/      ");
-            switch (player.Level)
+            switch (Level)
             {
                 case (0):
                     Console.WriteLine(@" 

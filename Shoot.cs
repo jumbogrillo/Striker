@@ -44,13 +44,14 @@ namespace Striker
 		public void Move()
 		{
 			if( Map[Position[1], Position[0]] == "Sh") Map[Position[1], Position[0]] = "E";
-			switch (Direction)
-			{
-				case "L": this.Position[0]--; break;
-				case "R": this.Position[0]++; break;
-				case "U": this.Position[1]--; break;
-				case "D": this.Position[1]++; break;
-			}
+			for(int i = 0; i < Direction.Length; i++)
+				switch (Direction[i])
+				{
+					case 'L': this.Position[0]--; break;
+					case 'R': this.Position[0]++; break;
+					case 'U': this.Position[1]--; break;
+					case 'D': this.Position[1]++; break;
+				}
 			if(Collision() == "E")Map[Position[1], Position[0]] = "Sh";
 		}
 		public string Collision()

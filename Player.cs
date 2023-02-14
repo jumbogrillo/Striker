@@ -16,8 +16,7 @@ namespace Stricker
 		public int Width { get; set; }
 		public int Height { get; set; }
 		public List<Shoot> Shots { get; set; }
-		public int Level { get; set; }
-		public Player(string[,] map, int width, int height)
+		public Player(int width, int height)
 		{
 			Width = width;
 			Height = height;
@@ -39,6 +38,11 @@ namespace Stricker
 				if (key == ConsoleKey.RightArrow) { Shots.Add(new Shoot(map, Width, Height, new int[] { Position[0], Position[1] }, "R", "Pl", 20, 1)); if (musica) { Music.Shoot(); } }
 				if (key == ConsoleKey.UpArrow) { Shots.Add(new Shoot(map, Width, Height, new int[] { Position[0], Position[1] }, "U", "Pl", 20, 1)); if (musica) { Music.Shoot(); } }
 				if (key == ConsoleKey.DownArrow) { Shots.Add(new Shoot(map, Width, Height, new int[] { Position[0], Position[1] }, "D", "Pl", 20, 1)); if (musica) { Music.Shoot(); } }
+
+				if (key == ConsoleKey.Q) { Shots.Add(new Shoot(map, Width, Height, new int[] { Position[0], Position[1] }, "LU", "Pl", 20, 1)); if (musica) { Music.Shoot(); } }
+				if (key == ConsoleKey.E) { Shots.Add(new Shoot(map, Width, Height, new int[] { Position[0], Position[1] }, "RU", "Pl", 20, 1)); if (musica) { Music.Shoot(); } }
+				if (key == ConsoleKey.C) { Shots.Add(new Shoot(map, Width, Height, new int[] { Position[0], Position[1] }, "RD", "Pl", 20, 1)); if (musica) { Music.Shoot(); } }
+				if (key == ConsoleKey.Z) { Shots.Add(new Shoot(map, Width, Height, new int[] { Position[0], Position[1] }, "LD", "Pl", 20, 1)); if (musica) { Music.Shoot(); } }
 				map[Position[1], Position[0]] = "Pl";
 			}
 		}
@@ -59,10 +63,16 @@ namespace Stricker
 					{
 						Score += 10 * (Combo + 1);
 						Combo++;
-						Graphic.Draw_Score(this.Score);
-						map[enemies[FindEnemy(enemies, Shots[i].Position)].Position[1], enemies[FindEnemy(enemies, Shots[i].Position)].Position[0]] = "E";
-						enemies[FindEnemy(enemies, Shots[i].Position)].DeleteAllShotBeforeDeath(map);
-						enemies.RemoveAt(FindEnemy(enemies, Shots[i].Position));
+						Graphic.Word(12 + Width * 2, Graphic.Margin_Top, this.Score > 99 ? "   " : "  ");
+						Graphic.Draw_Score(this.Score, 0);
+						int enemyIndex = FindEnemy(enemies, Shots[i].Position);
+						if (enemies[enemyIndex].Life > 1) enemies[enemyIndex].Life--;
+						else
+						{
+							map[enemies[enemyIndex].Position[1], enemies[enemyIndex].Position[0]] = "E";
+							enemies[enemyIndex].DeleteAllShotBeforeDeath(map);
+							enemies.RemoveAt(enemyIndex);
+						}
 					}
 					else Combo = 0;
 					Shots.RemoveAt(i);
