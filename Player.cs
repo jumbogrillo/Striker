@@ -16,6 +16,7 @@ namespace Stricker
 		public int Width { get; set; }
 		public int Height { get; set; }
 		public List<Shoot> Shots { get; set; }
+		public int Level { get; set; }
 		public Player(string[,] map, int width, int height)
 		{
 			Width = width;
@@ -73,7 +74,7 @@ namespace Stricker
 		{
 			foreach (Enemy enemy in enemies)
 			{
-				if (Distance(enemy.Position[0], enemy.Position[1], Position[0], Position[1]) <= 1) return true;
+				if (Distance(enemy.Position[0], enemy.Position[1], Position[0], Position[1]) < 1) return true;
 				foreach (Shoot shot in enemy.Shots)
 					if (shot.Collision() == "Pl") return true;
 			}

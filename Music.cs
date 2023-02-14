@@ -11,7 +11,10 @@ namespace Stricker
 {
     public class Music
     {
+
         static string cartella = Directory.GetCurrentDirectory();
+        static string file = cartella + "\\src\\sottofondo.wav";
+        static SoundPlayer sottofondo = new SoundPlayer(file);
         public static void Title()
         {
             var file = cartella + "\\src\\smb_coin.wav";
@@ -20,9 +23,12 @@ namespace Stricker
         }
         public static void SoundTrack()
         {
-            var file = cartella + "\\src\\sottofondo.wav";
-            SoundPlayer sottofondo = new SoundPlayer(file); 
+            
             sottofondo.Play();
+        }
+        public static void SoundTrack(bool stop)
+        {
+            sottofondo.Stop();
         }
         public static void Shoot()
         {
@@ -30,6 +36,12 @@ namespace Stricker
             SoundPlayer sottofondo = new SoundPlayer(file);
             sottofondo.Play();
         }
-		public static void Sound(string file)=> new SoundPlayer($"{Directory.GetCurrentDirectory()}\\{file}.wav").Play();
+		public static void Sound(string file)=> new SoundPlayer($"{Directory.GetCurrentDirectory()}\\src\\{file}.wav").Play();
+        public static void level()
+        {
+            var file = cartella + "\\src\\level.wav";
+            SoundPlayer sottofondo = new SoundPlayer(file);
+            sottofondo.Play();
+        }
     }
 }

@@ -11,7 +11,8 @@ namespace Stricker
         public const int Height = 25;
         public const int Width = 40;
         public static bool musica = true;
-		static Stopwatch Time = new Stopwatch();
+        public static Thread sottofondo = new Thread(Music.SoundTrack);
+        static Stopwatch Time = new Stopwatch();    
 		static String[,] Map = new String[Height, Width];
 		static Player player = new Player(Map, Width, Height);
 		static List<Enemy> enemies = new List<Enemy>();
@@ -21,14 +22,30 @@ namespace Stricker
         public static void Main(string[] args)
         {
 			Time.Start();
-            Console.SetWindowPosition(0,0);
-            Console.SetWindowSize(300,200);
+            //Casonsole.SetWindowPosition(0,0);
+            //Console.SetWindowSize(300,200);
             Console.CursorVisible = false;
             Music.Title();
             Start();
-            Console.ReadKey();
-            Console.Clear();
-            
+            Music.SoundTrack(true);
+
+        StartGame:
+            for (int i = 0; i < 6; i++)
+            {
+                if (i % 2 == 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                }
+                Console.BackgroundColor = ConsoleColor.Black;
+                LevelScreen();
+                Thread.Sleep(300);
+            }
+            Music.Sound("level");
+            Console.Clear();    
 			Graphic.Initialize_Map(Map);
             Graphic.Draw_Obstacles_Randomly(Map);
             Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);
@@ -62,6 +79,12 @@ namespace Stricker
 					enemy.Update(Map, player);
 					enemy.UpdateShots(Map);
 				}
+                if(player.Score > 99)
+                {
+                    player.Score = 0;
+                    player.Level++;
+                    goto StartGame;
+                }
 				Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);
 				player.UpdateShots(Map, enemies);
                 player.Move(Map, musica);
@@ -73,8 +96,7 @@ namespace Stricker
 		{
 			Thread title = new Thread(Title);
 			title.Start();
-			Thread sottofondo = new Thread(Music.SoundTrack);
-			bool musica = true;
+			musica = true;
             ConsoleKey startinput;
             bool startchoose = false;
             while (!startchoose)
@@ -388,6 +410,41 @@ namespace Stricker
                     }
 
                 }
+            }
+        }
+        public static void LevelScreen()
+        {
+            Console.Clear();
+            
+            Console.WriteLine(@"
+                                    .____                      .__   
+                                    |    |    _______  __ ____ |  |  
+                                    |    |  _/ __ \  \/ // __ \|  |  
+                                    |    |__\  ___/\   /\  ___/|  |__
+                                    |_______ \___  >\_/  \___  >____/
+                                            \/   \/          \/      ");
+            switch (player.Level)
+            {
+                case (0):
+                    Console.WriteLine(@" 
+                                                    ____ 
+                                                   /_   |
+                                                    |   |
+                                                    |   |
+                                                    |___|");
+                    break;
+                case (1):
+                    Console.WriteLine(@"
+                                                    ______  
+                                                   /      \ 
+                                                  /$$$$$$  |
+                                                  $$____$$ |
+                                                   /    $$/ 
+                                                  /$$$$$$/  
+                                                  $$ |_____ 
+                                                  $$       |
+                                                  $$$$$$$$/ ");
+                    break;
             }
         }
     }
