@@ -3,6 +3,7 @@ using MongoDB.Bson;// To write in the cluster
 using System;
 using System.Collections.Generic;
 using Stricker;
+using System.Diagnostics;
 
 namespace Striker_finale
 {
@@ -80,11 +81,17 @@ namespace Striker_finale
 			docs[index2] = appo;
 			indexes[index1] = index2;
 		}
-		public static void Update(string currentUser, int highscore)
+		public static void Update(string currentUser, int highscore, long time)
 		{
 			Connect();
 			var filter = Builders<BsonDocument>.Filter.Eq("username", currentUser);
 			var update = Builders<BsonDocument>.Update.Set("score", highscore);
+			Collection.UpdateOne(filter, update);
+			filter = Builders<BsonDocument>.Filter.Eq("username", currentUser);
+			update = Builders<BsonDocument>.Update.Set("date", DateTime.Now);
+			Collection.UpdateOne(filter, update);
+			filter = Builders<BsonDocument>.Filter.Eq("username", currentUser);
+			update = Builders<BsonDocument>.Update.Set("time", time);
 			Collection.UpdateOne(filter, update);
 		}
 		public static void Insert(ref string currentUser)
@@ -105,7 +112,8 @@ namespace Striker_finale
 			{
 				{ "username", currentUser },
 				{ "score", 0 },
-				{ "date", DateTime.Now }
+				{ "date", DateTime.Now },
+				{ "time", 0 }
 			});
 		}
 		public static void Delete(string currentUser)
@@ -113,6 +121,16 @@ namespace Striker_finale
 			Connect();
 			var filter = Builders<BsonDocument>.Filter.Eq("username", currentUser);
 			Collection.DeleteOne(filter);
+		}
+		public static void Clear()
+		{
+			Connect();
+			var documents = AllDoc();
+			foreach(var item in documents)
+			{
+				var filter = Builders<BsonDocument>.Filter.Eq("score", 0);
+				Collection.DeleteOne(filter);
+			}
 		}
 		public static void DrawClassification()
 		{
@@ -128,9 +146,11 @@ namespace Striker_finale
 			Graphic.Rect(20, 4, "Last game", setBG: false, fg: ConsoleColor.White);
 			for (int i = 0; i < users.Count; i++)
 			{
-				Graphic.Rect(0, 6 + i, users[users.Count - 1 - i]["username"].ToString(), setBG: false, fg:ConsoleColor.White);
-				Graphic.Rect(12, 6 + i, users[users.Count - 1 - i]["score"].ToString(), setBG: false, fg: ConsoleColor.White);
-				Graphic.Rect(20, 6 + i, Convert.ToDateTime(users[users.Count - 1 - i]["date"]).ToString("HH:mm - dd/MM/yy"), setBG: false, fg: ConsoleColor.White);
+				Graphic.Rect(0, 6 + i, i.ToString("00"), fg: ConsoleColor.White);
+				Graphic.Rect(2, 6 + i, users[users.Count - 1 - i]["username"].ToString(), setBG: false, fg:ConsoleColor.White);
+				Graphic.Rect(14, 6 + i, users[users.Count - 1 - i]["score"].ToString(), setBG: false, fg: ConsoleColor.White);
+				Graphic.Rect(22, 6 + i, users[users.Count - 1 - i]["time"].ToString(), setBG: false, fg: ConsoleColor.White);
+				Graphic.Rect(22, 6 + i, Convert.ToDateTime(users[users.Count - 1 - i]["date"]).ToString("HH:mm - dd/MM/yy"), setBG: false, fg: ConsoleColor.White);
 			}
 		}
 	}

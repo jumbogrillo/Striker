@@ -86,7 +86,7 @@ namespace Stricker
 				{
 					if (collision == "Enem")
 					{
-						Score += 10 * (Combo + 1);
+						Score += 100 * (Combo + 1);
 						Combo++;
 						Graphic.Word(12 + Width * 2, Graphic.Margin_Top, this.Score > 99 ? "   " : "  ");
 						Graphic.Draw_Score(this.Score, 2);

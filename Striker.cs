@@ -23,14 +23,15 @@ namespace Stricker
         
         public static void Main(string[] args)
         {
-            Console.CursorVisible = false;            
+            Console.SetWindowPosition(0,0);
+            Console.SetWindowSize(140, 70);
+            Console.SetBufferSize(140, 70);
 			Database.DrawClassification();
 			Database.Insert(ref CurrentUser);
+			Console.Clear();
+            Console.CursorVisible = false;
 			//Console.ReadKey();
 			Time.Start();
-            Console.SetWindowPosition(0,0);
-            Console.SetBufferSize(140, 100);
-            //Console.SetWindowSize(140, 100);
             Music.Title();
             Start();
             Music.SoundTrack(true);
@@ -43,14 +44,7 @@ namespace Stricker
             Console.Clear();
             for (int i = 0; i < 6; i++)
             {
-                if (i % 2 == 0)
-                {
-                    LevelScreen(ConsoleColor.Yellow);
-                }
-                else
-                {
-                    LevelScreen(ConsoleColor.DarkYellow);
-                }
+                LevelScreen(i % 2 == 0 ? ConsoleColor.Yellow : ConsoleColor.DarkYellow);
                 Console.BackgroundColor = ConsoleColor.Black;
                 Thread.Sleep(300);
             }
@@ -93,12 +87,12 @@ namespace Stricker
 					Reset();
                     goto StartGame;
                 }
-				Graphic.Draw_Map(Width / 2 - player.Position[0], Height / 2 - player.Position[1], Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);
+				Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);//Width / 2 - player.Position[0], Height / 2 - player.Position[1], 
 				player.UpdateShots(Map, enemies);
                 player.Move(Map, musica);
 			}
             GameOver();
-			Database.Update(CurrentUser, 100 * (Level - 1) + player.Score);
+			Database.Update(CurrentUser, 100 * (Level - 1) + player.Score, Time.ElapsedMilliseconds);
 			Database.DrawClassification();
 			Console.ReadKey();
         }
