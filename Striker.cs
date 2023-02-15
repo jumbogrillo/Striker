@@ -24,12 +24,12 @@ namespace Stricker
         public static void Main(string[] args)
         {
             Console.CursorVisible = false;
-			Database.DrawClassification();
-			Database.Insert(ref CurrentUser);
-			Console.ReadKey();
+			//Database.DrawClassification();
+			//Database.Insert(ref CurrentUser);
+			//Console.ReadKey();
 			Time.Start();
-            Console.SetWindowPosition(0,0);
-            Console.SetWindowSize(140,50);
+            //Console.SetWindowPosition(0,0);
+            //Console.SetWindowSize(140,50);
             Music.Title();
             Start();
             Music.SoundTrack(true);

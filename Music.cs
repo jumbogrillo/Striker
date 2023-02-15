@@ -49,5 +49,11 @@ namespace Stricker
             SoundPlayer sottofondo = new SoundPlayer(file);
             sottofondo.Play();
         }
+        public static void Error()
+        {
+            var file = cartella + "\\src\\Error.wav";
+            SoundPlayer sottofondo = new SoundPlayer(file);
+            sottofondo.Play();
+        }
     }
 }
