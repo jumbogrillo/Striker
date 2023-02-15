@@ -9,6 +9,7 @@ namespace Stricker
 {
 	class Player
 	{
+		static Random Random = new Random();
 		private ConsoleKey lastKey;
 		private DateTime Timestamp = DateTime.Now;
 		private int keycount = 0;
@@ -26,6 +27,12 @@ namespace Stricker
 			Height = height;
 			Life = 5;
 			Position = new int[] { Width / 2, Height / 2 };
+			while (Striker.Map[Position[1] + 1, Position[0]] == "Obs" & Striker.Map[Position[1] -1, Position[0]] == "Obs" & Striker.Map[Position[1], Position[0] + 1] == "Obs" & Striker.Map[Position[1], Position[0] - 1] == "Obs")
+            {
+				Position[0] = Random.Next(0, Height - 2);
+				Position[1] = Random.Next(0,Width - 2);
+            }
+			
 			Shots = new List<Shoot>();
 		}
 		public void Move(string[,] map, bool musica)
@@ -35,7 +42,7 @@ namespace Stricker
 				var key = Console.ReadKey(true).Key;
 				if(key == lastKey)
                 {
-					if(!(DateTime.Now > Timestamp.AddSeconds(0.3)))
+					if(!(DateTime.Now > Timestamp.AddSeconds(0.09)))
 					{
 						keycount++;
 					}

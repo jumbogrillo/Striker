@@ -15,8 +15,8 @@ namespace Stricker
 		public static string CurrentUser;
         public static Thread sottofondo = new Thread(Music.SoundTrack);
         static Stopwatch Time = new Stopwatch();
-		static String[,] Map = new String[Height, Width];
-		static Player player = new Player(Width, Height);
+		public static String[,] Map = new String[Height, Width];
+        static Player player;
 		static List<Enemy> enemies = new List<Enemy>();
 		static ConsoleColor PlayerColor = ConsoleColor.DarkBlue, EnemyColor = ConsoleColor.Red,
             BGColor = ConsoleColor.DarkGray, ObsColor = ConsoleColor.Gray, ShColor = ConsoleColor.White;
@@ -35,6 +35,9 @@ namespace Stricker
             Music.SoundTrack(true);
 
         StartGame:
+            Graphic.Initialize_Map(Map);
+            player = new Player(Width, Height);
+            Graphic.Draw_Obstacles_Randomly(Map);
             player.Combo = 0;
             Console.Clear();
             for (int i = 0; i < 6; i++)
@@ -51,9 +54,7 @@ namespace Stricker
                 Thread.Sleep(300);
             }
             Music.Sound("level");
-            Console.Clear();    
-			Graphic.Initialize_Map(Map);
-            Graphic.Draw_Obstacles_Randomly(Map);
+            Console.Clear();    	           
             Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);
             Graphic.Draw_Life_Bar(5);
             Graphic.Draw_Score(player.Score, 0);   
