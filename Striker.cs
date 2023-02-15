@@ -24,8 +24,8 @@ namespace Stricker
         public static void Main(string[] args)
         {
             Console.CursorVisible = false;            
-			//Database.DrawClassification();
-			//Database.Insert(ref CurrentUser);
+			Database.DrawClassification();
+			Database.Insert(ref CurrentUser);
 			//Console.ReadKey();
 			Time.Start();
             Console.SetWindowPosition(0,0);
@@ -99,6 +99,8 @@ namespace Stricker
 			}
             GameOver();
 			Database.Update(CurrentUser, 100 * (Level - 1) + player.Score);
+			Database.DrawClassification();
+			Console.ReadKey();
         }
 		static void Start()
 		{
@@ -246,7 +248,8 @@ namespace Stricker
 			Graphic.Draw_Obstacles_Randomly(Map);
 			player = new Player(Width, Height);
             player.Life = lastLife;
-			enemies = new List<Enemy>(); 
+			enemies = new List<Enemy>();
+			Map[player.Position[1], player.Position[0]] = "Pl";
 		}
         public static void Menu(int index)
         {
