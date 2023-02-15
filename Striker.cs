@@ -28,8 +28,9 @@ namespace Stricker
 			//Database.Insert(ref CurrentUser);
 			//Console.ReadKey();
 			Time.Start();
-            //Console.SetWindowPosition(0,0);
-            //Console.SetWindowSize(140,50);
+            Console.SetWindowPosition(0,0);
+             Console.SetBufferSize(140, 100);
+            //Console.SetWindowSize(300, 300);
             Music.Title();
             Start();
             Music.SoundTrack(true);
@@ -56,7 +57,7 @@ namespace Stricker
             Graphic.Draw_Obstacles_Randomly(Map);
             Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);
             Graphic.Draw_Life_Bar(5);
-            Graphic.Draw_Score(player.Score, 0);   
+            Graphic.Draw_Score(player.Score, 2);   
 			Graphic.Draw_Frame();
 			while (player.Life > 0)
 			{
@@ -174,11 +175,19 @@ namespace Stricker
                 Console.Clear();
                 Menu(index);
                 input = Console.ReadKey(false).Key;
-                if (input == ConsoleKey.UpArrow && index > 0)
+                if (input == ConsoleKey.UpArrow && index >= 2)
+                {
+                    index = index-2;
+                }
+                else if (input == ConsoleKey.DownArrow && index < 2)
+                {
+                    index+=2;
+                }
+                else if(input == ConsoleKey.LeftArrow && index >= 1)
                 {
                     index--;
                 }
-                else if (input == ConsoleKey.DownArrow && index < 2)
+                else if (input == ConsoleKey.RightArrow && index < 3)
                 {
                     index++;
                 }
@@ -215,7 +224,7 @@ namespace Stricker
                                 SelectionThemes(colorindex);
                                 Console.ResetColor();
                                 break;
-                            case 2:
+                            case 3:
                                 Environment.Exit(0);
                                 break;
                         }
@@ -244,43 +253,34 @@ namespace Stricker
                             |_______/       |__|    | _| `._____|__| |__|\__\ |_______|| _| `._____|");
             Console.WriteLine();
             Console.ResetColor();
-            for (int i = 0; i < 3; i++)
+            string word = "";
+            for (int i = 0; i < 4; i++)
             {
-                if (index == i)
-                {
-                    Console.ForegroundColor = PlayerColor;
-                }
+
                 switch (i)
                 {
                     case 0:
-            Console.WriteLine(@"    
-                        ╔═══╗               
-                        ║╔═╗║               
-                        ║║ ╚╝╔╗╔══╗╔══╗╔══╗ 
-                        ║║╔═╗╠╣║╔╗║║╔═╝╚ ╗║ 
-                        ║╚╩═║║║║╚╝║║╚═╗║╚╝╚╗
-                        ╚═══╝╚╝╚══╝╚══╝╚═══╝");
+                        word = "Gioca";
+                        if (index == i) Graphic.Word(Width - 33, 9, word,2,PlayerColor);
+                        else Graphic.Word(Width - 33, 9,word,2);
                         break;
                     case 1:
-            Console.WriteLine(@"
-                        ╔═══╗    ╔╗                             ╔════╗             
-                        ║╔═╗║    ║║                             ║╔╗╔╗║             
-                        ║╚══╗╔══╗║║ ╔══╗╔═══╗╔╗╔══╗╔═╗ ╔══╗     ╚╝║║╚╝╔══╗╔╗╔╗╔══╗ 
-                        ╚══╗║║╔╗║║║ ║╔╗║╠══║║╠╣║╔╗║║╔╗╗╚ ╗║       ║║  ║╔╗║║╚╝║╚ ╗║ 
-                        ║╚═╝║║║═╣║╚╗║║═╣║║══╣║║║╚╝║║║║║║╚╝╚╗     ╔╝╚╗ ║║═╣║║║║║╚╝╚╗
-                        ╚═══╝╚══╝╚═╝╚══╝╚═══╝╚╝╚══╝╚╝╚╝╚═══╝     ╚══╝ ╚══╝╚╩╩╝╚═══╝");
-
+                        word = "Temi";
+                        if (index == i) Graphic.Word(Width + 33, 9, word, 2,PlayerColor);
+                        else Graphic.Word(Width + 33, 9, word,2);
                         break;
                     case 2:
-        Console.WriteLine(@"
-                        ╔═══╗          
-                        ║╔══╝          
-                        ║╚══╗╔══╗╔══╗╔╗
-                        ║╔══╝║══╣║╔═╝╠╣
-                        ║╚══╗╠══║║╚═╗║║
-                        ╚═══╝╚══╝╚══╝╚╝");
-            break;
+                        word = "Comandi";
+                        if (index == i) Graphic.Word(Width - 33, 20, word,2,PlayerColor);
+                        else Graphic.Word(Width - 33, 20, word,2);
+                        break;
+                    case 3:
+                        word = "Esci";
+                        if (index == i) Graphic.Word(Width + 35, 20, word,2,PlayerColor);
+                        else Graphic.Word(Width + 35,20, word,2);
+                        break;
                 }
+                
                 Console.ResetColor();
             }
         }
@@ -429,8 +429,8 @@ namespace Stricker
         }
         public static void LevelScreen(ConsoleColor color)
         {
-            Graphic.Word(42, 3, "Level", font:2,fg:color);
-            Graphic.Word(60, 13, Level.ToString(),fg:color);
+            Graphic.Word(42, 3, "Level", 2,fg:color);
+            Graphic.Word(62, 13, Level.ToString(),2,fg:color);
         }
         public static void GameOver()
         {
