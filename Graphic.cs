@@ -33,7 +33,30 @@ namespace Stricker
 				}
 			}
 		}
+		public static void Draw_Map(int x, int y, String[,] map, ConsoleColor backGround = ConsoleColor.DarkGray, ConsoleColor enemy = ConsoleColor.Red, ConsoleColor player = ConsoleColor.DarkBlue, ConsoleColor obs = ConsoleColor.Gray, ConsoleColor shoot = ConsoleColor.White)
+		{
+			ConsoleColor[] bgs = { backGround, player, enemy, obs, backGround };
+			string[] pr = { "E", "Pl", "Enem", "Obs", "Sh" };
+			for (int i = 0; i < Height; i++)
+				for (int j = 0; j < Width; j++)
+				{
+					Rect(FormatPosition(j + x, Width), FormatPosition(i + y, Height), map[i, j] == "Sh" ? " ·" : "  ", bg: bgs[Index(map[i, j])], fg: map[i, j] == "Sh" ? shoot : bgs[Index(map[i, j])], marginLeft: Margin_Left + 1, marginTop: Margin_Top + 1);
+				}
+		}
+		public static int FormatPosition(int num, int limit)
+		{
+			if (num < 0) num = limit - 1 + num;
+			else if (num >= limit) num = num % limit;
+			return num;
+		}
+		private static int Index(string item, ConsoleColor backGround = ConsoleColor.DarkGray, ConsoleColor enemy = ConsoleColor.Red, ConsoleColor player = ConsoleColor.DarkBlue, ConsoleColor obs = ConsoleColor.Gray, ConsoleColor shoot = ConsoleColor.White)
+		{
 
+			ConsoleColor[] bgs = { backGround, enemy, player, obs, shoot };
+			string[] pr = { "E", "Pl", "Enem", "Obs", "Sh" };
+			for (int i = 0; i < pr.Length; i++) if (item == pr[i]) return i;
+			return 0;
+		}
 		public static void Draw_Map(String[,] map, ConsoleColor backGround = ConsoleColor.DarkGray, ConsoleColor enemy = ConsoleColor.Red, ConsoleColor player = ConsoleColor.DarkBlue, ConsoleColor obs = ConsoleColor.Gray, ConsoleColor shoot = ConsoleColor.White)
 		{
 			Console.SetCursorPosition(Margin_Left + 1, Margin_Top + 1);
