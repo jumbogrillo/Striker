@@ -89,7 +89,7 @@ namespace Stricker
 						Score += 10 * (Combo + 1);
 						Combo++;
 						Graphic.Word(12 + Width * 2, Graphic.Margin_Top, this.Score > 99 ? "   " : "  ");
-						Graphic.Draw_Score(this.Score, 0);
+						Graphic.Draw_Score(this.Score, 2);
 						int enemyIndex = FindEnemy(enemies, Shots[i].Position);
 						if (enemies[enemyIndex].Life > 1) enemies[enemyIndex].Life--;
 						else
