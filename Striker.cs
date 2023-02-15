@@ -18,12 +18,12 @@ namespace Stricker
 		public static String[,] Map = new String[Height, Width];
         static Player player;
 		static List<Enemy> enemies = new List<Enemy>();
-		static ConsoleColor PlayerColor = ConsoleColor.DarkBlue, EnemyColor = ConsoleColor.Red,
-            BGColor = ConsoleColor.DarkGray, ObsColor = ConsoleColor.Gray, ShColor = ConsoleColor.White;
+		static ConsoleColor PlayerColor = ConsoleColor.DarkRed, EnemyColor = ConsoleColor.DarkMagenta,
+            BGColor = ConsoleColor.Gray, ObsColor = ConsoleColor.DarkGray, ShColor = ConsoleColor.Black;
         
         public static void Main(string[] args)
         {
-            Console.CursorVisible = false;
+            Console.CursorVisible = false;            
 			//Database.DrawClassification();
 			//Database.Insert(ref CurrentUser);
 			//Console.ReadKey();
@@ -34,10 +34,10 @@ namespace Stricker
             Music.Title();
             Start();
             Music.SoundTrack(true);
+            player = new Player(Width, Height);
 
         StartGame:
             Graphic.Initialize_Map(Map);
-            player = new Player(Width, Height);
             Graphic.Draw_Obstacles_Randomly(Map);
             player.Combo = 0;
             Console.Clear();
@@ -57,7 +57,7 @@ namespace Stricker
             Music.Sound("level");
             Console.Clear();    	           
             Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);
-            Graphic.Draw_Life_Bar(5);
+            Graphic.Draw_Life_Bar(player.Life);
             Graphic.Draw_Score(player.Score, 2);   
 			Graphic.Draw_Frame();
 			while (player.Life > 0)
@@ -229,7 +229,7 @@ namespace Stricker
                                 Graphic.Clear();
                                 Commands();
                                 Console.ReadKey();
-                                break;
+                                goto Menu;
                             case 3:
                                 Environment.Exit(0);
                                 break;
@@ -240,10 +240,12 @@ namespace Stricker
         }
 		static void Reset()
 		{
+            int lastLife = player.Life;
 			Map = new String[Height, Width];
 			Graphic.Initialize_Map(Map);
 			Graphic.Draw_Obstacles_Randomly(Map);
 			player = new Player(Width, Height);
+            player.Life = lastLife;
 			enemies = new List<Enemy>(); 
 		}
         public static void Menu(int index)
@@ -251,12 +253,12 @@ namespace Stricker
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.WriteLine(@"   
-                                 _______.___________.______      __   __  ___  _______ .______      
-                                /       |           |   _  \    |  | |  |/  / |   ____||   _  \     
-                               |   (----`---|  |----|  |_)  |   |  | |  '  /  |  |__   |  |_)  |    
-                                \   \       |  |    |      /    |  | |    <   |   __|  |      /     
-                            .----)   |      |  |    |  |\  \----|  | |  .  \  |  |____ |  |\  \----.
-                            |_______/       |__|    | _| `._____|__| |__|\__\ |_______|| _| `._____|");
+                              _______.___________.______      __   __  ___  _______ .______      
+                             /       |           |   _  \    |  | |  |/  / |   ____||   _  \     
+                            |   (----`---|  |----|  |_)  |   |  | |  '  /  |  |__   |  |_)  |    
+                             \   \       |  |    |      /    |  | |    <   |   __|  |      /     
+                         .----)   |      |  |    |  |\  \----|  | |  .  \  |  |____ |  |\  \----.
+                         |_______/       |__|    | _| `._____|__| |__|\__\ |_______|| _| `._____|");
             Console.WriteLine();
             Console.ResetColor();
             string word = "";
@@ -336,29 +338,33 @@ namespace Stricker
         }
         static void Commands()
         {
+            Console.SetCursorPosition(0,0);
             Console.WriteLine(@"
-                  .----------------.                                                  .----------------. 
-                 | .--------------. |                                                | .--------------. |
-                 | | _____  _____ | |                                                | |      ___     | |
-                 | ||_   _||_   _|| |                                                | |     / _ \    | |
-                 | |  | | /\ | |  | |                                                | |    |_/ \_|   | |
-                 | |  | |/  \| |  | |                                                | |      | |     | |
-                 | |  |   /\   |  | |                                                | |      | |     | |
-                 | |  |__/  \__|  | |                                                | |      |_|     | |
-                 | |              | |                                                | |              | |
-                 | '--------------' |                                                | '--------------' |
-                  '----------------'                                                  '----------------' 
- .----------------.  .----------------.  .----------------.       .----------------.  .----------------.  .----------------. 
-| .--------------. || .--------------. || .--------------. |     | .--------------. || .--------------. || .--------------. |
-| |      __      | || |    _______   | || |  ________    | |     | |       _      | || |       _      | || |      _       | |
-| |     /  \     | || |   /  ___  |  | || | |_   ___ `.  | |     | |      / /     | || |      | |     | || |     \ \      | |
-| |    / /\ \    | || |  |  (__ \_|  | || |   | |   `. \ | |     | |     / /      | || |      | |     | || |      \ \     | |
-| |   / ____ \   | || |   '.___`-.   | || |   | |    | | | |     | |    < <       | || |     _| |_    | || |       > >    | |
-| | _/ /    \ \_ | || |  |`\____) |  | || |  _| |___.' / | |     | |     \ \      | || |     \   /    | || |      / /     | |
-| ||____|  |____|| || |  |_______.'  | || | |________.'  | |     | |      \_\     | || |      \_/     | || |     /_/      | |
-| |              | || |              | || |              | |     | |              | || |              | || |              | |
-| '--------------' || '--------------' || '--------------' |     | '--------------' || '--------------' || '--------------' |
- '----------------'  '----------------'  '----------------'       '----------------'  '----------------'  '----------------' 
+
+                      Movimento:                                                       Sparo:
+                                                            
+                  .----------------.                                             .----------------. 
+                 | .--------------. |                                           | .--------------. |
+                 | | _____  _____ | |                                           | |      ___     | |
+                 | ||_   _||_   _|| |                                           | |     / _ \    | |
+                 | |  | | /\ | |  | |                                           | |    |_/ \_|   | |
+                 | |  | |/  \| |  | |                                           | |      | |     | |
+                 | |  |   /\   |  | |                                           | |      | |     | |
+                 | |  |__/  \__|  | |                                           | |      |_|     | |
+                 | |              | |                                           | |              | |
+                 | '--------------' |                                           | '--------------' |
+                  '----------------'                                             '----------------' 
+ .----------------.  .----------------.  .----------------.  .----------------.  .----------------.  .----------------. 
+| .--------------. || .--------------. || .--------------. || .--------------. || .--------------. || .--------------. |
+| |      __      | || |    _______   | || |  ________    | || |       _      | || |       _      | || |      _       | |
+| |     /  \     | || |   /  ___  |  | || | |_   ___ `.  | || |      / /     | || |      | |     | || |     \ \      | |
+| |    / /\ \    | || |  |  (__ \_|  | || |   | |   `. \ | || |     / /      | || |      | |     | || |      \ \     | |
+| |   / ____ \   | || |   '.___`-.   | || |   | |    | | | || |    < <       | || |     _| |_    | || |       > >    | |
+| | _/ /    \ \_ | || |  |`\____) |  | || |  _| |___.' / | || |     \ \      | || |     \   /    | || |      / /     | |
+| ||____|  |____|| || |  |_______.'  | || | |________.'  | || |      \_\     | || |      \_/     | || |     /_/      | |
+| |              | || |              | || |              | || |              | || |              | || |              | |
+| '--------------' || '--------------' || '--------------' || '--------------' || '--------------' || '--------------' |
+ '----------------'  '----------------'  '----------------'  '----------------'  '----------------'  '----------------' 
 
 ");
         }
