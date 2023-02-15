@@ -24,13 +24,13 @@ namespace Stricker
         public static void Main(string[] args)
         {
             Console.CursorVisible = false;
-			Database.DrawClassification();
-			Database.Insert(ref CurrentUser);
+			//Database.DrawClassification();
+			//Database.Insert(ref CurrentUser);
 			//Console.ReadKey();
 			Time.Start();
             Console.SetWindowPosition(0,0);
-             Console.SetBufferSize(140, 100);
-            //Console.SetWindowSize(300, 300);
+            Console.SetBufferSize(140, 100);
+            //Console.SetWindowSize(140, 100);
             Music.Title();
             Start();
             Music.SoundTrack(true);
@@ -225,6 +225,11 @@ namespace Stricker
                                 SelectionThemes(colorindex);
                                 Console.ResetColor();
                                 break;
+                            case 2:
+                                Graphic.Clear();
+                                Commands();
+                                Console.ReadKey();
+                                break;
                             case 3:
                                 Environment.Exit(0);
                                 break;
@@ -329,6 +334,35 @@ namespace Stricker
                 }
             }
         }
+        static void Commands()
+        {
+            Console.WriteLine(@"
+                  .----------------.                                                  .----------------. 
+                 | .--------------. |                                                | .--------------. |
+                 | | _____  _____ | |                                                | |      ___     | |
+                 | ||_   _||_   _|| |                                                | |     / _ \    | |
+                 | |  | | /\ | |  | |                                                | |    |_/ \_|   | |
+                 | |  | |/  \| |  | |                                                | |      | |     | |
+                 | |  |   /\   |  | |                                                | |      | |     | |
+                 | |  |__/  \__|  | |                                                | |      |_|     | |
+                 | |              | |                                                | |              | |
+                 | '--------------' |                                                | '--------------' |
+                  '----------------'                                                  '----------------' 
+ .----------------.  .----------------.  .----------------.       .----------------.  .----------------.  .----------------. 
+| .--------------. || .--------------. || .--------------. |     | .--------------. || .--------------. || .--------------. |
+| |      __      | || |    _______   | || |  ________    | |     | |       _      | || |       _      | || |      _       | |
+| |     /  \     | || |   /  ___  |  | || | |_   ___ `.  | |     | |      / /     | || |      | |     | || |     \ \      | |
+| |    / /\ \    | || |  |  (__ \_|  | || |   | |   `. \ | |     | |     / /      | || |      | |     | || |      \ \     | |
+| |   / ____ \   | || |   '.___`-.   | || |   | |    | | | |     | |    < <       | || |     _| |_    | || |       > >    | |
+| | _/ /    \ \_ | || |  |`\____) |  | || |  _| |___.' / | |     | |     \ \      | || |     \   /    | || |      / /     | |
+| ||____|  |____|| || |  |_______.'  | || | |________.'  | |     | |      \_\     | || |      \_/     | || |     /_/      | |
+| |              | || |              | || |              | |     | |              | || |              | || |              | |
+| '--------------' || '--------------' || '--------------' |     | '--------------' || '--------------' || '--------------' |
+ '----------------'  '----------------'  '----------------'       '----------------'  '----------------'  '----------------' 
+
+");
+        }
+
         public static void SelectionThemes(int index)
         {
             Console.Clear();
