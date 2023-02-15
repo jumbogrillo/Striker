@@ -95,7 +95,9 @@ namespace Striker_finale
 			{
 				Console.Write("Enter your username: ");
 				currentUser = Console.ReadLine();
-				if (IsPresent(currentUser)) Console.WriteLine("The username already exist");
+				if (IsPresent(currentUser)) Console.WriteLine($"{currentUser} already exist");
+				else if (currentUser.Length > 12) Console.WriteLine("The maximum length is 12!!!");
+				else if (currentUser.Length < 5) Console.WriteLine("The minimum length is 5");
 				else break;
 			} while (true);
 

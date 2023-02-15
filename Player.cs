@@ -42,7 +42,7 @@ namespace Stricker
 				var key = Console.ReadKey(true).Key;
 				if(key == lastKey)
                 {
-					if(!(DateTime.Now > Timestamp.AddSeconds(0.09)))
+					if(!(DateTime.Now > Timestamp.AddSeconds(0.3)))
 					{
 						keycount++;
 					}

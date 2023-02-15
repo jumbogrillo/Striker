@@ -93,7 +93,7 @@ namespace Stricker
 					Reset();
                     goto StartGame;
                 }
-				Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);
+				Graphic.Draw_Map(Width / 2 - player.Position[0], Height / 2 - player.Position[1], Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);
 				player.UpdateShots(Map, enemies);
                 player.Move(Map, musica);
 			}
