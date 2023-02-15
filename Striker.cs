@@ -24,8 +24,8 @@ namespace Stricker
         public static void Main(string[] args)
         {
             Console.CursorVisible = false;
-			//Database.DrawClassification();
-			//Database.Insert(ref CurrentUser);
+			Database.DrawClassification();
+			Database.Insert(ref CurrentUser);
 			//Console.ReadKey();
 			Time.Start();
             Console.SetWindowPosition(0,0);

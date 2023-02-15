@@ -89,6 +89,7 @@ namespace Striker_finale
 		}
 		public static void Insert(ref string currentUser)
 		{
+			Console.WriteLine();
 			Connect();
 			do
 			{
@@ -127,7 +128,7 @@ namespace Striker_finale
 			{
 				Graphic.Rect(0, 6 + i, users[users.Count - 1 - i]["username"].ToString(), setBG: false, fg:ConsoleColor.White);
 				Graphic.Rect(12, 6 + i, users[users.Count - 1 - i]["score"].ToString(), setBG: false, fg: ConsoleColor.White);
-				Graphic.Rect(20, 6 + i, users[users.Count - 1 - i]["date"].ToString(), setBG: false, fg: ConsoleColor.White);
+				Graphic.Rect(20, 6 + i, Convert.ToDateTime(users[users.Count - 1 - i]["date"]).ToString("HH:mm - dd/MM/yy"), setBG: false, fg: ConsoleColor.White);
 			}
 		}
 	}
