@@ -3,6 +3,9 @@ using MongoDB.Bson;// To write in the cluster
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Numerics;
+using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace Striker
 {
@@ -10,22 +13,12 @@ namespace Striker
 	{
 		static IMongoCollection<BsonDocument> Collection;
 		static MongoClient Client;
-		static BsonDocument Schema = new BsonDocument
-		{
-			{"username", "" },
-			{"score", 0 },
-			{"date", DateTime.Now }
-		};
 		public static void Connect(string collection)
 		{
 			var settings = MongoClientSettings.FromConnectionString("mongodb+srv://marco0019:bamboccetti@striker.pq8k4qv.mongodb.net/test");
 			settings.ServerApi = new ServerApi(ServerApiVersion.V1);
 			Client = new MongoClient(settings);
 			Collection = Client.GetDatabase("Striker").GetCollection<BsonDocument>(collection);
-		}
-		public static void Test()
-		{
-			Sort();
 		}
 		public static List<BsonDocument> AllDoc(string collection)
 		{
@@ -44,42 +37,6 @@ namespace Striker
 			var filter = Builders<BsonDocument>.Filter.Eq("username", currentUser);
 			return Collection.Find(filter).FirstOrDefault();
 		}
-		public static void Sort()
-		{
-			Connect("classification");
-			var documents = Collection.Find(new BsonDocument()).ToList();
-			int[] scores = ScoreSorted();
-			for(int i = 0; i < scores.Length; i++)
-			{
-				Console.WriteLine(documents[scores[i]]["username"] + " " + documents[scores[i]]["score"]);
-			}
-		}
-		private static int[] ScoreSorted()
-		{
-			var documents = Collection.Find(new BsonDocument()).ToList();
-			int[] indexes = new int[documents.Count];
-			for (int i = 0; i < documents.Count - 1; i++)
-				for (int j = i + 1; j < documents.Count; j++)
-					if (documents[i]["score"] > documents[j]["score"])
-					{
-						var appo = documents[i];
-						documents[i] = documents[j];
-						documents[j] = appo;
-						indexes[i] = j;
-					}
-					else if (String.Compare(documents[i]["username"].ToString(), documents[j]["username"].ToString()) > 0)
-					{
-
-					}
-			return indexes;
-		}
-		private static void Invert(List<BsonDocument> docs, int index1, int index2, int[] indexes)
-		{
-			var appo = docs[index1];
-			docs[index1] = docs[index2];
-			docs[index2] = appo;
-			indexes[index1] = index2;
-		}
 		public static void Update(string currentUser, int highscore, long time)
 		{
 			Connect("classification");
@@ -92,6 +49,11 @@ namespace Striker
 			filter = Builders<BsonDocument>.Filter.Eq("username", currentUser);
 			update = Builders<BsonDocument>.Update.Set("time", time);
 			Collection.UpdateOne(filter, update);
+		}
+		public static void SetInitialMap(string[,] map, int width, int height)
+		{
+			var obs = AllDoc("obstacles");
+			foreach(var item in obs)map[Convert.ToInt16(item["position"][1]), Convert.ToInt16(item["position"][0])] = "Obs";
 		}
 		public static void Login(ref string currentUser)
 		{
@@ -138,29 +100,11 @@ namespace Striker
 				{ "shotMissed", 0 }
 			});
 		}
-		public static void Delete(string currentUser)
+		public static void Delete(string collection, string currentUser)
 		{
-			Connect("classification");
+			Connect(collection);
 			var filter = Builders<BsonDocument>.Filter.Eq("username", currentUser);
 			Collection.DeleteOne(filter);
-		}
-		public static void Clear(string collection)
-		{
-			Connect("classification");
-			var documents = AllDoc("");
-			foreach(var item in documents)
-			{
-				var filter = Builders<BsonDocument>.Filter.Eq("score", 0);
-				Collection.DeleteOne(filter);
-			}
-		}
-		public static void Insert(string[,] map, int width, int height)
-		{
-			Connect("map");
-			Collection.InsertOne(new BsonDocument
-			{
-				{"map", map.ToBson() }
-			});
 		}
 		public static void DrawClassification()
 		{
@@ -188,16 +132,87 @@ namespace Striker
 			Console.SetWindowPosition(0, 0);
 			Console.SetWindowSize(140, 50);
 		}
-		public static void Lobby(string[,] map)
+		public static void InsertObs(string[,] map, int width, int height)
 		{
-			Stopwatch time = new Stopwatch();
-			time.Start();
-			if(AllDoc("multiplayer").Count == 1)
+			Graphic.Initialize_Map(map);
+			Graphic.Draw_Obstacles_Randomly(map);
+			Connect("obstacles");
+			List<List<int>> list = Graphic.GetObstacles(map,width, height );
+			foreach(List<int> item in list)
 			{
-				Connect("map");
-				Insert(map, 40, 25);
+				Collection.InsertOne(new BsonDocument
+				{
+					{"position", new BsonArray(item) }
+				});
 			}
+		}
+		public static void Lobby(string[,] map, int width, int height, string currentUser, Player player)
+		{
+			Insert(currentUser, player);
+			var players = AllDoc("multiplayer");
+			if (players.Count == 1)
+			{
+				Graphic.Initialize_Map(map);
+				Graphic.Draw_Obstacles_Randomly(map);
+
+			}
+			else SetInitialMap(map, width, height);
+			Stopwatch time = new Stopwatch();
+
+			time.Start();
+			while(players.Count < 2 | time.ElapsedMilliseconds / 1000 < 10)
+			{
+				Console.SetCursorPosition(0, 0);
+				Console.Write(time.ElapsedMilliseconds);
+			}
+		}
+		public static void UpdatePlayers(string[,] map, int width, int height)
+		{
+			var players = AllDoc("multiplayer");
+			ClearMap(map, width, height);
+			foreach(var player in players)
+			{
+				map[Convert.ToInt16(player["posY"]), Convert.ToInt16(player["posX"])] = "Pl";
+				for (int i = 0; i < player["shotsY"].ToBson().Length; i++)
+					map[Convert.ToInt16(player["shotsY"][i]), Convert.ToInt16(player["shotsX"][i])] = "Sh";
+			}
+		}
+		static void ClearMap(string[,] map, int width, int height){
+			for (int i = 0; i < height; i++)
+				for (int j = 0; j < width; j++) if (map[i, j] == "Pl" | map[i, j] == "Sh") map[i, j] = "E";
+		}
+		static void Insert(string currentUser, Player player)
+		{
 			Connect("multiplayer");
+			Collection.InsertOne(new BsonDocument
+			{
+				{"user", currentUser },
+				{"posX", player.Position[0] },
+				{"posY", player.Position[1] },
+				{"shotsX", new BsonArray(SetShotPosition(player, 0)) },
+				{"shotsY", new BsonArray(SetShotPosition(player, 1)) }
+			});
+		}
+		public static void Update(string currentUser, Player player)
+		{
+			var filter = Builders<BsonDocument>.Filter.Eq("username", currentUser);
+			var update = Builders<BsonDocument>.Update.Set("posX", player.Position[0]);
+			Collection.UpdateOne(filter, update);
+			update = Builders<BsonDocument>.Update.Set("posY", player.Position[1]);
+			Collection.UpdateOne(filter, update);
+			update = Builders<BsonDocument>.Update.Set("shotsX", new BsonArray(SetShotPosition(player, 0)));
+			Collection.UpdateOne(filter, update);
+			update = Builders<BsonDocument>.Update.Set("shotsY", new BsonArray(SetShotPosition(player, 1)));
+			Collection.UpdateOne(filter, update);
+		}
+		static List<int> SetShotPosition(Player player, int index)
+		{
+			List<int> ints = new List<int>();
+			for(int i = 0; i < player.Shots.Count; i++)
+			{
+				ints.Add(player.Shots[i].Position[index]);
+			}
+			return ints;
 		}
 	}
 }

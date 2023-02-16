@@ -24,26 +24,18 @@ namespace Striker
         public static void Main(string[] args)
         {
             Console.Title = "Striker";
-            Console.CursorVisible = false;
-            Console.SetWindowSize(140, 70);
-            Console.SetBufferSize(Console.WindowWidth, Console.WindowHeight);
-            Console.SetWindowPosition(0, 0);
-          //Database.DrawClassification();
-            Console.SetWindowSize(120, 30);
-            Console.SetBufferSize(120, 30);
-          //Database.Insert(ref CurrentUser);
+			Console.ReadKey();
+            player = new Player(Width, Height);
+			Database.Register(ref CurrentUser);
+			Database.Lobby(Map, Width, Height, CurrentUser, player);
             Console.CursorVisible = false;
             Console.Clear();
             Time.Start();
             Music.Title();
-            Console.SetBufferSize(120, 30);
             Start();
             Music.SoundTrack(true);
-            player = new Player(Width, Height);
 
         StartGame:
-            Graphic.Initialize_Map(Map);
-            Graphic.Draw_Obstacles_Randomly(Map);
             player.Combo = 0;
             Graphic.Clear(1);
             for (int i = 0; i < 6; i++)
@@ -61,8 +53,8 @@ namespace Striker
             Graphic.Draw_Frame();
             while (player.Life > 0)
             {
-                Console.SetBufferSize(140, 70);
-                if (Time.ElapsedMilliseconds % 5000 < 100) enemies.Add(new Enemy(Map, Width, Height, 2, 1));
+				//Console.SetBufferSize(140, 70);
+                //if (Time.ElapsedMilliseconds % 5000 < 100) enemies.Add(new Enemy(Map, Width, Height, 2, 1));
                 if (player.Combo > 0)
                 {
                     Console.SetCursorPosition(102, 13);
@@ -96,7 +88,11 @@ namespace Striker
                 Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);//Width / 2 - player.Position[0], Height / 2 - player.Position[1], 
                 player.UpdateShots(Map, enemies);
                 player.Move(Map, musica);
+				Database.Update(CurrentUser, player);
+				Database.UpdatePlayers(Map, Width, Height);
             }
+			int position = Database.AllDoc("multiplayer").Count;
+
             GameOver();
             Database.Update(CurrentUser, 100 * (Level - 1) + player.Score, Time.ElapsedMilliseconds);
             Database.DrawClassification();
@@ -372,7 +368,6 @@ namespace Striker
 
 ");
         }
-
         public static void SelectionThemes(int index)
         {
             Console.Clear();
@@ -481,6 +476,7 @@ namespace Striker
         {
             Console.Clear();
             Graphic.Word(11, 3, "Game Over");
+			Graphic.Word(5, 15, Database.AllDoc("multiplayer").Count.ToString());
             if (musica)
             {
                 Music.GameOver();
@@ -612,6 +608,5 @@ namespace Striker
                 }
             }
         }
-        
     }
 }
