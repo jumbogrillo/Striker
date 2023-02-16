@@ -4,35 +4,39 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 
-namespace Stricker
+namespace Striker_Finale
 {
-    internal class Striker
+    public class Striker
     {
         public const int Height = 25;
         public const int Width = 40;
         public static bool musica = true;
-		public static int Level = 1;
-		public static string CurrentUser;
+        public static int Level = 1;
+        public static string CurrentUser;
         public static Thread sottofondo = new Thread(Music.SoundTrack);
         static Stopwatch Time = new Stopwatch();
-		public static String[,] Map = new String[Height, Width];
+        public static String[,] Map = new String[Height, Width];
         static Player player;
-		static List<Enemy> enemies = new List<Enemy>();
-		static ConsoleColor PlayerColor = ConsoleColor.DarkRed, EnemyColor = ConsoleColor.DarkMagenta,
+        static List<Enemy> enemies = new List<Enemy>();
+        static ConsoleColor PlayerColor = ConsoleColor.DarkRed, EnemyColor = ConsoleColor.DarkMagenta,
             BGColor = ConsoleColor.Gray, ObsColor = ConsoleColor.DarkGray, ShColor = ConsoleColor.Black;
-        
+
         public static void Main(string[] args)
         {
-            Console.SetWindowPosition(0,0);
-            Console.SetWindowSize(140, 70);
-            Console.SetBufferSize(140, 70);
-			Database.DrawClassification();
-			Database.Insert(ref CurrentUser);
-			Console.Clear();
+            Console.Title = "Striker";
             Console.CursorVisible = false;
-			//Console.ReadKey();
-			Time.Start();
+            Console.SetBufferSize(140, 70);
+            Console.SetWindowSize(140, 70);
+            Console.SetWindowPosition(0, 0);
+          //Database.DrawClassification();
+            Console.SetWindowSize(120, 30);
+            Console.SetBufferSize(120, 30);
+          //Database.Insert(ref CurrentUser);
+            Console.CursorVisible = false;
+            Console.Clear();
+            Time.Start();
             Music.Title();
+            Console.SetBufferSize(120, 30);
             Start();
             Music.SoundTrack(true);
             player = new Player(Width, Height);
@@ -41,22 +45,24 @@ namespace Stricker
             Graphic.Initialize_Map(Map);
             Graphic.Draw_Obstacles_Randomly(Map);
             player.Combo = 0;
-            Console.Clear();
+            Graphic.Clear(1);
             for (int i = 0; i < 6; i++)
             {
                 LevelScreen(i % 2 == 0 ? ConsoleColor.Yellow : ConsoleColor.DarkYellow);
                 Console.BackgroundColor = ConsoleColor.Black;
                 Thread.Sleep(300);
             }
-            Music.Sound("level");
-            Console.Clear();    	           
+            if (musica) Music.Sound("level");
+            Graphic.Clear();
+            Console.Clear();
             Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);
             Graphic.Draw_Life_Bar(player.Life);
-            Graphic.Draw_Score(player.Score, 2);   
-			Graphic.Draw_Frame();
-			while (player.Life > 0)
-			{
-                if (Time.ElapsedMilliseconds % 5000 < 100)enemies.Add(new Enemy(Map, Width, Height, 2, 1));
+            Graphic.Draw_Score(player.Score, 2);
+            Graphic.Draw_Frame();
+            while (player.Life > 0)
+            {
+                Console.SetBufferSize(140, 70);
+                if (Time.ElapsedMilliseconds % 5000 < 100) enemies.Add(new Enemy(Map, Width, Height, 2, 1));
                 if (player.Combo > 0)
                 {
                     Console.SetCursorPosition(102, 13);
@@ -72,35 +78,35 @@ namespace Stricker
                     }
                 }
                 if (player.Hit(enemies))
-				{
-					player.Life--;
-					Graphic.Draw_Life_Bar(player.Life);
-				}
-				foreach (Enemy enemy in enemies)
-				{
-					enemy.Update(Map, player);
-					enemy.UpdateShots(Map);
-				}
-                if(player.Score > 99)
+                {
+                    player.Life--;
+                    Graphic.Draw_Life_Bar(player.Life);
+                }
+                foreach (Enemy enemy in enemies)
+                {
+                    enemy.Update(Map, player);
+                    enemy.UpdateShots(Map);
+                }
+                if (player.Score > 99)
                 {
                     Level++;
-					Reset();
+                    Reset();
                     goto StartGame;
                 }
-				Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);//Width / 2 - player.Position[0], Height / 2 - player.Position[1], 
-				player.UpdateShots(Map, enemies);
+                Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);//Width / 2 - player.Position[0], Height / 2 - player.Position[1], 
+                player.UpdateShots(Map, enemies);
                 player.Move(Map, musica);
-			}
+            }
             GameOver();
-			Database.Update(CurrentUser, 100 * (Level - 1) + player.Score, Time.ElapsedMilliseconds);
-			Database.DrawClassification();
-			Console.ReadKey();
+            Database.Update(CurrentUser, 100 * (Level - 1) + player.Score, Time.ElapsedMilliseconds);
+            Database.DrawClassification();
+            Console.ReadKey();
         }
-		static void Start()
-		{
-			Thread title = new Thread(Title);
-			title.Start();
-			musica = true;
+        static void Start()
+        {
+            Thread title = new Thread(Title);
+            title.Start();
+            musica = true;
             ConsoleKey startinput;
             bool startchoose = false;
             while (!startchoose)
@@ -145,7 +151,7 @@ namespace Stricker
           -#@@=   .#*-  :+@#:  
              ");
                     }
-                    
+
                 }
                 else
                 {
@@ -156,8 +162,8 @@ namespace Stricker
                     startchoose = true;
                 }
             }
-			title.Abort();
-			Console.ResetColor();
+            title.Abort();
+            Console.ResetColor();
             Console.CursorVisible = false;
 
         Menu:
@@ -174,13 +180,13 @@ namespace Stricker
                 input = Console.ReadKey(false).Key;
                 if (input == ConsoleKey.UpArrow && index >= 2)
                 {
-                    index = index-2;
+                    index = index - 2;
                 }
                 else if (input == ConsoleKey.DownArrow && index < 2)
                 {
-                    index+=2;
+                    index += 2;
                 }
-                else if(input == ConsoleKey.LeftArrow && index >= 1)
+                else if (input == ConsoleKey.LeftArrow && index >= 1)
                 {
                     index--;
                 }
@@ -218,6 +224,7 @@ namespace Stricker
                                     next = false;
                                     goto Menu;
                                 }
+                                Console.Clear();
                                 SelectionThemes(colorindex);
                                 Console.ResetColor();
                                 break;
@@ -234,17 +241,17 @@ namespace Stricker
                 }
             }
         }
-		static void Reset()
-		{
+        static void Reset()
+        {
             int lastLife = player.Life;
-			Map = new String[Height, Width];
-			Graphic.Initialize_Map(Map);
-			Graphic.Draw_Obstacles_Randomly(Map);
-			player = new Player(Width, Height);
+            Map = new String[Height, Width];
+            Graphic.Initialize_Map(Map);
+            Graphic.Draw_Obstacles_Randomly(Map);
+            player = new Player(Width, Height);
             player.Life = lastLife;
-			enemies = new List<Enemy>();
-			Map[player.Position[1], player.Position[0]] = "Pl";
-		}
+            enemies = new List<Enemy>();
+            Map[player.Position[1], player.Position[0]] = "Pl";
+        }
         public static void Menu(int index)
         {
             Console.Clear();
@@ -266,26 +273,26 @@ namespace Stricker
                 {
                     case 0:
                         word = "Gioca";
-                        if (index == i) Graphic.Word(Width - 33, 9, word,2,PlayerColor);
-                        else Graphic.Word(Width - 33, 9,word,2);
+                        if (index == i) Graphic.Word(Width - 33, 9, word, 2, PlayerColor);
+                        else Graphic.Word(Width - 33, 9, word, 2);
                         break;
                     case 1:
                         word = "Temi";
-                        if (index == i) Graphic.Word(Width + 33, 9, word, 2,PlayerColor);
-                        else Graphic.Word(Width + 33, 9, word,2);
+                        if (index == i) Graphic.Word(Width + 33, 9, word, 2, PlayerColor);
+                        else Graphic.Word(Width + 33, 9, word, 2);
                         break;
                     case 2:
                         word = "Comandi";
-                        if (index == i) Graphic.Word(Width - 33, 20, word,2,PlayerColor);
-                        else Graphic.Word(Width - 33, 20, word,2);
+                        if (index == i) Graphic.Word(Width - 33, 20, word, 2, PlayerColor);
+                        else Graphic.Word(Width - 33, 20, word, 2);
                         break;
                     case 3:
                         word = "Esci";
-                        if (index == i) Graphic.Word(Width + 35, 20, word,2,PlayerColor);
-                        else Graphic.Word(Width + 35,20, word,2);
+                        if (index == i) Graphic.Word(Width + 35, 20, word, 2, PlayerColor);
+                        else Graphic.Word(Width + 35, 20, word, 2);
                         break;
                 }
-                
+
                 Console.ResetColor();
             }
         }
@@ -293,7 +300,7 @@ namespace Stricker
         {
             //Title LOGO
             int Title_color = 0;
-            Console.ForegroundColor= ConsoleColor.Yellow;
+            Console.ForegroundColor = ConsoleColor.Yellow;
             while (true)
             {
                 Console.SetCursorPosition(0, 0);
@@ -335,22 +342,22 @@ namespace Stricker
         }
         static void Commands()
         {
-            Console.SetCursorPosition(0,0);
+            Console.SetCursorPosition(0, 0);
             Console.WriteLine(@"
 
-                      Movimento:                                                       Sparo:
-                                                            
-                  .----------------.                                             .----------------. 
-                 | .--------------. |                                           | .--------------. |
-                 | | _____  _____ | |                                           | |      ___     | |
-                 | ||_   _||_   _|| |                                           | |     / _ \    | |
-                 | |  | | /\ | |  | |                                           | |    |_/ \_|   | |
-                 | |  | |/  \| |  | |                                           | |      | |     | |
-                 | |  |   /\   |  | |                                           | |      | |     | |
-                 | |  |__/  \__|  | |                                           | |      |_|     | |
-                 | |              | |                                           | |              | |
-                 | '--------------' |                                           | '--------------' |
-                  '----------------'                                             '----------------' 
+                         Movimento:                                                    Sparo:
+                                                        
+                     .----------------.                                          .----------------. 
+                    | .--------------. |                                        | .--------------. |
+                    | | _____  _____ | |                                        | |       _      | |
+                    | ||_   _||_   _|| |                                        | |      / \     | |
+                    | |  | | /\ | |  | |                                        | |     /   \    | |
+                    | |  | |/  \| |  | |                                        | |      | |     | |
+                    | |  |   /\   |  | |                                        | |      | |     | |
+                    | |  |__/  \__|  | |                                        | |      |_|     | |
+                    | |              | |                                        | |              | |
+                    | '--------------' |                                        | '--------------' |
+                     '----------------'                                          '----------------' 
  .----------------.  .----------------.  .----------------.  .----------------.  .----------------.  .----------------. 
 | .--------------. || .--------------. || .--------------. || .--------------. || .--------------. || .--------------. |
 | |      __      | || |    _______   | || |  ________    | || |       _      | || |       _      | || |      _       | |
@@ -435,7 +442,7 @@ namespace Stricker
                                          | | \ \ (_) \__ \__ \ (_) |
                                          |_|  \_\___/|___/___/\___/");
                             break;
-                           
+
                         case 3:
                             Console.ForegroundColor = ConsoleColor.DarkGreen;
                             PlayerColor = ConsoleColor.DarkGreen;
@@ -467,8 +474,8 @@ namespace Stricker
         }
         public static void LevelScreen(ConsoleColor color)
         {
-            Graphic.Word(42, 3, "Level", 2,fg:color);
-            Graphic.Word(62, 13, Level.ToString(),2,fg:color);
+            Graphic.Word(42, 3, "Level", 2, fg: color);
+            Graphic.Word(62, 13, Level.ToString(), 2, fg: color);
         }
         public static void GameOver()
         {
@@ -484,6 +491,127 @@ namespace Stricker
                 Console.ReadKey();
             }
         }
+        public static void Pause()
+        {
+            if(musica)Music.SoundTrack();
+            bool backmenu = false, next = false;
+            int colorindex = 0;
+            int index = 0;
+            ConsoleKey input;
+            Console.Clear();
+            while (!next)
+            {
+            PauseMenuWritings:
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.SetCursorPosition(0, 0);
+                Console.WriteLine(@"   
+                              _______.___________.______      __   __  ___  _______ .______      
+                             /       |           |   _  \    |  | |  |/  / |   ____||   _  \     
+                            |   (----`---|  |----|  |_)  |   |  | |  '  /  |  |__   |  |_)  |    
+                             \   \       |  |    |      /    |  | |    <   |   __|  |      /     
+                         .----)   |      |  |    |  |\  \----|  | |  .  \  |  |____ |  |\  \----.
+                         |_______/       |__|    | _| `._____|__| |__|\__\ |_______|| _| `._____|");
+                //Console.WriteLine();
+                Console.ResetColor();
+                string word = "";
+                for (int i = 0; i < 4; i++)
+                {
+                    switch (i)
+                    {
+                        case 0:
+                            word = "Resume";
+                            if (index == i) Graphic.Word(Width - 33, 9, word, 2, PlayerColor);
+                            else Graphic.Word(Width - 33, 9, word, 2);
+                            break;
+                        case 1:
+                            word = "Temi";
+                            if (index == i) Graphic.Word(Width + 33, 9, word, 2, PlayerColor);
+                            else Graphic.Word(Width + 33, 9, word, 2);
+                            break;
+                        case 2:
+                            word = "Comandi";
+                            if (index == i) Graphic.Word(Width - 33, 20, word, 2, PlayerColor);
+                            else Graphic.Word(Width - 33, 20, word, 2);
+                            break;
+                        case 3:
+                            word = "Esci";
+                            if (index == i) Graphic.Word(Width + 35, 20, word, 2, PlayerColor);
+                            else Graphic.Word(Width + 35, 20, word, 2);
+                            break;
+                    }
+                }
+                backmenu = false;
+                Console.ResetColor();
+                Console.SetCursorPosition(40, index);
+                input = Console.ReadKey(false).Key;
+                if (input == ConsoleKey.UpArrow && index >= 2)
+                {
+                    index = index - 2;
+                }
+                else if (input == ConsoleKey.DownArrow && index < 2)
+                {
+                    index += 2;
+                }
+                else if (input == ConsoleKey.LeftArrow && index >= 1)
+                {
+                    index--;
+                }
+                else if (input == ConsoleKey.RightArrow && index < 3)
+                {
+                    index++;
+                }
+                else if (input == ConsoleKey.Enter)
+                {
+                    while (!backmenu)
+                    {
+                        backmenu = false;
+                        switch (index)
+                        {
+                            case 0:
+                                backmenu = true;
+                                Graphic.Clear();
+                                Graphic.Draw_Life_Bar(player.Life);
+                                Graphic.Draw_Score(player.Score, 2);
+                                Graphic.Draw_Frame();
+                                return;
+                            case 1:
+                                Console.Clear();
+                                SelectionThemes(colorindex);
+                                input = Console.ReadKey().Key;
+                                if (input == ConsoleKey.UpArrow && colorindex > 0)
+                                {
+                                    colorindex--;
+                                }
+                                else if (input == ConsoleKey.DownArrow && colorindex < 3)
+                                {
+                                    colorindex++;
+                                }
+                                else if (input == ConsoleKey.Enter)
+                                {
+                                    backmenu = true;
+                                    Graphic.Clear();
+                                    goto PauseMenuWritings;
+                                }
+                                Console.ResetColor();
+                                if(input == ConsoleKey.Enter) 
+                                { index = 0; 
+                                  backmenu = true;}
+                                break;
+                            case 2:
+                                Graphic.Clear();
+                                Commands();
+                                Console.ReadKey();
+                                Graphic.Clear();
+                                goto PauseMenuWritings;
+                            case 3:
+                                Environment.Exit(0);
+                                break;
+                        }
 
+                    }
+                }
+            }
+        }
+        
     }
 }

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Data.SqlTypes;
 using System.Threading;
 
-namespace Stricker
+namespace Striker_Finale
 {
 	class Player
 	{
@@ -45,7 +45,12 @@ namespace Stricker
 					if(!(DateTime.Now > Timestamp.AddSeconds(0.3)))
 					{
 						keycount++;
+						Timestamp = DateTime.Now;
 					}
+                    else
+                    {
+						keycount = 0;
+                    }
                 }
                 else keycount = 0;
 				if (keycount < 4)
@@ -65,6 +70,9 @@ namespace Stricker
 					if (key == ConsoleKey.E) { Shots.Add(new Shoot(map, Width, Height, new int[] { Position[0], Position[1] }, "RU", "Pl", 20, 1)); if (musica) { Music.Shoot(); } }
 						if (key == ConsoleKey.C) { Shots.Add(new Shoot(map, Width, Height, new int[] { Position[0], Position[1] }, "RD", "Pl", 20, 1)); if (musica) { Music.Shoot(); } }
 					if (key == ConsoleKey.Z) { Shots.Add(new Shoot(map, Width, Height, new int[] { Position[0], Position[1] }, "LD", "Pl", 20, 1)); if (musica) { Music.Shoot(); } }
+					if(key == ConsoleKey.P)
+					{ Striker.Pause(); 
+						if(musica)Music.SoundTrack(true);}
 					map[Position[1], Position[0]] = "Pl";
 					lastKey = key;
 					Timestamp = DateTime.Now;
@@ -86,7 +94,7 @@ namespace Stricker
 				{
 					if (collision == "Enem")
 					{
-						Score += 100 * (Combo + 1);
+						Score += 5 * (Combo + 1);
 						Combo++;
 						Graphic.Word(12 + Width * 2, Graphic.Margin_Top, this.Score > 99 ? "   " : "  ");
 						Graphic.Draw_Score(this.Score, 2);
