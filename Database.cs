@@ -2,8 +2,8 @@
 using MongoDB.Bson;// To write in the cluster
 using System;
 using System.Collections.Generic;
-using Stricker;
 using System.Diagnostics;
+using Striker_Finale;
 
 namespace Striker_finale
 {
