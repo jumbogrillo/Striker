@@ -1,11 +1,10 @@
 ﻿using Striker;
-using Striker_finale;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlTypes;
 using System.Threading;
 
-namespace Striker_Finale
+namespace Striker
 {
 	class Player
 	{

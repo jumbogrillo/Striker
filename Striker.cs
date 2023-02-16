@@ -1,10 +1,10 @@
-﻿using Striker_finale;
+﻿using Striker;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 
-namespace Striker_Finale
+namespace Striker
 {
     public class Striker
     {
@@ -25,8 +25,8 @@ namespace Striker_Finale
         {
             Console.Title = "Striker";
             Console.CursorVisible = false;
-            Console.SetBufferSize(140, 70);
             Console.SetWindowSize(140, 70);
+            Console.SetBufferSize(Console.WindowWidth, Console.WindowHeight);
             Console.SetWindowPosition(0, 0);
           //Database.DrawClassification();
             Console.SetWindowSize(120, 30);

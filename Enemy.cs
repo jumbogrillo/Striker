@@ -1,5 +1,4 @@
-﻿using Stricker;
-using Striker;
+﻿using Striker;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -7,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Striker_finale
+namespace Striker
 {
 	class Enemy : Player
 	{
