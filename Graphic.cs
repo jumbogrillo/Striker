@@ -4,7 +4,7 @@ using MongoDB.Driver;
 using MongoDB.Bson;// To write in the cluster
 using System.Threading;
 
-namespace Stricker
+namespace Striker_Finale
 {
 	internal class Graphic
 	{

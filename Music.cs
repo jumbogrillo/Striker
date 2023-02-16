@@ -7,7 +7,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Media;
 
-namespace Stricker
+namespace Striker_Finale
 {
     public class Music
     {

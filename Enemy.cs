@@ -1,4 +1,4 @@
-﻿using Stricker;
+﻿using Striker_Finale;
 using Striker;
 using System;
 using System.Collections.Generic;

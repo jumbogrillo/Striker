@@ -2,11 +2,12 @@
 using MongoDB.Bson;// To write in the cluster
 using System;
 using System.Collections.Generic;
-using Stricker;
+using Striker_Finale;
 using System.Diagnostics;
 
 namespace Striker_finale
 {
+
 	class Database
 	{
 		static IMongoCollection<BsonDocument> Collection;
@@ -100,6 +101,7 @@ namespace Striker_finale
 			Connect();
 			do
 			{
+				Console.CursorVisible = true;
 				Console.Write("Enter your username: ");
 				currentUser = Console.ReadLine();
 				if (IsPresent(currentUser)) Console.WriteLine($"{currentUser} already exist");
@@ -135,10 +137,10 @@ namespace Striker_finale
 		public static void DrawClassification()
 		{
 			Connect();
-			Graphic.Clear(0, 0);
-			Console.SetWindowSize(140, 50);
-			Console.SetWindowPosition(0, 0);
-			Console.SetWindowSize(140, 50);
+			Console.Clear();
+		//	Console.SetWindowSize(140, 50);
+		//	Console.SetWindowPosition(0, 0);
+		//	Console.SetWindowSize(140, 50);
 			Graphic.Word(0, 0, "Classification", 1);
 			var users = AllDoc();
 			Graphic.Rect(0, 4, "Username", setBG: false, fg: ConsoleColor.White);
@@ -149,8 +151,8 @@ namespace Striker_finale
 				Graphic.Rect(0, 6 + i, i.ToString("00"), fg: ConsoleColor.White);
 				Graphic.Rect(2, 6 + i, users[users.Count - 1 - i]["username"].ToString(), setBG: false, fg:ConsoleColor.White);
 				Graphic.Rect(14, 6 + i, users[users.Count - 1 - i]["score"].ToString(), setBG: false, fg: ConsoleColor.White);
-				Graphic.Rect(22, 6 + i, users[users.Count - 1 - i]["time"].ToString(), setBG: false, fg: ConsoleColor.White);
-				Graphic.Rect(22, 6 + i, Convert.ToDateTime(users[users.Count - 1 - i]["date"]).ToString("HH:mm - dd/MM/yy"), setBG: false, fg: ConsoleColor.White);
+			//	Graphic.Rect(22, 6 + i, users[users.Count - 1 - i]["time"].ToString(), setBG: false, fg: ConsoleColor.White);
+				Graphic.Rect(20, 6 + i, Convert.ToDateTime(users[users.Count - 1 - i]["date"]).ToString("HH:mm - dd/MM/yy"), setBG: false, fg: ConsoleColor.White);
 			}
 		}
 	}
