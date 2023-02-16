@@ -2,8 +2,8 @@
 using MongoDB.Bson;// To write in the cluster
 using System;
 using System.Collections.Generic;
-using Stricker;
 using System.Diagnostics;
+using Striker_Finale;
 
 namespace Striker_finale
 {
@@ -94,17 +94,26 @@ namespace Striker_finale
 			update = Builders<BsonDocument>.Update.Set("time", time);
 			Collection.UpdateOne(filter, update);
 		}
-		public static void Login(ref string currentUser)
+		public static void Login(ref string currentUser,ref string password)
 		{
 			Connect("classification");
-			string password = "";
+			Graphic.Word(20, 16, "Register",1, fg: ConsoleColor.Black);
+			Graphic.Word(26, 16, "Login",1);
 			do
 			{
-				Console.Write("Enter your username: ");
+				Console.SetCursorPosition(32, 21);
+				Console.ForegroundColor = ConsoleColor.Black;
+				Console.Write(currentUser);
+				Console.SetCursorPosition(32, 23);
+				Console.Write(password);
+				Console.SetCursorPosition(24, 24);
+				Console.Write($"{currentUser} already exist");
+				Console.SetCursorPosition(24, 25);
+				Console.Write("Press any key to login...");
+				Console.ResetColor();
+				Console.SetCursorPosition(32, 21);
 				currentUser = Console.ReadLine();
-				Console.WriteLine();
-				Console.Write("Enter your password: ");
-				Console.WriteLine();
+				Console.SetCursorPosition(32, 23);
 				password = Console.ReadLine();
 				if (Read(currentUser)["password"] == password) break;
 				else Console.WriteLine("Password or username is invalid! Please enter the correct username or password!!!");
@@ -115,14 +124,27 @@ namespace Striker_finale
 			Console.WriteLine();
 			Connect("classification");
 			string password = "";
-			do
-			{
+            Graphic.Word(20, 16, "Register", 1);
+            do
+            {
+				Console.SetCursorPosition(25, 20);
 				Console.Write("Enter your username: ");
+				Console.SetCursorPosition(32, 21);
 				currentUser = Console.ReadLine();
-				Console.WriteLine();
+				Console.SetCursorPosition(25, 22);
 				Console.Write("Enter your password: ");
+				Console.SetCursorPosition(32, 23);
 				password = Console.ReadLine();
-				if (IsPresent(currentUser)) Console.WriteLine($"{currentUser} already exist");
+				Console.SetCursorPosition(25, 24);
+				if (IsPresent(currentUser)) 
+				{ 
+					Console.WriteLine($"{currentUser} already exist");
+					Console.SetCursorPosition(24, 25);
+					Console.Write("Press any key to login...");
+					Console.ReadKey();
+					Login(ref currentUser, ref password); 
+					return;
+				}
 				else if (currentUser.Length > 12 | password.Length > 12) Console.WriteLine("The maximum length is 12!!!");
 				else if (currentUser.Length < 5 | password.Length < 5) Console.WriteLine("The minimum length is 5");
 				else break;

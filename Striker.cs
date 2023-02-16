@@ -28,7 +28,9 @@ namespace Striker_Finale
             Console.SetBufferSize(140, 70);
             Console.SetWindowSize(140, 70);
             Console.SetWindowPosition(0, 0);
-          //Database.DrawClassification();
+            Database.DrawClassification();
+            Console.CursorVisible = true;
+            Database.Register(ref CurrentUser);
             Console.SetWindowSize(120, 30);
             Console.SetBufferSize(120, 30);
           //Database.Insert(ref CurrentUser);
