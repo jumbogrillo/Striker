@@ -493,7 +493,7 @@ namespace Striker_Finale
         }
         public static void Pause()
         {
-            Music.SoundTrack();
+            if(musica)Music.SoundTrack();
             bool backmenu = false, next = false;
             int colorindex = 0;
             int index = 0;
@@ -540,6 +540,7 @@ namespace Striker_Finale
                             break;
                     }
                 }
+                backmenu = false;
                 Console.ResetColor();
                 Console.SetCursorPosition(40, index);
                 input = Console.ReadKey(false).Key;
@@ -574,7 +575,7 @@ namespace Striker_Finale
                                 Graphic.Draw_Frame();
                                 return;
                             case 1:
-                                Graphic.Clear();
+                                Console.Clear();
                                 SelectionThemes(colorindex);
                                 input = Console.ReadKey().Key;
                                 if (input == ConsoleKey.UpArrow && colorindex > 0)
@@ -592,6 +593,9 @@ namespace Striker_Finale
                                     goto PauseMenuWritings;
                                 }
                                 Console.ResetColor();
+                                if(input == ConsoleKey.Enter) 
+                                { index = 0; 
+                                  backmenu = true;}
                                 break;
                             case 2:
                                 Graphic.Clear();

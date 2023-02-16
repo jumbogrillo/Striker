@@ -72,7 +72,7 @@ namespace Striker_Finale
 					if (key == ConsoleKey.Z) { Shots.Add(new Shoot(map, Width, Height, new int[] { Position[0], Position[1] }, "LD", "Pl", 20, 1)); if (musica) { Music.Shoot(); } }
 					if(key == ConsoleKey.P)
 					{ Striker.Pause(); 
-						Music.SoundTrack(true);}
+						if(musica)Music.SoundTrack(true);}
 					map[Position[1], Position[0]] = "Pl";
 					lastKey = key;
 					Timestamp = DateTime.Now;
