@@ -1,5 +1,4 @@
-﻿using Striker;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
@@ -24,10 +23,9 @@ namespace Striker
         public static void Main(string[] args)
         {
             Console.Title = "Striker";
-			Console.ReadKey();
             player = new Player(Width, Height);
+			Database.Login(ref CurrentUser);
 			Database.Register(ref CurrentUser);
-			Database.Lobby(Map, Width, Height, CurrentUser, player);
             Console.CursorVisible = false;
             Console.Clear();
             Time.Start();

@@ -58,35 +58,54 @@ namespace Striker
 		public static void Login(ref string currentUser)
 		{
 			Connect("classification");
+			Graphic.SetWindowSize(50, 20);
+			Graphic.Draw_Frame(20, 10, 5, 5, setBG:false);
+			Graphic.Word(15, 6, "login", 1);
+			Graphic.Rect(7, 9, "Username: ", fg:ConsoleColor.White, setBG: false, size: 1);
+			Graphic.Rect(7, 11, "Password: ", fg: ConsoleColor.White, setBG: false, size: 1);
 			string password = "";
 			do
 			{
-				Console.Write("Enter your username: ");
+				Console.CursorVisible = true;
+				Console.SetCursorPosition(17, 9);
 				currentUser = Console.ReadLine();
-				Console.WriteLine();
-				Console.Write("Enter your password: ");
-				Console.WriteLine();
+				Console.SetCursorPosition(17, 11);
 				password = Console.ReadLine();
-				if (Read(currentUser)["password"] == password) break;
+				Console.SetCursorPosition(7, 13);
+				if (Read(currentUser) == null) Console.WriteLine("Error 404: Account not found!");
+				else if (Read(currentUser)["password"] == password) break;
 				else Console.WriteLine("Password or username is invalid! Please enter the correct username or password!!!");
+				Console.SetCursorPosition(17, 9);
+				Console.Write("                  ");
+				Console.SetCursorPosition(17, 11);
+				Console.Write("                  ");
 			} while (true);
 		}
 		public static void Register(ref string currentUser)
 		{
-			Console.WriteLine();
+
 			Connect("classification");
+			Graphic.SetWindowSize(50, 20);
+			Graphic.Draw_Frame(20, 10, 5, 5, setBG: false);
+			Graphic.Word(15, 6, "register", 1);
+			Graphic.Rect(7, 9, "Username: ", fg: ConsoleColor.White, setBG: false, size: 1);
+			Graphic.Rect(7, 11, "Password: ", fg: ConsoleColor.White, setBG: false, size: 1);
 			string password = "";
 			do
 			{
-				Console.Write("Enter your username: ");
+				Console.SetCursorPosition(17, 9);
 				currentUser = Console.ReadLine();
 				Console.WriteLine();
-				Console.Write("Enter your password: ");
+				Console.SetCursorPosition(17, 11);
 				password = Console.ReadLine();
 				if (IsPresent(currentUser)) Console.WriteLine($"{currentUser} already exist");
 				else if (currentUser.Length > 12 | password.Length > 12) Console.WriteLine("The maximum length is 12!!!");
 				else if (currentUser.Length < 5 | password.Length < 5) Console.WriteLine("The minimum length is 5");
 				else break;
+				Console.SetCursorPosition(17, 9);
+				Console.Write("                  ");
+				Console.SetCursorPosition(17, 11);
+				Console.Write("                  ");
 			} while (true);
 
 			Collection.InsertOne(new BsonDocument
@@ -137,7 +156,7 @@ namespace Striker
 			Graphic.Initialize_Map(map);
 			Graphic.Draw_Obstacles_Randomly(map);
 			Connect("obstacles");
-			List<List<int>> list = Graphic.GetObstacles(map,width, height );
+			List<List<int>> list = GetObstacles(map,width, height );
 			foreach(List<int> item in list)
 			{
 				Collection.InsertOne(new BsonDocument
@@ -146,25 +165,13 @@ namespace Striker
 				});
 			}
 		}
-		public static void Lobby(string[,] map, int width, int height, string currentUser, Player player)
+		static List<List<int>> GetObstacles(string[,] map, int width, int height)
 		{
-			Insert(currentUser, player);
-			var players = AllDoc("multiplayer");
-			if (players.Count == 1)
-			{
-				Graphic.Initialize_Map(map);
-				Graphic.Draw_Obstacles_Randomly(map);
-
-			}
-			else SetInitialMap(map, width, height);
-			Stopwatch time = new Stopwatch();
-
-			time.Start();
-			while(players.Count < 2 | time.ElapsedMilliseconds / 1000 < 10)
-			{
-				Console.SetCursorPosition(0, 0);
-				Console.Write(time.ElapsedMilliseconds);
-			}
+			List<List<int>> list = new List<List<int>>();
+			for(int i = 0; i < height; i++)
+				for(int j = 0; j < width; j++)
+					if (map[i, j] == "Obs")list.Add(new List<int> { j, i});
+			return list;
 		}
 		public static void UpdatePlayers(string[,] map, int width, int height)
 		{
@@ -177,11 +184,11 @@ namespace Striker
 					map[Convert.ToInt16(player["shotsY"][i]), Convert.ToInt16(player["shotsX"][i])] = "Sh";
 			}
 		}
-		static void ClearMap(string[,] map, int width, int height){
+		public static void ClearMap(string[,] map, int width, int height){
 			for (int i = 0; i < height; i++)
 				for (int j = 0; j < width; j++) if (map[i, j] == "Pl" | map[i, j] == "Sh") map[i, j] = "E";
 		}
-		static void Insert(string currentUser, Player player)
+		public static void Insert(string currentUser, Player player)
 		{
 			Connect("multiplayer");
 			Collection.InsertOne(new BsonDocument
@@ -204,6 +211,24 @@ namespace Striker
 			Collection.UpdateOne(filter, update);
 			update = Builders<BsonDocument>.Update.Set("shotsY", new BsonArray(SetShotPosition(player, 1)));
 			Collection.UpdateOne(filter, update);
+		}
+		public static void Lobby(string[,] map, int width, int height, string currentUser, Player player)
+		{
+			Insert(currentUser, player);
+			var players = AllDoc("multiplayer");
+			if (players.Count == 1)
+			{
+				Graphic.Initialize_Map(map);
+				Graphic.Draw_Obstacles_Randomly(map);
+			}
+			else SetInitialMap(map, width, height);
+			Stopwatch time = new Stopwatch();
+			time.Start();
+			while (AllDoc("multiplayer").Count < 2 | time.ElapsedMilliseconds / 1000 < 10)
+			{
+				Console.SetCursorPosition(0, 0);
+				Console.Write(time.ElapsedMilliseconds);
+			}
 		}
 		static List<int> SetShotPosition(Player player, int index)
 		{
