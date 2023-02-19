@@ -24,6 +24,13 @@ namespace Striker_Finale
 
         public static void Main(string[] args)
         {
+
+
+            
+            Local_Multiplayer_Start();
+
+
+
             MultiplayerLocale.Height = Height;
             MultiplayerLocale.Width = Width;
             Graphic.Initialize_Map(Map);
@@ -620,6 +627,64 @@ namespace Striker_Finale
 
                     }
                 }
+            }
+        }
+
+        public static void Local_Multiplayer_Start()
+        {
+            Graphic.Initialize_Map(Map);
+            Player player = new Player(Width, Height);
+            Enemy enemy = new Enemy(Map, Width, Height, 0, 5);
+            Handshake();
+            player.LM_Spawn(Type);
+            Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);
+            Graphic.Draw_Life_Bar(player.Life);
+            Graphic.Draw_Score(player.Score, 2);
+            Graphic.Draw_Frame();
+
+            while (player.Life > 0)
+            {
+                Console.SetBufferSize(140, 70);
+                //if (Time.ElapsedMilliseconds % 5000 < 100) enemies.Add(new Enemy(Map, Width, Height, 2, 1));
+                MultiplayerLocale.Enemy_Update(Map);
+                if (player.Combo > 0)
+                {
+                    Console.SetCursorPosition(102, 13);
+                    Console.Write($"Combo X{player.Combo}");
+                    if (player.Combo % 5 == 0 && player.Life < 5)
+                    {
+                        player.Life++;
+                        player.Combo++;
+                        Graphic.Draw_Life_Bar(player.Life);
+                        Music.Title();
+                        Console.SetCursorPosition(90, 16);
+                        Console.WriteLine(" ");
+                    }
+                }
+                if (player.Hit(enemies))
+                {
+                    player.Life--;
+                    Graphic.Draw_Life_Bar(player.Life);
+                }
+                Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);//Width / 2 - player.Position[0], Height / 2 - player.Position[1], 
+                player.UpdateShots(Map, enemies);
+                player.Move(Map, musica);
+
+                MultiplayerLocale.Update(player.Position[0], player.Position[1]);
+            }
+
+        }
+
+        public static void Handshake()
+        {
+            if (Type)
+            {
+                Graphic.Draw_Obstacles_Randomly(Map);
+                MultiplayerLocale.Initialize_Set(Map);
+            }
+            else
+            {
+                MultiplayerLocale.Initialize_Get(Map);
             }
         }
     }

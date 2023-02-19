@@ -25,6 +25,7 @@ namespace Striker_finale
 			Height = height;
 			Spawn(map);
 		}
+
 		private void Spawn(string[,] map)
 		{
 			int x, y;

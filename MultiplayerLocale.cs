@@ -53,7 +53,26 @@ namespace Striker_finale
             sharedFile.Close();
         }
 
-        public static int[] Download()
+        public static void Enemy_Update(String[,] map)
+        {
+            map[Find_Enem(map)[0], Find_Enem(map)[1]] = "E";
+            map[Download_Position()[0], Download_Position()[1]] = "Enem";
+        }
+
+        static int[] Find_Enem(String[,] map)
+        {
+            int[] position = { -1, -1 };
+            for (int i = 0; i < Height; i++)
+            {
+                for (int j = 0; j < Width; j++)
+                {
+                    if (map[i, j] == "Enem") position[0] = i; position[1] = j;
+                }
+            }
+            return position;            
+        }
+
+        static int[] Download_Position()
         {
             int[] position = new int[2];
 

@@ -124,5 +124,23 @@ namespace Striker_Finale
 			return false;
 		}
 		public int Distance(int x1, int y1, int x2, int y2) => (int)Math.Sqrt(Math.Pow(x1 - x2, 2) + Math.Pow(y1 - y2, 2));
+
+		public void LM_Spawn(Boolean type)
+        {
+            if (type)
+            {
+				Position[0] = 1;
+				Position[1] = 1;
+				for (int i = 1; i <= 5; i++) Striker.Map[1, i + 1] = "E";
+				for (int i = 1; i <= 5; i++) Striker.Map[i + 1, 1] = "E";
+            }
+            else
+            {
+				Position[0] = Width - 2;
+				Position[1] = Height - 2;
+				for (int i = 1; i <= 5; i++) Striker.Map[Position[0], Position[1] - i] = "E";
+				for (int i = 1; i <= 5; i++) Striker.Map[Position[0] - i, Position[1]] = "E";
+			}
+        }
 	}
 }
