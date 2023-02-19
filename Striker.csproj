@@ -152,6 +152,7 @@
     <Compile Include="Database.cs" />
     <Compile Include="Enemy.cs" />
     <Compile Include="Graphic.cs" />
+    <Compile Include="MultiplayerLocale.cs" />
     <Compile Include="Music.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Shoot.cs" />

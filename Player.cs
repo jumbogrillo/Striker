@@ -42,7 +42,7 @@ namespace Striker_Finale
 				var key = Console.ReadKey(true).Key;
 				if(key == lastKey)
                 {
-					if(!(DateTime.Now > Timestamp.AddSeconds(0.3)))
+					if(!(DateTime.Now > Timestamp.AddSeconds(0.15)))
 					{
 						keycount++;
 						Timestamp = DateTime.Now;

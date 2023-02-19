@@ -13,6 +13,7 @@ namespace Striker_finale
 	{
 		public int Speed { get; set; }
 		private int Count { get; set; }
+
 		public Enemy(string[,] map, int width, int height, int speed, int life) : base(width, height)
 		{
 			Count = 0;
@@ -113,5 +114,11 @@ namespace Striker_finale
 				else Shots[i].Update();
 			}
 		}
+		public void Update_Enem(string[,] map, int x, int y)
+		{
+			map[Position[1], Position[0]] = "E";
+			map[x, y] = "Enem";
+		}
+
 	}
 }

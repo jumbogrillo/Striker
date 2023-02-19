@@ -18,11 +18,19 @@ namespace Striker_Finale
         public static String[,] Map = new String[Height, Width];
         static Player player;
         static List<Enemy> enemies = new List<Enemy>();
+        static Boolean Type = false; // true = Host, false = Guest
         static ConsoleColor PlayerColor = ConsoleColor.DarkRed, EnemyColor = ConsoleColor.DarkMagenta,
             BGColor = ConsoleColor.Gray, ObsColor = ConsoleColor.DarkGray, ShColor = ConsoleColor.Black;
 
         public static void Main(string[] args)
         {
+            MultiplayerLocale.Height = Height;
+            MultiplayerLocale.Width = Width;
+            Graphic.Initialize_Map(Map);
+            Graphic.Draw_Obstacles_Randomly(Map);
+            MultiplayerLocale.Initialize_Get(Map);
+            Console.ReadKey();
+
             Console.Title = "Striker";
             Console.CursorVisible = false;
             Console.SetBufferSize(140, 70);
@@ -614,6 +622,5 @@ namespace Striker_Finale
                 }
             }
         }
-        
     }
 }
