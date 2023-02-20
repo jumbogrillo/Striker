@@ -26,7 +26,7 @@ namespace Striker_Finale
         {
 
 
-            
+            Type = true;
             Local_Multiplayer_Start();
 
 
@@ -632,6 +632,8 @@ namespace Striker_Finale
 
         public static void Local_Multiplayer_Start()
         {
+            MultiplayerLocale.Height = Height;
+            MultiplayerLocale.Width = Width;
             Graphic.Initialize_Map(Map);
             Player player = new Player(Width, Height);
             Enemy enemy = new Enemy(Map, Width, Height, 0, 5);
@@ -642,6 +644,12 @@ namespace Striker_Finale
             Graphic.Draw_Score(player.Score, 2);
             Graphic.Draw_Frame();
 
+            LM_Game();
+
+        }
+
+        public static void LM_Game()
+        {
             while (player.Life > 0)
             {
                 Console.SetBufferSize(140, 70);
@@ -672,7 +680,6 @@ namespace Striker_Finale
 
                 MultiplayerLocale.Update(player.Position[0], player.Position[1]);
             }
-
         }
 
         public static void Handshake()

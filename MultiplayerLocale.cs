@@ -12,51 +12,97 @@ namespace Striker_finale
         public static int Width;
         public static int Height;
         public static string Host_Path = "C:\\Users\\Public\\sharedFile";
-        public static string Guest_Path = "C:\\Users\\Public\\sharedFile";
+        public static string Guest_Path = "F:\\Users\\Public\\sharedFile";
         public static void Initialize_Set(String[,] map)
         {
-            StreamWriter sharedFile = new StreamWriter(Host_Path);
-
-            for (int i = 0; i < Height; i++)
+            try
             {
-                for (int j = 0; j < Width; j++)
+                using (FileStream stream = new FileStream(Host_Path,FileMode.Open, FileAccess.ReadWrite, FileShare.None))
                 {
-                    sharedFile.WriteLine(map[i,j]);
+                    StreamWriter sharedFile = new StreamWriter(Host_Path);
+
+                    for (int i = 0; i < Height; i++)
+                    {
+                        for (int j = 0; j < Width; j++)
+                        {
+                            sharedFile.WriteLine(map[i, j]);
+                        }
+                    }
+
+                    sharedFile.Close();
                 }
             }
-
-            sharedFile.Close();
+            catch (IOException)
+            {
+                Striker_Finale.Striker.LM_Game();
+            }            
         }
 
         public static void Initialize_Get(String[,] map)
         {
-            StreamReader sharedFile = new StreamReader(Guest_Path); //percorso unità condivisa
-
-            for (int i = 0; i < Height; i++)
+            try
             {
-                for (int j = 0; j < Width; j++)
+                using (FileStream stream = new FileStream(Host_Path, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
                 {
-                    map[i,j] = sharedFile.ReadLine().ToString();
+
+                    StreamReader sharedFile = new StreamReader(Guest_Path); //percorso unità condivisa
+
+                    for (int i = 0; i < Height; i++)
+                    {
+                        for (int j = 0; j < Width; j++)
+                        {
+                            map[i, j] = sharedFile.ReadLine().ToString();
+                        }
+                    }
+
+                    sharedFile.Close();
                 }
             }
-
-            sharedFile.Close();
+            catch (IOException)
+            {
+                Striker_Finale.Striker.LM_Game();
+            }
         }
 
         public static void Update(int x, int y)
         {
-            StreamWriter sharedFile = new StreamWriter(Host_Path);
+            try
+            {
+                using (FileStream stream = new FileStream(Host_Path, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
+                {
+                    StreamWriter sharedFile = new StreamWriter(Host_Path);
 
-            sharedFile.WriteLine(x);
-            sharedFile.WriteLine(y);
+                    sharedFile.WriteLine(x);
+                    sharedFile.WriteLine(y);
 
-            sharedFile.Close();
+                    sharedFile.Close();
+                }
+            }
+            catch (IOException)
+            {
+                Striker_Finale.Striker.LM_Game();
+            }
         }
 
         public static void Enemy_Update(String[,] map)
         {
-            map[Find_Enem(map)[0], Find_Enem(map)[1]] = "E";
-            map[Download_Position()[0], Download_Position()[1]] = "Enem";
+            bool libero = false;
+            do
+            {
+                int[] pos = Download_Position();
+                if (pos[0] != -1)
+                {
+                    libero = true;
+                    map[Find_Enem(map)[0], Find_Enem(map)[1]] = "E";
+                    map[pos[0], pos[1]] = "Enem";
+                }
+                else
+                {
+                    libero = false;
+                }
+            }
+            while (!libero);
+            
         }
 
         static int[] Find_Enem(String[,] map)
@@ -74,13 +120,24 @@ namespace Striker_finale
 
         static int[] Download_Position()
         {
-            int[] position = new int[2];
+            try
+            {
+                using (FileStream stream = new FileStream(Host_Path, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
+                {
+                    int[] position = new int[2];
 
-            StreamReader sharedFile = new StreamReader(Guest_Path);
-            position[0] = Convert.ToInt32(sharedFile.ReadLine());
-            position[1] = Convert.ToInt32(sharedFile.ReadLine());
+                    StreamReader sharedFile = new StreamReader(Guest_Path);
+                    position[0] = Convert.ToInt32(sharedFile.ReadLine());
+                    position[1] = Convert.ToInt32(sharedFile.ReadLine());
 
-            return position;
+                    return position;
+                }
+            }
+            catch (IOException)
+            {
+                int[] ritorna = { -1, -1 };
+                return ritorna;
+            }            
         }
     }
 }
