@@ -13,32 +13,30 @@ namespace Striker_finale
         public static int Height;
         public static string Host_Path = "C:\\Users\\Public\\sharedFile";
         public static string Guest_Path = "F:\\Users\\Public\\sharedFile";
-        public static void Initialize_Set(String[,] map)
+        public static Boolean Initialize_Set(String[,] map)
         {
             try
             {
-                using (FileStream stream = new FileStream(Host_Path,FileMode.Open, FileAccess.ReadWrite, FileShare.None))
+                StreamWriter sharedFile = new StreamWriter(Host_Path);
+
+                for (int i = 0; i < Height; i++)
                 {
-                    StreamWriter sharedFile = new StreamWriter(Host_Path);
-
-                    for (int i = 0; i < Height; i++)
+                    for (int j = 0; j < Width; j++)
                     {
-                        for (int j = 0; j < Width; j++)
-                        {
-                            sharedFile.WriteLine(map[i, j]);
-                        }
+                        sharedFile.WriteLine(map[i, j]);
                     }
-
-                    sharedFile.Close();
                 }
+
+                sharedFile.Close();            
+                return true;
             }
             catch (IOException)
             {
-                Striker_Finale.Striker.LM_Game();
+                return false;
             }            
         }
 
-        public static void Initialize_Get(String[,] map)
+        public static Boolean Initialize_Get(String[,] map)
         {
             try
             {
@@ -57,14 +55,16 @@ namespace Striker_finale
 
                     sharedFile.Close();
                 }
+                return true;
             }
             catch (IOException)
             {
-                Striker_Finale.Striker.LM_Game();
+                return false;
+                //Striker_Finale.Striker.LM_Game();
             }
         }
 
-        public static void Update(int x, int y)
+        public static Boolean Update(int x, int y)
         {
             try
             {
@@ -77,10 +77,12 @@ namespace Striker_finale
 
                     sharedFile.Close();
                 }
+                return true;
             }
             catch (IOException)
             {
-                Striker_Finale.Striker.LM_Game();
+                return false;
+                //Striker_Finale.Striker.LM_Game();
             }
         }
 

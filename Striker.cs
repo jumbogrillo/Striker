@@ -644,12 +644,6 @@ namespace Striker_Finale
             Graphic.Draw_Score(player.Score, 2);
             Graphic.Draw_Frame();
 
-            LM_Game();
-
-        }
-
-        public static void LM_Game()
-        {
             while (player.Life > 0)
             {
                 Console.SetBufferSize(140, 70);
@@ -682,16 +676,25 @@ namespace Striker_Finale
             }
         }
 
+        
+
         public static void Handshake()
         {
+            Riprova:
             if (Type)
             {
                 Graphic.Draw_Obstacles_Randomly(Map);
-                MultiplayerLocale.Initialize_Set(Map);
+                if(!MultiplayerLocale.Initialize_Set(Map))
+                {
+                    goto Riprova;
+                }
             }
             else
             {
-                MultiplayerLocale.Initialize_Get(Map);
+                if (!MultiplayerLocale.Initialize_Get(Map))
+                {
+                    goto Riprova;
+                }
             }
         }
     }
