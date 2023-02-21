@@ -77,9 +77,9 @@ namespace Striker_Finale
 			Connect("classification");
 			Graphic.WindowSize(50, 20);
 			Graphic.Draw_Frame(20, 10, 5, 5, setBG: false);
-			Graphic.Word(12, 6, "register", 1);
-			Graphic.Rect(7, 9, "Username: ", fg: ConsoleColor.White, setBG: false, size: 1);
-			Graphic.Rect(7, 11, "Password: ", fg: ConsoleColor.White, setBG: false, size: 1);
+			Graphic.Word(Console.WindowWidth / 2, 3, "register", 2);
+			//Graphic.Rect(7, 9, "Username: ", fg: ConsoleColor.White, setBG: false, size: 1);
+			//Graphic.Rect(7, 11, "Password: ", fg: ConsoleColor.White, setBG: false, size: 1);
 			string password = "";
 			do
 			{

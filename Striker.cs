@@ -24,38 +24,20 @@ namespace Striker_Finale
 
         public static void Main(string[] args)
         {
-			Start();
-			Graphic.Clear();
-			Online_Multiplayer();
-
-			/*
-			Local_Multiplayer_Start();
-
-
-
-            MultiplayerLocale.Height = Height;
-            MultiplayerLocale.Width = Width;
-            Graphic.Initialize_Map(Map);
-            Graphic.Draw_Obstacles_Randomly(Map);
-            MultiplayerLocale.Initialize_Get(Map);
-            Console.ReadKey();
-
             Console.Title = "Striker";
             Console.CursorVisible = false;
+            Start();
+			Graphic.Clear(1);
+            GameModeMenu();
+            Graphic.Initialize_Map(Map);
+            Graphic.Draw_Obstacles_Randomly(Map);
+
             Console.SetBufferSize(140, 70);
             Console.SetWindowSize(140, 70);
             Console.SetWindowPosition(0, 0);
-            Database.DrawClassification();
-            Console.CursorVisible = true;
-            Database.Register(ref CurrentUser);
-            Console.SetWindowSize(120, 30);
-            Console.SetBufferSize(120, 30);
-          //Database.Insert(ref CurrentUser);
-            Console.CursorVisible = false;
             Console.Clear();
             Time.Start();
             Music.Title();
-            Start();
             Music.SoundTrack(true);
             player = new Player(Width, Height);
 
@@ -118,7 +100,7 @@ namespace Striker_Finale
             GameOver();
             Database.Update(CurrentUser, 100 * (Level - 1) + player.Score, Time.ElapsedMilliseconds);
             Database.DrawClassification();
-            Console.ReadKey();*/
+            Console.ReadKey();
         }
 		static void Online_Multiplayer()
 		{
@@ -731,6 +713,65 @@ namespace Striker_Finale
             {
                 MultiplayerLocale.Initialize_Get(Map);
             }
+        }
+        public static void GameModeMenu()
+        {
+            Graphic.Word(Width / 2 - 5, 2, "Game Mode", 2,ConsoleColor.DarkYellow);
+            int index = 0;
+            ConsoleKey input;
+            string word = "";
+            Menu:
+            for (int i = 0; i < 4; i++)
+            {
+                switch (i)
+                {
+                    case 0:
+                        word = "Solo";
+                        if (index == i) Graphic.Word(Width - 33, 9, word, 2, PlayerColor);
+                        else Graphic.Word(Width - 33, 9, word, 2);
+                        break;
+                    case 1:
+                        word = "Local";
+                        if (index == i) Graphic.Word(Width + 33, 9, word, 2, PlayerColor);
+                        else Graphic.Word(Width + 33, 9, word, 2);
+                        break;
+                    case 2:
+                        word = "Online";
+                        if (index == i) Graphic.Word((Width / 2) + 13, 20, word, 2, PlayerColor);
+                        else Graphic.Word((Width / 2) + 13, 20, word, 2);
+                        break;
+                }
+            }
+            input = Console.ReadKey().Key;
+            if (input == ConsoleKey.LeftArrow && index >= 1)
+            {
+                index--;
+                goto Menu;
+            }
+            else if (input == ConsoleKey.RightArrow && index < 2)
+            {
+                index++;
+                goto Menu;
+            }
+            else if(input == ConsoleKey.Enter)
+            {
+                switch (index) 
+                {
+                    case 0:
+                        return;
+                    case 1:
+                        MultiplayerLocale.Height = Height;
+                        MultiplayerLocale.Width = Width;
+                        MultiplayerLocale.Initialize_Get(Map);
+                        Local_Multiplayer_Start();
+                        break;
+                    case 2:
+                        Online_Multiplayer();
+                        break;
+
+                }
+            }
+            goto Menu;
         }
     }
 }
