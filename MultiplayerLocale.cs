@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Striker;
+using Striker_finale;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +11,7 @@ namespace Striker_finale
 {
     class MultiplayerLocale
     {
+        public static List<Shoot> Shots { get; set; }
         public static int Width;
         public static int Height;
         public static Boolean Type = true;
@@ -17,6 +20,7 @@ namespace Striker_finale
         static int X = 23, Y = 38;
         public static string Host_Path = "C:\\Users\\Public\\sharedFile", Host_UpDown = "C:\\Users\\Public\\sharedFile1";
         public static string Guest_Path = "F:\\Public\\sharedFile", Guest_UpDown = "F:\\Public\\sharedFile1";
+
         public static Boolean Initialize_Set(String[,] map)
         {
             try
@@ -64,7 +68,7 @@ namespace Striker_finale
             }
         }
 
-        public static Boolean Update(int x, int y)
+        public static Boolean Update(int x, int y, int sh_x,int sh_y, String dir, String alliance, int speed, int damage)
         {
             try
             {
@@ -79,6 +83,16 @@ namespace Striker_finale
 
                 sharedFile.WriteLine(x);
                 sharedFile.WriteLine(y);
+
+                if (sh_x != -1)
+                {
+                    sharedFile.WriteLine(sh_x);
+                    sharedFile.WriteLine(sh_y);
+                    sharedFile.WriteLine(dir);
+                    sharedFile.WriteLine(alliance);
+                    sharedFile.WriteLine(speed);
+                    sharedFile.WriteLine(damage);
+                }
 
                 sharedFile.Close();
                 return true;
@@ -137,10 +151,26 @@ namespace Striker_finale
                     position[1] = Convert.ToInt32(y);
                     //lastY = position[1];
                 }
-                sharedFileR.Close();
                 map[X, Y] = "E";
                 X = position[1];
                 Y = position[0];
+
+                String Ssh_x = sharedFileR.ReadLine();
+
+                if (Ssh_x != "" && Convert.ToInt32(Ssh_x) != -1)
+                {
+                    int sh_x = Convert.ToInt32(Ssh_x);
+                    int sh_y = Convert.ToInt32(sharedFileR.ReadLine());
+                    string dir = sharedFileR.ReadLine();
+                    string alli = sharedFileR.ReadLine();
+                    int speed = Convert.ToInt32(sharedFileR.ReadLine());
+                    int dam = Convert.ToInt32(sharedFileR.ReadLine());
+
+                    Shots = new List<Shoot>();
+                    Shots.Add(new Shoot(map, Width, Height,new int[] {sh_x, sh_y }, dir, alli, speed, dam));
+                }
+
+                sharedFileR.Close();
                 return position;
             }
             catch (IOException)

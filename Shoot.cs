@@ -1,4 +1,5 @@
-﻿using Striker_Finale;
+﻿using Striker;
+using Striker_Finale;
 using System;
 using System.Collections.Generic;
 using System.Linq;

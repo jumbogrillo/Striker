@@ -8,6 +8,10 @@ namespace Striker_Finale
 {
     public class Striker
     {
+        public static int[] Position; //per LM_MULTI
+        public static String Direction, Alliance;
+        public static int Speed, Damage;
+
         public const int Height = 25;
         public const int Width = 40;
         public static bool musica = true;
@@ -674,6 +678,7 @@ namespace Striker_Finale
                 }
                 Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);//Width / 2 - player.Position[0], Height / 2 - player.Position[1], 
                 player.UpdateShots(Map, enemies);
+                Set_Param();
                 player.Move(Map, musica);
             }
         }
@@ -702,8 +707,18 @@ namespace Striker_Finale
 
         static void Update(String[,] Map)
         {
-            MultiplayerLocale.Update(player.Position[0], player.Position[1]);
+            MultiplayerLocale.Update(player.Position[0], player.Position[1], Position[0], Position[1], Direction, Alliance, Speed, Damage);
             MultiplayerLocale.Enemy_Update(Map);
+        }
+
+        static void Set_Param()
+        {
+            Position[0] = -1;
+            Position[1] = -1;
+            Direction = "//";
+            Alliance = "//";
+            Speed = -1;
+            Damage = -1;
         }
     }
 }
