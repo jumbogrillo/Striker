@@ -67,7 +67,15 @@ namespace Striker_finale
             {
                 StreamWriter sharedFile;
 
-                sharedFile = new StreamWriter(Host_Path);
+                if (Type)
+                {
+                    sharedFile = new StreamWriter(Host_Path);
+                }
+                else
+                {
+                    sharedFile = new StreamWriter(Guest_Path);
+                }
+                
 
                 sharedFile.WriteLine(x);
                 sharedFile.WriteLine(y);
@@ -79,14 +87,20 @@ namespace Striker_finale
             {
                 StreamWriter sharedFile;
 
-                sharedFile = new StreamWriter(Guest_UpDown);
+                if (Type)
+                {
+                    sharedFile = new StreamWriter(Host_UpDown);
+                }
+                else
+                {
+                    sharedFile = new StreamWriter(Guest_UpDown);
+                }
 
                 sharedFile.WriteLine(x);
                 sharedFile.WriteLine(y);
 
                 sharedFile.Close();
                 return true;
-                return false;
                 //Striker_Finale.Striker.LM_Game();
             }
         }
@@ -132,7 +146,14 @@ namespace Striker_finale
                 int[] position = new int[2];
                 StreamReader sharedFile;
 
-                sharedFile = new StreamReader(Host_UpDown);
+                if (Type)
+                {
+                    sharedFile = new StreamReader(Host_Path);
+                }
+                else
+                {
+                    sharedFile = new StreamReader(Guest_Path);
+                }
 
                 String x = sharedFile.ReadLine(), y = sharedFile.ReadLine();
 
@@ -153,7 +174,14 @@ namespace Striker_finale
                 int[] position = new int[2];
                 StreamReader sharedFile;
 
-                sharedFile = new StreamReader(Guest_Path);
+                if (Type)
+                {
+                    sharedFile = new StreamReader(Host_UpDown);
+                }
+                else
+                {
+                    sharedFile = new StreamReader(Guest_UpDown);
+                }
 
                 String x = sharedFile.ReadLine(), y = sharedFile.ReadLine();
 
