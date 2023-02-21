@@ -13,7 +13,7 @@ namespace Striker_Finale
         public static bool musica = true;
         public static int Level = 1;
         public static string CurrentUser;
-        static Thread update = new Thread(Update);
+        static Thread update;
         public static Thread sottofondo = new Thread(Music.SoundTrack);
         static Stopwatch Time = new Stopwatch();
         public static String[,] Map = new String[Height, Width];
@@ -24,9 +24,10 @@ namespace Striker_Finale
 
         public static void Main(string[] args)
         {
+            player = new Player(Width, Height);
             Time.Start();
             Console.CursorVisible = false;
-            MultiplayerLocale.Type = false;
+            MultiplayerLocale.Type = true;
             Local_Multiplayer_Start();
 
 
@@ -56,7 +57,6 @@ namespace Striker_Finale
             Console.SetBufferSize(120, 30);
             Start();
             Music.SoundTrack(true);
-            player = new Player(Width, Height);
 
         StartGame:
             Graphic.Initialize_Map(Map);
@@ -635,20 +635,22 @@ namespace Striker_Finale
             MultiplayerLocale.Height = Height;
             MultiplayerLocale.Width = Width;
             Graphic.Initialize_Map(Map);
-            Player player = new Player(Width, Height);
             Enemy enemy = new Enemy(Map, Width, Height, 0, 5);
             Handshake();
             Console.ReadKey();
+            Time.Start();
             player.LM_Spawn(player, MultiplayerLocale.Type);
             Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);
             Graphic.Draw_Life_Bar(player.Life);
             Graphic.Draw_Score(player.Score, 2);
             Graphic.Draw_Frame();
-            update.Start();
+            //update = new Thread(Update);
+            //update.Start();
 
             while (player.Life > 0)
             {
                 Console.SetBufferSize(140, 70);
+                if ((Convert.ToInt32(Time.ElapsedMilliseconds / 20) % 2 == 0) == MultiplayerLocale.Type) Update();
                 //if (Time.ElapsedMilliseconds % 5000 < 100) enemies.Add(new Enemy(Map, Width, Height, 2, 1));
                 MultiplayerLocale.Enemy_Update(Map);
                 if (player.Combo > 0)
@@ -665,14 +667,14 @@ namespace Striker_Finale
                         Console.WriteLine(" ");
                     }
                 }
-                //if (player.Hit(enemies))
-                //{
-                //    player.Life--;
-                //    Graphic.Draw_Life_Bar(player.Life);
-                //}
+                if (player.Hit(enemies))
+                {
+                    player.Life--;
+                    Graphic.Draw_Life_Bar(player.Life);
+                }
                 Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);//Width / 2 - player.Position[0], Height / 2 - player.Position[1], 
                 player.UpdateShots(Map, enemies);
-                player.Move(Map, musica);                
+                player.Move(Map, musica);
             }
             update.Join();
         }
@@ -701,11 +703,8 @@ namespace Striker_Finale
 
         static void Update()
         {
-            if (player.Life > 0)
-            {
-                MultiplayerLocale.Update(player.Position[0], player.Position[1]);
-                MultiplayerLocale.Enemy_Update(Map);
-            }
+            MultiplayerLocale.Update(player.Position[0], player.Position[1]);
+            MultiplayerLocale.Enemy_Update(Map);
         }
     }
 }
