@@ -65,7 +65,7 @@ namespace Striker_finale
         {
             try
             {
-                StreamWriter sharedFile = new StreamWriter(Host_Path);
+                StreamWriter sharedFile;
 
                 if (Type)
                 {
@@ -141,12 +141,12 @@ namespace Striker_finale
 
                 String x = sharedFile.ReadLine(), y = sharedFile.ReadLine();
 
-                if (x != "" && Convert.ToInt32(x) >= 0)
+                if (x != "" && x != "E" && x != "Obs" && x != "Pl" && x != "Enem" && Convert.ToInt32(x) >= 0)
                 {
                     position[0] = Convert.ToInt32(x);
                 }
 
-                if (y != "" && Convert.ToInt32(y) >= 0)
+                if (y != "" && y != "E" && y != "Obs" && y != "Pl" && y != "Enem" && Convert.ToInt32(y) >= 0)
                 {
                     position[1] = Convert.ToInt32(y);
                 }
