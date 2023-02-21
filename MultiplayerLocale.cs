@@ -14,7 +14,7 @@ namespace Striker_finale
         public static Boolean Type = true;
         static StreamReader sharedFileR;
         static StreamWriter sharedFile;
-        static int lastX = Height - 2, lastY = Width - 2;
+        static int X = 23, Y = 38;
         public static string Host_Path = "C:\\Users\\Public\\sharedFile", Host_UpDown = "C:\\Users\\Public\\sharedFile1";
         public static string Guest_Path = "F:\\Public\\sharedFile", Guest_UpDown = "F:\\Public\\sharedFile1";
         public static Boolean Initialize_Set(String[,] map)
@@ -94,12 +94,11 @@ namespace Striker_finale
             bool libero = false;
             do
             {
-                int[] pos = Download_Position();
+                int[] pos = Download_Position(map);
                 if (pos[0] != -1)
                 {
                     libero = true;
-                    map[lastX, lastY] = "E";
-                    map[pos[1], pos[0]] = "Enem";
+                    map[pos[1], pos[0]] = "Enem";                    
                 }
                 else
                 {
@@ -107,10 +106,10 @@ namespace Striker_finale
                 }
             }
             while (!libero);
-            
+
         }
 
-        static int[] Download_Position()
+        static int[] Download_Position(String[,] map)
         {
             try
             {
@@ -130,20 +129,23 @@ namespace Striker_finale
                 if (x != "" && Convert.ToInt32(x) >= 0)
                 {
                     position[0] = Convert.ToInt32(x);
-                    lastX = position[0];
+                    //lastX = position[0];
                 }
 
                 if (y != "" && Convert.ToInt32(y) >= 0)
                 {
                     position[1] = Convert.ToInt32(y);
-                    lastY = position[1];
+                    //lastY = position[1];
                 }
                 sharedFileR.Close();
+                map[X, Y] = "E";
+                X = position[1];
+                Y = position[0];
                 return position;
             }
             catch (IOException)
             {
-                int[] pos = { 5, 5 };
+                int[] pos = { -1, 5 };
                 return pos;
             }            
         }

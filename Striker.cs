@@ -27,7 +27,7 @@ namespace Striker_Finale
             player = new Player(Width, Height);
             Time.Start();
             Console.CursorVisible = false;
-            MultiplayerLocale.Type = false;
+            MultiplayerLocale.Type = true;
             Local_Multiplayer_Start();
 
 
@@ -650,7 +650,7 @@ namespace Striker_Finale
             while (player.Life > 0)
             {
                 Console.SetBufferSize(140, 70);
-                Update();
+                Update(Map);
                 //if (Time.ElapsedMilliseconds % 5000 < 100) enemies.Add(new Enemy(Map, Width, Height, 2, 1));
                 //MultiplayerLocale.Enemy_Update(Map);
                 if (player.Combo > 0)
@@ -700,7 +700,7 @@ namespace Striker_Finale
             }
         }
 
-        static void Update()
+        static void Update(String[,] Map)
         {
             MultiplayerLocale.Update(player.Position[0], player.Position[1]);
             MultiplayerLocale.Enemy_Update(Map);
