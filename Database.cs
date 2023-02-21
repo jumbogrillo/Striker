@@ -1,33 +1,23 @@
 ﻿using MongoDB.Driver;
-using MongoDB.Bson;// To write in the cluster
+using MongoDB.Bson;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using Striker_Finale;
+using System.Linq;
+using System.Collections.ObjectModel;
 
-namespace Striker_finale
+namespace Striker_Finale
 {
 	class Database
 	{
 		static IMongoCollection<BsonDocument> Collection;
 		static MongoClient Client;
-		static BsonDocument Schema = new BsonDocument
-		{
-			{"username", "" },
-			{"score", 0 },
-			{"date", DateTime.Now }
-		};
-		public static void Connect(string collection)
+		public static void TurnOn()
 		{
 			var settings = MongoClientSettings.FromConnectionString("mongodb+srv://marco0019:bamboccetti@striker.pq8k4qv.mongodb.net/test");
 			settings.ServerApi = new ServerApi(ServerApiVersion.V1);
 			Client = new MongoClient(settings);
-			Collection = Client.GetDatabase("Striker").GetCollection<BsonDocument>(collection);
 		}
-		public static void Test()
-		{
-			Sort();
-		}
+		public static void Connect(string collection) => Collection = Client.GetDatabase("Striker").GetCollection<BsonDocument>(collection);
 		public static List<BsonDocument> AllDoc(string collection)
 		{
 			Connect(collection);
@@ -39,115 +29,74 @@ namespace Striker_finale
 			var filter = Builders<BsonDocument>.Filter.Eq("username", currentUser);
 			return Collection.Find(filter).ToList().Count != 0;
 		}
-		public static BsonDocument Read(string currentUser)
+		public static BsonDocument GetUser(string currentUser)
 		{
 			Connect("classification");
 			var filter = Builders<BsonDocument>.Filter.Eq("username", currentUser);
 			return Collection.Find(filter).FirstOrDefault();
 		}
-		public static void Sort()
-		{
-			Connect("classification");
-			var documents = Collection.Find(new BsonDocument()).ToList();
-			int[] scores = ScoreSorted();
-			for(int i = 0; i < scores.Length; i++)
-			{
-				Console.WriteLine(documents[scores[i]]["username"] + " " + documents[scores[i]]["score"]);
-			}
-		}
-		private static int[] ScoreSorted()
-		{
-			var documents = Collection.Find(new BsonDocument()).ToList();
-			int[] indexes = new int[documents.Count];
-			for (int i = 0; i < documents.Count - 1; i++)
-				for (int j = i + 1; j < documents.Count; j++)
-					if (documents[i]["score"] > documents[j]["score"])
-					{
-						var appo = documents[i];
-						documents[i] = documents[j];
-						documents[j] = appo;
-						indexes[i] = j;
-					}
-					else if (String.Compare(documents[i]["username"].ToString(), documents[j]["username"].ToString()) > 0)
-					{
-
-					}
-			return indexes;
-		}
-		private static void Invert(List<BsonDocument> docs, int index1, int index2, int[] indexes)
-		{
-			var appo = docs[index1];
-			docs[index1] = docs[index2];
-			docs[index2] = appo;
-			indexes[index1] = index2;
-		}
 		public static void Update(string currentUser, int highscore, long time)
 		{
 			Connect("classification");
 			var filter = Builders<BsonDocument>.Filter.Eq("username", currentUser);
-			var update = Builders<BsonDocument>.Update.Set("score", highscore);
-			Collection.UpdateOne(filter, update);
-			filter = Builders<BsonDocument>.Filter.Eq("username", currentUser);
-			update = Builders<BsonDocument>.Update.Set("date", DateTime.Now);
-			Collection.UpdateOne(filter, update);
-			filter = Builders<BsonDocument>.Filter.Eq("username", currentUser);
-			update = Builders<BsonDocument>.Update.Set("time", time);
-			Collection.UpdateOne(filter, update);
+			Collection.UpdateOne(filter, Builders<BsonDocument>.Update.Set("score", highscore));
+			Collection.UpdateOne(filter, Builders<BsonDocument>.Update.Set("date", DateTime.Now));
+			Collection.UpdateOne(filter, Builders<BsonDocument>.Update.Set("time", time));
 		}
-		public static void Login(ref string currentUser,ref string password)
+		public static void Login(ref string currentUser)
 		{
 			Connect("classification");
-			Graphic.Word(20, 16, "Register",1, fg: ConsoleColor.Black);
-			Graphic.Word(26, 16, "Login",1);
+			Graphic.WindowSize(50, 20);
+			Graphic.Draw_Frame(20, 10, 5, 5, setBG: false);
+			Graphic.Word(15, 6, "login", 1);
+			Graphic.Rect(7, 9, "Username: ", fg: ConsoleColor.White, setBG: false, size: 1);
+			Graphic.Rect(7, 11, "Password: ", fg: ConsoleColor.White, setBG: false, size: 1);
+			string password = "";
 			do
 			{
-				Console.SetCursorPosition(32, 21);
-				Console.ForegroundColor = ConsoleColor.Black;
-				Console.Write(currentUser);
-				Console.SetCursorPosition(32, 23);
-				Console.Write(password);
-				Console.SetCursorPosition(24, 24);
-				Console.Write($"{currentUser} already exist");
-				Console.SetCursorPosition(24, 25);
-				Console.Write("Press any key to login...");
-				Console.ResetColor();
-				Console.SetCursorPosition(32, 21);
+				Console.CursorVisible = true;
+				Console.SetCursorPosition(17, 9);
 				currentUser = Console.ReadLine();
-				Console.SetCursorPosition(32, 23);
+				Console.SetCursorPosition(17, 11);
 				password = Console.ReadLine();
-				if (Read(currentUser)["password"] == password) break;
+				Console.SetCursorPosition(7, 13);
+				if (GetUser(currentUser) == null) Console.WriteLine("Error 404: Account not found!");
+				else if (GetUser(currentUser)["password"] == password) break;
 				else Console.WriteLine("Password or username is invalid! Please enter the correct username or password!!!");
+				Console.SetCursorPosition(17, 9);
+				Console.Write("                  ");
+				Console.SetCursorPosition(17, 11);
+				Console.Write("                  ");
 			} while (true);
+			Graphic.Clear();
+			Graphic.WindowSize(140, 70);
 		}
 		public static void Register(ref string currentUser)
 		{
-			Console.WriteLine();
+
 			Connect("classification");
+			Graphic.WindowSize(50, 20);
+			Graphic.Draw_Frame(20, 10, 5, 5, setBG: false);
+			Graphic.Word(12, 6, "register", 1);
+			Graphic.Rect(7, 9, "Username: ", fg: ConsoleColor.White, setBG: false, size: 1);
+			Graphic.Rect(7, 11, "Password: ", fg: ConsoleColor.White, setBG: false, size: 1);
 			string password = "";
-            Graphic.Word(20, 16, "Register", 1);
-            do
-            {
-				Console.SetCursorPosition(25, 20);
-				Console.Write("Enter your username: ");
-				Console.SetCursorPosition(32, 21);
+			do
+			{
+				Console.SetCursorPosition(17, 9);
 				currentUser = Console.ReadLine();
-				Console.SetCursorPosition(25, 22);
-				Console.Write("Enter your password: ");
-				Console.SetCursorPosition(32, 23);
+				Console.WriteLine();
+				Console.SetCursorPosition(17, 11);
 				password = Console.ReadLine();
-				Console.SetCursorPosition(25, 24);
-				if (IsPresent(currentUser)) 
-				{ 
-					Console.WriteLine($"{currentUser} already exist");
-					Console.SetCursorPosition(24, 25);
-					Console.Write("Press any key to login...");
-					Console.ReadKey();
-					Login(ref currentUser, ref password); 
-					return;
-				}
+				Console.SetCursorPosition(17, 13);
+				if (IsPresent(currentUser)) Console.WriteLine($"{currentUser} already exist");
 				else if (currentUser.Length > 12 | password.Length > 12) Console.WriteLine("The maximum length is 12!!!");
 				else if (currentUser.Length < 5 | password.Length < 5) Console.WriteLine("The minimum length is 5");
 				else break;
+				Console.SetCursorPosition(17, 9);
+				Console.Write("                  ");
+				Console.SetCursorPosition(17, 11);
+				Console.Write("                  ");
 			} while (true);
 
 			Collection.InsertOne(new BsonDocument
@@ -160,30 +109,8 @@ namespace Striker_finale
 				{ "allShot", 0 },
 				{ "shotMissed", 0 }
 			});
-		}
-		public static void Delete(string currentUser)
-		{
-			Connect("classification");
-			var filter = Builders<BsonDocument>.Filter.Eq("username", currentUser);
-			Collection.DeleteOne(filter);
-		}
-		public static void Clear(string collection)
-		{
-			Connect("classification");
-			var documents = AllDoc("");
-			foreach(var item in documents)
-			{
-				var filter = Builders<BsonDocument>.Filter.Eq("score", 0);
-				Collection.DeleteOne(filter);
-			}
-		}
-		public static void Insert(string[,] map, int width, int height)
-		{
-			Connect("map");
-			Collection.InsertOne(new BsonDocument
-			{
-				{"map", map.ToBson() }
-			});
+			Graphic.Clear();
+			Graphic.WindowSize(140, 70);
 		}
 		public static void DrawClassification()
 		{
@@ -201,7 +128,7 @@ namespace Striker_finale
 			for (int i = 0; i < users.Count; i++)
 			{
 				Graphic.Rect(0, 6 + i, (1 + i).ToString(" 0"), fg: ConsoleColor.White);
-				Graphic.Rect(2, 6 + i, users[users.Count - 1 - i]["username"].ToString(), setBG: false, fg:ConsoleColor.White);
+				Graphic.Rect(2, 6 + i, users[users.Count - 1 - i]["username"].ToString(), setBG: false, fg: ConsoleColor.White);
 				Graphic.Rect(12, 6 + i, users[users.Count - 1 - i]["score"].ToString(), setBG: false, fg: ConsoleColor.White);
 				Graphic.Rect(20, 6 + i, (Convert.ToInt16(users[users.Count - 1 - i]["allShot"]) / Convert.ToDouble(users[users.Count - 1 - i]["allShot"]) * 100).ToString("0.0"), fg: ConsoleColor.White);
 				Graphic.Rect(26, 6 + i, (Convert.ToDouble(users[users.Count - 1 - i]["time"]) / Convert.ToDouble(1000)).ToString("0.00s"), setBG: false, fg: ConsoleColor.White);
@@ -211,16 +138,100 @@ namespace Striker_finale
 			Console.SetWindowPosition(0, 0);
 			Console.SetWindowSize(140, 50);
 		}
-		public static void Lobby(string[,] map)
+		public static void Insert(string currentUser, Player player)
 		{
-			Stopwatch time = new Stopwatch();
-			time.Start();
-			if(AllDoc("multiplayer").Count == 1)
-			{
-				Connect("map");
-				Insert(map, 40, 25);
-			}
 			Connect("multiplayer");
+			Collection.InsertOne(new BsonDocument
+			{
+				{"user", currentUser },
+				{"posX", player.Position[0] },
+				{"posY", player.Position[1] },
+				{"shotsX", new BsonArray(SetShotPosition(player, 0)) },
+				{"shotsY", new BsonArray(SetShotPosition(player, 1)) }
+			});
+		}
+		public static void Clear(string collection)
+		{
+			Connect(collection);
+			Collection.DeleteMany(new BsonDocument() { });
+		}
+		public static void InsertObs(string[,] map, int width, int height)
+		{
+			Connect("obstacles");
+			Clear("obstacles");
+			Graphic.Initialize_Map(map);
+			Graphic.Draw_Obstacles_Randomly(map);
+			List<List<int>> list = GetObstacles(map, width, height);
+			foreach (List<int> item in list)
+			{
+				Collection.InsertOne(new BsonDocument
+				{
+					{"x", item[0] },
+					{"y", item[1] }
+				});
+			}
+		}
+		static List<List<int>> GetObstacles(string[,] map, int width, int height)
+		{
+			List<List<int>> list = new List<List<int>>();
+			for (int i = 0; i < height; i++)
+				for (int j = 0; j < width; j++)
+					if (map[i, j] == "Obs") list.Add(new List<int> { j, i });
+			return list;
+		}
+		public static void UpdateMap(string[,] map, int width, int height)
+		{
+			for (int i = 0; i < width; i++)
+				for (int j = 0; j < height; j++)
+					if (map[j, i] == "Pl" | map[j, i] == "Sh") map[j, i] = "E";
+			var players = AllDoc("multiplayer");
+			foreach(var player in players)
+			{
+				map[Convert.ToInt16(player["posY"]), Convert.ToInt16(player["posX"])] = "Pl";
+				var LL = player["shotsX"].AsBsonArray.Count;
+				for (int i = 0; i < LL; i++) try
+					{
+						map[Convert.ToInt16(player["shotsY"][i]), Convert.ToInt16(player["shotsX"][i])] = "Sh";
+					}
+					catch(Exception ex) { }
+			}
+		}
+		public static void Update(string currentUser, Player player)
+		{
+			Connect("multiplayer");
+			var filter = Builders<BsonDocument>.Filter.Eq("user", currentUser);
+			var update = Builders<BsonDocument>.Update.Set("posX", player.Position[0]);
+			Collection.UpdateOne(filter, update);
+			update = Builders<BsonDocument>.Update.Set("posY", player.Position[1]);
+			Collection.UpdateOne(filter, update);
+			update = Builders<BsonDocument>.Update.Set("shotsX", new BsonArray(SetShotPosition(player, 0)));
+			Collection.UpdateOne(filter, update);
+			update = Builders<BsonDocument>.Update.Set("shotsY", new BsonArray(SetShotPosition(player, 1)));
+			Collection.UpdateOne(filter, update);
+		}
+		static List<int> SetShotPosition(Player player, int index)
+		{
+			List<int> ints = new List<int>();
+			for (int i = 0; i < player.Shots.Count; i++)
+			{
+				ints.Add(player.Shots[i].Position[index]);
+			}
+			return ints;
+		}
+		public static void SetMap(string[,] map, int width, int height)
+		{
+			Graphic.Initialize_Map(map);
+			foreach (var item in AllDoc("obstacles")) map[Convert.ToInt16(item["y"]), Convert.ToInt16(item["x"])] = "Obs";
+		}
+		public static void Lobby(string[,] map, int width, int height, string currentUser, Player player)
+		{
+			Graphic.Initialize_Map(map);
+			Insert(currentUser, player);
+			if (AllDoc("multiplayer").Count == 1)
+				InsertObs(map, width, height);
+			else SetMap(map, width, height);
+			while (AllDoc("multiplayer").Count < 2) Console.WriteLine(AllDoc("multiplayer").Count);
+
 		}
 	}
 }

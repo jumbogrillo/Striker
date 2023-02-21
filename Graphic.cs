@@ -1,4 +1,3 @@
-using Striker_finale;
 using System;
 using MongoDB.Driver;
 using MongoDB.Bson;// To write in the cluster
@@ -99,11 +98,16 @@ namespace Striker_Finale
 				Console.SetCursorPosition(Margin_Left + 1, Console.CursorTop + 1);
 			}
 		}
-
-		public static void Draw_Frame(int width = Striker.Width + 1, int height = Striker.Height + 2, int margin_top = Margin_Top, int margin_left = Margin_Left, ConsoleColor fore = ConsoleColor.DarkYellow, ConsoleColor back = ConsoleColor.DarkGray)
+		public static void WindowSize(int width, int height)
+		{
+			Console.SetWindowSize(width, height);
+			Console.SetBufferSize(width, height);
+			Console.SetWindowPosition(0, 0);
+		}
+		public static void Draw_Frame(int width = Striker.Width + 1, int height = Striker.Height + 2, int margin_top = Margin_Top, int margin_left = Margin_Left, ConsoleColor fore = ConsoleColor.DarkYellow, ConsoleColor back = ConsoleColor.DarkGray, bool setBG=true)
 		{
 			//Console.BackgroundColor = ConsoleColor.Black;
-			Console.BackgroundColor = back;
+			if(setBG)Console.BackgroundColor = back;
 			Console.ForegroundColor = fore;
 			width *= 2;
 			Console.SetCursorPosition(margin_left, margin_top);
@@ -183,356 +187,6 @@ namespace Striker_Finale
 				}
 			}
 		}
-
-		/*public static void Draw_Score(int score, ConsoleColor bg = ConsoleColor.White)
-		{
-
-			Console.BackgroundColor = ConsoleColor.Black;
-
-			for (int i = 0; i < 7; i++)
-			{
-				Console.SetCursorPosition(12 + Width * 2, Margin_Top + i);
-				Console.Write("                           ");
-			}
-
-			Console.SetCursorPosition(27 + Width * 2, Margin_Top);
-			Console.BackgroundColor = bg;
-
-			int a = Console.CursorLeft;
-			int b = Console.CursorTop;
-
-			//if (score % 10 == 0) bg = ConsoleColor.DarkYellow;
-
-			String _score = score.ToString();
-
-			if (_score.Length == 1)
-			{
-				Draw_0(a - 14, b);
-
-				switch (score)
-				{
-					case 0:
-						Draw_0(a, b);
-						break;
-					case 1:
-						Draw_1(a, b);
-						break;
-					case 2:
-						Draw_2(a, b);
-						break;
-					case 3:
-						Draw_3(a, b);
-						break;
-					case 4:
-						Draw_4(a, b);
-						break;
-					case 5:
-						Draw_5(a, b);
-						break;
-					case 6:
-						Draw_6(a, b);
-						break;
-					case 7:
-						Draw_7(a, b);
-						break;
-					case 8:
-						Draw_8(a, b);
-						break;
-					case 9:
-						Draw_9(a, b);
-						break;
-				}
-			}
-			else
-			{
-				int num1 = Convert.ToInt16(_score[0].ToString());
-				int num2 = Convert.ToInt16(_score[1].ToString());
-
-				a -= 14;
-				switch (num1)
-				{
-					case 0:
-						Draw_0(a, b);
-						break;
-					case 1:
-						Draw_1(a, b);
-						break;
-					case 2:
-						Draw_2(a, b);
-						break;
-					case 3:
-						Draw_3(a, b);
-						break;
-					case 4:
-						Draw_4(a, b);
-						break;
-					case 5:
-						Draw_5(a, b);
-						break;
-					case 6:
-						Draw_6(a, b);
-						break;
-					case 7:
-						Draw_7(a, b);
-						break;
-					case 8:
-						Draw_8(a, b);
-						break;
-					case 9:
-						Draw_9(a, b);
-						break;
-				}
-
-				a += 14;
-				switch (num2)
-				{
-					case 0:
-						Draw_0(a, b);
-						break;
-					case 1:
-						Draw_1(a, b);
-						break;
-					case 2:
-						Draw_2(a, b);
-						break;
-					case 3:
-						Draw_3(a, b);
-						break;
-					case 4:
-						Draw_4(a, b);
-						break;
-					case 5:
-						Draw_5(a, b);
-						break;
-					case 6:
-						Draw_6(a, b);
-						break;
-					case 7:
-						Draw_7(a, b);
-						break;
-					case 8:
-						Draw_8(a, b);
-						break;
-					case 9:
-						Draw_9(a, b);
-						break;
-				}
-			}
-		}
-
-		static void Draw_0(int a, int b, ConsoleColor bg = ConsoleColor.White)
-		{
-			Console.BackgroundColor = bg;
-			Console.SetCursorPosition(a, b);
-			Console.SetCursorPosition(Console.CursorLeft + 2, Console.CursorTop);
-			Console.Write("      ");
-
-			Console.SetCursorPosition(Console.CursorLeft + 1, Console.CursorTop);
-			Draw_Down_3();
-
-			Console.SetCursorPosition(Console.CursorLeft - 2, Console.CursorTop + 2);
-			Draw_Down_3();
-
-
-			Console.SetCursorPosition(Console.CursorLeft - 9, Console.CursorTop);
-			Console.Write("      ");
-
-			Console.SetCursorPosition(a - 1, b);
-			Draw_Down_3();
-
-			Console.SetCursorPosition(Console.CursorLeft - 2, Console.CursorTop + 2);
-			Draw_Down_3();
-		}
-		static void Draw_1(int a, int b, ConsoleColor bg = ConsoleColor.White)
-		{
-			Console.BackgroundColor = bg;
-			Console.SetCursorPosition(a, b);
-			Console.SetCursorPosition(Console.CursorLeft + 9, Console.CursorTop);
-			Draw_Down_3();
-
-			Console.SetCursorPosition(Console.CursorLeft - 2, Console.CursorTop + 2);
-			Draw_Down_3();
-		}
-
-		static void Draw_2(int a, int b, ConsoleColor bg = ConsoleColor.White)
-		{
-			Console.BackgroundColor = bg;
-			Console.SetCursorPosition(a, b);
-			Console.SetCursorPosition(Console.CursorLeft + 2, Console.CursorTop);
-			Console.Write("      ");
-
-			Console.SetCursorPosition(Console.CursorLeft + 1, Console.CursorTop);
-			Draw_Down_3();
-
-			Console.SetCursorPosition(Console.CursorLeft - 9, Console.CursorTop + 1);
-			Console.Write("      ");
-
-			Console.SetCursorPosition(Console.CursorLeft - 9, Console.CursorTop + 1);
-			Draw_Down_3();
-
-			Console.SetCursorPosition(Console.CursorLeft + 1, Console.CursorTop);
-			Console.Write("      ");
-		}
-
-		static void Draw_3(int a, int b, ConsoleColor bg = ConsoleColor.White)
-		{
-			Console.BackgroundColor = bg;
-			Console.SetCursorPosition(a, b);
-			Console.SetCursorPosition(Console.CursorLeft + 2, Console.CursorTop);
-			Console.Write("      ");
-
-			Console.SetCursorPosition(Console.CursorLeft + 1, Console.CursorTop);
-			Draw_Down_3();
-
-			Console.SetCursorPosition(Console.CursorLeft - 9, Console.CursorTop + 1);
-			Console.Write("      ");
-
-			Console.SetCursorPosition(Console.CursorLeft + 1, Console.CursorTop + 1);
-			Draw_Down_3();
-
-			Console.SetCursorPosition(Console.CursorLeft - 9, Console.CursorTop);
-			Console.Write("      ");
-		}
-
-		static void Draw_4(int a, int b, ConsoleColor bg = ConsoleColor.White)
-		{
-			Console.BackgroundColor = bg;
-			Console.SetCursorPosition(a, b);
-
-			Console.SetCursorPosition(Console.CursorLeft - 1, Console.CursorTop);
-			Draw_Down_3();
-
-			Console.SetCursorPosition(Console.CursorLeft + 1, Console.CursorTop + 1);
-			Console.Write("      ");
-
-			Console.SetCursorPosition(Console.CursorLeft + 1, Console.CursorTop + 1);
-			Draw_Down_3();
-
-			Console.SetCursorPosition(a + 9, b);
-			Draw_Down_3();
-		}
-
-		static void Draw_5(int a, int b, ConsoleColor bg = ConsoleColor.White)
-		{
-			Console.BackgroundColor = bg;
-			Console.SetCursorPosition(a, b);
-			Console.SetCursorPosition(Console.CursorLeft + 2, Console.CursorTop);
-			Console.Write("      ");
-
-			Console.SetCursorPosition(Console.CursorLeft - 9, Console.CursorTop);
-			Draw_Down_3();
-
-			Console.SetCursorPosition(Console.CursorLeft + 1, Console.CursorTop + 1);
-			Console.Write("      ");
-
-			Console.SetCursorPosition(Console.CursorLeft + 1, Console.CursorTop + 1);
-			Draw_Down_3();
-
-			Console.SetCursorPosition(Console.CursorLeft - 9, Console.CursorTop);
-			Console.Write("      ");
-		}
-
-		static void Draw_6(int a, int b, ConsoleColor bg = ConsoleColor.White)
-		{
-			Console.BackgroundColor = bg;
-			Console.SetCursorPosition(a, b);
-			Console.SetCursorPosition(Console.CursorLeft + 2, Console.CursorTop);
-			Console.Write("      ");
-
-			Console.SetCursorPosition(Console.CursorLeft - 9, Console.CursorTop);
-			Draw_Down_3();
-
-			Console.SetCursorPosition(Console.CursorLeft + 1, Console.CursorTop + 1);
-			Console.Write("      ");
-
-			Console.SetCursorPosition(Console.CursorLeft + 1, Console.CursorTop + 1);
-			Draw_Down_3();
-
-			Console.SetCursorPosition(Console.CursorLeft - 9, Console.CursorTop);
-			Console.Write("      ");
-
-			Console.SetCursorPosition(a - 1, b + 4);
-			Draw_Down_3();
-		}
-
-		static void Draw_7(int a, int b, ConsoleColor bg = ConsoleColor.White)
-		{
-			Console.BackgroundColor = bg;
-			Console.SetCursorPosition(a, b);
-			Console.SetCursorPosition(Console.CursorLeft + 2, Console.CursorTop);
-			Console.Write("      ");
-
-			Console.SetCursorPosition(Console.CursorLeft + 1, Console.CursorTop);
-			Draw_Down_3();
-
-			Console.SetCursorPosition(Console.CursorLeft - 2, Console.CursorTop + 2);
-			Draw_Down_3();
-		}
-
-		static void Draw_8(int a, int b, ConsoleColor bg = ConsoleColor.White)
-		{
-			Console.BackgroundColor = bg;
-			Console.SetCursorPosition(a, b);
-			Console.SetCursorPosition(Console.CursorLeft + 2, Console.CursorTop);
-			Console.Write("      ");
-
-			Console.SetCursorPosition(Console.CursorLeft - 9, Console.CursorTop);
-			Draw_Down_3();
-
-			Console.SetCursorPosition(Console.CursorLeft + 1, Console.CursorTop + 1);
-			Console.Write("      ");
-
-			Console.SetCursorPosition(Console.CursorLeft + 1, Console.CursorTop + 1);
-			Draw_Down_3();
-
-			Console.SetCursorPosition(Console.CursorLeft - 9, Console.CursorTop);
-			Console.Write("      ");
-
-			Console.SetCursorPosition(a - 1, b + 4);
-			Draw_Down_3();
-
-			Console.SetCursorPosition(a + 9, b);
-			Draw_Down_3();
-
-			Console.SetCursorPosition(Console.CursorLeft - 2, Console.CursorTop + 2);
-			Draw_Down_3();
-		}
-
-		static void Draw_9(int a, int b, ConsoleColor bg = ConsoleColor.White)
-		{
-			Console.BackgroundColor = bg;
-			Console.SetCursorPosition(a, b);
-			Console.SetCursorPosition(Console.CursorLeft + 2, Console.CursorTop);
-			Console.Write("      ");
-
-			Console.SetCursorPosition(Console.CursorLeft - 9, Console.CursorTop);
-			Draw_Down_3();
-
-			Console.SetCursorPosition(Console.CursorLeft + 1, Console.CursorTop + 1);
-			Console.Write("      ");
-
-			Console.SetCursorPosition(Console.CursorLeft + 1, Console.CursorTop + 1);
-			Draw_Down_3();
-
-			Console.SetCursorPosition(Console.CursorLeft - 9, Console.CursorTop);
-			Console.Write("      ");
-
-			Console.SetCursorPosition(a + 9, b);
-			Draw_Down_3();
-
-			Console.SetCursorPosition(Console.CursorLeft - 2, Console.CursorTop + 2);
-			Draw_Down_3();
-		}
-
-		static void Draw_Down_3()
-		{
-			Console.Write("  ");
-			Console.SetCursorPosition(Console.CursorLeft - 2, Console.CursorTop + 1);
-			Console.Write("  ");
-			Console.SetCursorPosition(Console.CursorLeft - 2, Console.CursorTop + 1);
-			Console.Write("  ");
-		}*/
-
 		public static void Draw_Life_Bar(int life)
 		{
 			int life_bar_width = Width - (Width % 5) - 4;
@@ -600,10 +254,7 @@ namespace Striker_Finale
 			}
 			Console.Write("╝");
 		}
-		public static void Draw_Score(int score, int font = 0)
-		{
-			Word(12 + Width * 2, Margin_Top, score.ToString(), font);
-		}
+		public static void Draw_Score(int score, int font = 0) => Word(12 + Width * 2, Margin_Top, score.ToString(), font);
 		public static int Word(int x, int y, string text, int font = 0, ConsoleColor fg = ConsoleColor.White, int delay = 0)
 		{
 			int posX = x;
@@ -637,6 +288,9 @@ namespace Striker_Finale
 		}
 		public static void Clear(int type = 0, int delay = 0)
 		{
+			Console.CursorVisible = false;
+			Console.SetBufferSize(Console.WindowWidth, Console.WindowHeight);
+			Console.SetWindowPosition(0, 0);
 			Action[] transitions =
 			{
 				delegate ()
@@ -684,6 +338,7 @@ namespace Striker_Finale
 				}
 			};
 			transitions[type % transitions.Length]();
+			Console.SetWindowPosition(0, 0);
 		}
 	}
 }

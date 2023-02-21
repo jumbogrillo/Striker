@@ -20,7 +20,8 @@ namespace Striker
 		public int[] Position { get; set; }
 		public string StateBeforeShot { get; set; }
 		public int Count { get; set; }
-		public Shoot(string[,] map, int width, int height, int[] position, string direction, string alliance, int speed, int damage)
+		private bool Boost { get; set; }
+		public Shoot(string[,] map, int width, int height, int[] position, string direction, string alliance, int speed, int damage, bool boost=false)
 		{
 			Direction = direction;
 			Speed = speed;
@@ -31,15 +32,18 @@ namespace Striker
 			Position = position;
 			Alliance = alliance;
 			StateBeforeShot = Map[position[1], position[0]];
+			Boost = boost;
 		}
 		public void Update()
 		{
-			if (10 / Speed > Count) Count++;
+			if (Boost) Move();
 			else
-			{
-				Count = 0;
-				Move();
-			}
+				if (10 / Speed > Count) Count++;
+				else
+				{
+					Count = 0;
+					Move();
+				}
 		}
 		public void Move()
 		{
