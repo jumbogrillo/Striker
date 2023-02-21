@@ -66,8 +66,15 @@ namespace Striker_finale
         public static Boolean Update(int x, int y)
         {
             try
-            {   
-                Writer1();
+            {
+                if (Type)
+                {
+                    sharedFile = new StreamWriter(Host_Path);
+                }
+                else
+                {
+                    sharedFile = new StreamWriter(Guest_Path);
+                }
 
                 sharedFile.WriteLine(x);
                 sharedFile.WriteLine(y);
@@ -79,7 +86,14 @@ namespace Striker_finale
             {
                 try
                 {
-                    Writer2();
+                    if (Type)
+                    {
+                        sharedFile = new StreamWriter(Host_UpDown);
+                    }
+                    else
+                    {
+                        sharedFile = new StreamWriter(Guest_UpDown);
+                    }
                     sharedFile.WriteLine(x);
                     sharedFile.WriteLine(y);
 
@@ -89,7 +103,14 @@ namespace Striker_finale
                 }
                 catch
                 {
-                    Writer1();
+                    if (Type)
+                    {
+                        sharedFile = new StreamWriter(Host_Path);
+                    }
+                    else
+                    {
+                        sharedFile = new StreamWriter(Guest_Path);
+                    }
 
                     sharedFile.WriteLine(x);
                     sharedFile.WriteLine(y);
@@ -140,7 +161,14 @@ namespace Striker_finale
             {
                 int[] position = new int[2];
 
-                Reader1();
+                if (Type)
+                {
+                    sharedFileR = new StreamReader(Host_Path);
+                }
+                else
+                {
+                    sharedFileR = new StreamReader(Guest_Path);
+                }
 
                 String x = sharedFileR.ReadLine(), y = sharedFileR.ReadLine();
 
@@ -162,7 +190,14 @@ namespace Striker_finale
                 {
                     int[] position = new int[2];
 
-                    Reader2();
+                    if (Type)
+                    {
+                        sharedFileR = new StreamReader(Host_UpDown);
+                    }
+                    else
+                    {
+                        sharedFileR = new StreamReader(Guest_UpDown);
+                    }
 
                     String x = sharedFileR.ReadLine(), y = sharedFileR.ReadLine();
 
@@ -182,7 +217,14 @@ namespace Striker_finale
                 {
                     int[] position = new int[2];
 
-                    Reader1();
+                    if (Type)
+                    {
+                        sharedFileR = new StreamReader(Host_Path);
+                    }
+                    else
+                    {
+                        sharedFileR = new StreamReader(Guest_Path);
+                    }
 
                     String x = sharedFileR.ReadLine(), y = sharedFileR.ReadLine();
 
@@ -199,54 +241,6 @@ namespace Striker_finale
                     return position;
                 }
             }            
-        }
-
-        static void Writer1()
-        {
-            if (Type)
-            {
-                sharedFile = new StreamWriter(Host_Path);
-            }
-            else
-            {
-                sharedFile = new StreamWriter(Guest_Path);
-            }
-        }
-
-        static void Writer2()
-        {
-            if (Type)
-            {
-                sharedFile = new StreamWriter(Host_UpDown);
-            }
-            else
-            {
-                sharedFile = new StreamWriter(Guest_UpDown);
-            }
-        }
-
-        static void Reader1()
-        {
-            if (Type)
-            {
-                sharedFileR = new StreamReader(Host_Path);
-            }
-            else
-            {
-                sharedFileR = new StreamReader(Guest_Path);
-            }
-        }
-
-        static void Reader2()
-        {
-            if (Type)
-            {
-                sharedFileR = new StreamReader(Host_UpDown);
-            }
-            else
-            {
-                sharedFileR = new StreamReader(Guest_UpDown);
-            }
         }
     }
 }
