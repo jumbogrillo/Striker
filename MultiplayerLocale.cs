@@ -67,14 +67,7 @@ namespace Striker_finale
             {
                 StreamWriter sharedFile;
 
-                if (Type)
-                {
-                    sharedFile = new StreamWriter(Host_Path);
-                }
-                else
-                {
-                    sharedFile = new StreamWriter(Guest_UpDown);
-                }
+                sharedFile = new StreamWriter(Host_Path);
 
                 sharedFile.WriteLine(x);
                 sharedFile.WriteLine(y);
@@ -84,6 +77,15 @@ namespace Striker_finale
             }
             catch (IOException)
             {
+                StreamWriter sharedFile;
+
+                sharedFile = new StreamWriter(Guest_UpDown);
+
+                sharedFile.WriteLine(x);
+                sharedFile.WriteLine(y);
+
+                sharedFile.Close();
+                return true;
                 return false;
                 //Striker_Finale.Striker.LM_Game();
             }
@@ -130,14 +132,7 @@ namespace Striker_finale
                 int[] position = new int[2];
                 StreamReader sharedFile;
 
-                if (Type) 
-                {
-                    sharedFile = new StreamReader(Host_UpDown);
-                }
-                else
-                {
-                    sharedFile = new StreamReader(Guest_Path);
-                }
+                sharedFile = new StreamReader(Host_UpDown);
 
                 String x = sharedFile.ReadLine(), y = sharedFile.ReadLine();
 
@@ -155,8 +150,24 @@ namespace Striker_finale
             }
             catch (IOException)
             {
-                int[] ritorna = { 5, 5 };
-                return ritorna;
+                int[] position = new int[2];
+                StreamReader sharedFile;
+
+                sharedFile = new StreamReader(Guest_Path);
+
+                String x = sharedFile.ReadLine(), y = sharedFile.ReadLine();
+
+                if (x != "" && x != "E" && x != "Obs" && x != "Pl" && x != "Enem" && Convert.ToInt32(x) >= 0)
+                {
+                    position[0] = Convert.ToInt32(x);
+                }
+
+                if (y != "" && y != "E" && y != "Obs" && y != "Pl" && y != "Enem" && Convert.ToInt32(y) >= 0)
+                {
+                    position[1] = Convert.ToInt32(y);
+                }
+
+                return position;
             }            
         }
     }
