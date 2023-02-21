@@ -25,7 +25,7 @@ namespace Striker_Finale
         {
 
             Console.CursorVisible = false;
-            MultiplayerLocale.Type = false;
+            MultiplayerLocale.Type = true;
             Local_Multiplayer_Start();
 
 

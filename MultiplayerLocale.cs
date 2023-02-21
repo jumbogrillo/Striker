@@ -99,7 +99,7 @@ namespace Striker_finale
                 {
                     libero = true;
                     map[Find_Enem(map)[0], Find_Enem(map)[1]] = "E";
-                    map[pos[0], pos[1]] = "Enem";
+                    map[pos[1], pos[0]] = "Enem";
                 }
                 else
                 {
@@ -112,7 +112,7 @@ namespace Striker_finale
 
         static int[] Find_Enem(String[,] map)
         {
-            int[] position = { -1, -1 };
+            int[] position = { 5, 5 };
             for (int i = 0; i < Height; i++)
             {
                 for (int j = 0; j < Width; j++)
@@ -138,9 +138,18 @@ namespace Striker_finale
                 {
                     sharedFile = new StreamReader(Guest_Path);
                 }
-                
-                position[0] = Convert.ToInt32(sharedFile.ReadLine());
-                position[1] = Convert.ToInt32(sharedFile.ReadLine());
+
+                String x = sharedFile.ReadLine(), y = sharedFile.ReadLine();
+
+                if (x != "" && Convert.ToInt32(x) >= 0)
+                {
+                    position[0] = Convert.ToInt32(x);
+                }
+
+                if (y != "" && Convert.ToInt32(y) >= 0)
+                {
+                    position[1] = Convert.ToInt32(y);
+                }
 
                 return position;
             }
