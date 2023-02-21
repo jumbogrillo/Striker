@@ -11,8 +11,9 @@ namespace Striker_finale
     {
         public static int Width;
         public static int Height;
-        public static string Host_Path = "C:\\Users\\Public\\sharedFile";
-        public static string Guest_Path = "F:\\Users\\Public\\sharedFile";
+        public static Boolean Type = true;
+        public static string Host_Path = "C:\\Users\\Public\\sharedFile", Host_UpDown = "C:\\Users\\Public\\sharedFile1";
+        public static string Guest_Path = "F:\\Public\\sharedFile", Guest_UpDown = "F:\\Public\\sharedFile1";
         public static Boolean Initialize_Set(String[,] map)
         {
             try
@@ -40,21 +41,17 @@ namespace Striker_finale
         {
             try
             {
-                using (FileStream stream = new FileStream(Host_Path, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
+                StreamReader sharedFile = new StreamReader(Guest_Path); //percorso unità condivisa
+
+                for (int i = 0; i < Height; i++)
                 {
-
-                    StreamReader sharedFile = new StreamReader(Guest_Path); //percorso unità condivisa
-
-                    for (int i = 0; i < Height; i++)
+                    for (int j = 0; j < Width; j++)
                     {
-                        for (int j = 0; j < Width; j++)
-                        {
-                            map[i, j] = sharedFile.ReadLine().ToString();
-                        }
+                        map[i, j] = sharedFile.ReadLine().ToString();
                     }
-
-                    sharedFile.Close();
                 }
+
+                sharedFile.Close();
                 return true;
             }
             catch (IOException)
@@ -68,15 +65,21 @@ namespace Striker_finale
         {
             try
             {
-                using (FileStream stream = new FileStream(Host_Path, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
+                StreamWriter sharedFile = new StreamWriter(Host_Path);
+
+                if (Type)
                 {
-                    StreamWriter sharedFile = new StreamWriter(Host_Path);
-
-                    sharedFile.WriteLine(x);
-                    sharedFile.WriteLine(y);
-
-                    sharedFile.Close();
+                    sharedFile = new StreamWriter(Host_Path);
                 }
+                else
+                {
+                    sharedFile = new StreamWriter(Guest_UpDown);
+                }
+
+                sharedFile.WriteLine(x);
+                sharedFile.WriteLine(y);
+
+                sharedFile.Close();
                 return true;
             }
             catch (IOException)
@@ -124,20 +127,26 @@ namespace Striker_finale
         {
             try
             {
-                using (FileStream stream = new FileStream(Host_Path, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
+                int[] position = new int[2];
+                StreamReader sharedFile;
+
+                if (Type) 
                 {
-                    int[] position = new int[2];
-
-                    StreamReader sharedFile = new StreamReader(Guest_Path);
-                    position[0] = Convert.ToInt32(sharedFile.ReadLine());
-                    position[1] = Convert.ToInt32(sharedFile.ReadLine());
-
-                    return position;
+                    sharedFile = new StreamReader(Host_UpDown);
                 }
+                else
+                {
+                    sharedFile = new StreamReader(Guest_Path);
+                }
+                
+                position[0] = Convert.ToInt32(sharedFile.ReadLine());
+                position[1] = Convert.ToInt32(sharedFile.ReadLine());
+
+                return position;
             }
             catch (IOException)
             {
-                int[] ritorna = { -1, -1 };
+                int[] ritorna = { 5, 5 };
                 return ritorna;
             }            
         }

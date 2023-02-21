@@ -18,15 +18,14 @@ namespace Striker_Finale
         public static String[,] Map = new String[Height, Width];
         static Player player;
         static List<Enemy> enemies = new List<Enemy>();
-        static Boolean Type = false; // true = Host, false = Guest
         static ConsoleColor PlayerColor = ConsoleColor.DarkRed, EnemyColor = ConsoleColor.DarkMagenta,
             BGColor = ConsoleColor.Gray, ObsColor = ConsoleColor.DarkGray, ShColor = ConsoleColor.Black;
 
         public static void Main(string[] args)
         {
 
-
-            Type = true;
+            Console.CursorVisible = false;
+            MultiplayerLocale.Type = false;
             Local_Multiplayer_Start();
 
 
@@ -638,7 +637,8 @@ namespace Striker_Finale
             Player player = new Player(Width, Height);
             Enemy enemy = new Enemy(Map, Width, Height, 0, 5);
             Handshake();
-            player.LM_Spawn(Type);
+            Console.ReadKey();
+            player.LM_Spawn(player, MultiplayerLocale.Type);
             Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);
             Graphic.Draw_Life_Bar(player.Life);
             Graphic.Draw_Score(player.Score, 2);
@@ -681,7 +681,7 @@ namespace Striker_Finale
         public static void Handshake()
         {
             Riprova:
-            if (Type)
+            if (MultiplayerLocale.Type)
             {
                 Graphic.Draw_Obstacles_Randomly(Map);
                 if(!MultiplayerLocale.Initialize_Set(Map))
