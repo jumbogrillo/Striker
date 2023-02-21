@@ -86,7 +86,7 @@ namespace Striker_Finale
 				if (position[0] == enemies[i].Position[0] & position[1] == enemies[i].Position[1]) return i;
 			return 0;
 		}
-		public void UpdateShots(string[,] map, List<Enemy> enemies)
+		public void UpdateShots(string[,] map, List<Enemy> enemies, bool onlineMP=false)
 		{
 			for (int i = 0; i < Shots.Count; i++)
 			{
@@ -99,13 +99,16 @@ namespace Striker_Finale
 						Combo++;
 						Graphic.Word(12 + Width * 2, Graphic.Margin_Top, this.Score > 99 ? "   " : "  ");
 						Graphic.Draw_Score(this.Score, 2);
-						int enemyIndex = FindEnemy(enemies, Shots[i].Position);
-						if (enemies[enemyIndex].Life > 1) enemies[enemyIndex].Life--;
-						else
+						if (!onlineMP)
 						{
-							map[enemies[enemyIndex].Position[1], enemies[enemyIndex].Position[0]] = "E";
-							enemies[enemyIndex].DeleteAllShotBeforeDeath(map);
-							enemies.RemoveAt(enemyIndex);
+							int enemyIndex = FindEnemy(enemies, Shots[i].Position);
+							if (enemies[enemyIndex].Life > 1) enemies[enemyIndex].Life--;
+							else
+							{
+								map[enemies[enemyIndex].Position[1], enemies[enemyIndex].Position[0]] = "E";
+								enemies[enemyIndex].DeleteAllShotBeforeDeath(map);
+								enemies.RemoveAt(enemyIndex);
+							}
 						}
 					}
 					else Combo = 0;

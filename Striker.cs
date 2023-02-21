@@ -24,6 +24,7 @@ namespace Striker_Finale
 
         public static void Main(string[] args)
         {
+			Online_Multiplayer();
             Console.Title = "Striker";
             Console.CursorVisible = false;
             Start();
@@ -105,6 +106,7 @@ namespace Striker_Finale
 		static void Online_Multiplayer()
 		{
 			Database.TurnOn();
+			Graphic.WindowSize(140, 70);
 			player = new Player(Width, Height);
 			Graphic.Initialize_Map(Map);
 			Graphic.Draw_Obstacles_Randomly(Map);
@@ -139,11 +141,12 @@ namespace Striker_Finale
 					Graphic.Draw_Life_Bar(player.Life);
 				}
 				Database.Update(CurrentUser, player);
-				Database.UpdateMap(Map, Width, Height);
-				Graphic.Draw_Map(Map, ConsoleColor.White, EnemyColor, PlayerColor, ObsColor, ShColor);//Width / 2 - player.Position[0], Height / 2 - player.Position[1], 
-				player.UpdateShots(Map, enemies);
+				Database.UpdateMap(Map, Width, Height, CurrentUser, player);
+				player.UpdateShots(Map, enemies, true);
 				player.Move(Map, musica);
+				Graphic.Draw_Map(Map, ConsoleColor.White, EnemyColor, PlayerColor, ObsColor, ShColor);//Width / 2 - player.Position[0], Height / 2 - player.Position[1], 
 			}
+			Database.DeletePlayer(CurrentUser);
 			GameOver();
 			Graphic.Word(10, 25, Database.AllDoc("multiplayer").Count.ToString());
 			Database.DrawClassification();

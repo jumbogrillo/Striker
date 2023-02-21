@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Collections.ObjectModel;
+using System.Numerics;
 
 namespace Striker_Finale
 {
@@ -75,12 +76,13 @@ namespace Striker_Finale
 		{
 
 			Connect("classification");
-			Graphic.WindowSize(50, 20);
+			Graphic.WindowSize(100, 20);
 			Graphic.Draw_Frame(20, 10, 5, 5, setBG: false);
-			Graphic.Word(Console.WindowWidth / 2, 3, "register", 2);
-			//Graphic.Rect(7, 9, "Username: ", fg: ConsoleColor.White, setBG: false, size: 1);
-			//Graphic.Rect(7, 11, "Password: ", fg: ConsoleColor.White, setBG: false, size: 1);
+			Graphic.Word(10, 6, "register", 1);
+			Graphic.Rect(7, 9, "Username: ", fg: ConsoleColor.White, setBG: false, size: 1);
+			Graphic.Rect(7, 11, "Password: ", fg: ConsoleColor.White, setBG: false, size: 1);
 			string password = "";
+			Console.CursorVisible = true;
 			do
 			{
 				Console.SetCursorPosition(17, 9);
@@ -179,26 +181,38 @@ namespace Striker_Finale
 					if (map[i, j] == "Obs") list.Add(new List<int> { j, i });
 			return list;
 		}
-		public static void UpdateMap(string[,] map, int width, int height)
+		public static void UpdateMap(string[,] map, int width, int height, string currentUser, Player currentPlayer)
 		{
 			for (int i = 0; i < width; i++)
 				for (int j = 0; j < height; j++)
 					if (map[j, i] == "Pl" | map[j, i] == "Sh") map[j, i] = "E";
+
 			var players = AllDoc("multiplayer");
 			foreach(var player in players)
 			{
-				map[Convert.ToInt16(player["posY"]), Convert.ToInt16(player["posX"])] = "Pl";
-				var LL = player["shotsX"].AsBsonArray.Count;
-				for (int i = 0; i < LL; i++) try
+				if (player["user"] == currentUser)map[Convert.ToInt16(player["posY"]), Convert.ToInt16(player["posX"])] = "Pl";
+				else map[Convert.ToInt16(player["posY"]), Convert.ToInt16(player["posX"])] = "Enem";
+				for (int i = 0; i < player["shotsX"].AsBsonArray.Count; i++)
+					try
 					{
-						map[Convert.ToInt16(player["shotsY"][i]), Convert.ToInt16(player["shotsX"][i])] = "Sh";
+						if (map[Convert.ToInt16(player["shotsY"][i]), Convert.ToInt16(player["shotsX"][i])] == "E" )map[Convert.ToInt16(player["shotsY"][i]), Convert.ToInt16(player["shotsX"][i])] = "Sh";
+						if (player["user"] != currentUser)
+							if (currentPlayer.Position[0] == Convert.ToInt16(player["shotsX"][i]) & currentPlayer.Position[1] == Convert.ToInt16(player["shotsY"][i])) { currentPlayer.Life--; Graphic.Draw_Life_Bar(currentPlayer.Life);}
 					}
 					catch(Exception ex) { }
+
 			}
+			// Update Shot
+
+		}
+		public static void DeletePlayer(string currentUser)
+		{
+			Connect("multiplayer");
+			var filter = Builders<BsonDocument>.Filter.Eq("user", currentUser);
+			Collection.DeleteOne(filter);
 		}
 		public static void Update(string currentUser, Player player)
 		{
-			Connect("multiplayer");
 			var filter = Builders<BsonDocument>.Filter.Eq("user", currentUser);
 			var update = Builders<BsonDocument>.Update.Set("posX", player.Position[0]);
 			Collection.UpdateOne(filter, update);
@@ -218,18 +232,13 @@ namespace Striker_Finale
 			}
 			return ints;
 		}
-		public static void SetMap(string[,] map, int width, int height)
-		{
-			Graphic.Initialize_Map(map);
-			foreach (var item in AllDoc("obstacles")) map[Convert.ToInt16(item["y"]), Convert.ToInt16(item["x"])] = "Obs";
-		}
 		public static void Lobby(string[,] map, int width, int height, string currentUser, Player player)
 		{
 			Graphic.Initialize_Map(map);
 			Insert(currentUser, player);
 			if (AllDoc("multiplayer").Count == 1)
 				InsertObs(map, width, height);
-			else SetMap(map, width, height);
+			else foreach (var item in AllDoc("obstacles")) map[Convert.ToInt16(item["y"]), Convert.ToInt16(item["x"])] = "Obs";
 			while (AllDoc("multiplayer").Count < 2) Console.WriteLine(AllDoc("multiplayer").Count);
 
 		}
