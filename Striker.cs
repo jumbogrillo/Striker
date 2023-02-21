@@ -27,7 +27,7 @@ namespace Striker_Finale
             player = new Player(Width, Height);
             Time.Start();
             Console.CursorVisible = false;
-            MultiplayerLocale.Type = true;
+            MultiplayerLocale.Type = false;
             Local_Multiplayer_Start();
 
 

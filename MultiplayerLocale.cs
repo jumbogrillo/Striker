@@ -73,7 +73,7 @@ namespace Striker_finale
                 }
                 else
                 {
-                    sharedFile = new StreamWriter(Guest_Path);
+                    sharedFile = new StreamWriter(Guest_UpDown);
                 }
 
                 sharedFile.WriteLine(x);
@@ -84,40 +84,7 @@ namespace Striker_finale
             }
             catch (IOException)
             {
-                try
-                {
-                    if (Type)
-                    {
-                        sharedFile = new StreamWriter(Host_UpDown);
-                    }
-                    else
-                    {
-                        sharedFile = new StreamWriter(Guest_UpDown);
-                    }
-                    sharedFile.WriteLine(x);
-                    sharedFile.WriteLine(y);
-
-                    sharedFile.Close();
-                    return true;
-                    //Striker_Finale.Striker.LM_Game();
-                }
-                catch
-                {
-                    if (Type)
-                    {
-                        sharedFile = new StreamWriter(Host_Path);
-                    }
-                    else
-                    {
-                        sharedFile = new StreamWriter(Guest_Path);
-                    }
-
-                    sharedFile.WriteLine(x);
-                    sharedFile.WriteLine(y);
-
-                    sharedFile.Close();
-                    return true;
-                }
+                return false;
             }
         }
 
@@ -131,7 +98,7 @@ namespace Striker_finale
                 {
                     libero = true;
                     map[Find_Enem(map)[0], Find_Enem(map)[1]] = "E";
-                    map[pos[1], pos[0]] = "Enem";
+                    map[pos[0], pos[1]] = "Enem";
                 }
                 else
                 {
@@ -144,7 +111,7 @@ namespace Striker_finale
 
         static int[] Find_Enem(String[,] map)
         {
-            int[] position = { 5, 5 };
+            int[] position = { -1, -1 };
             for (int i = 0; i < Height; i++)
             {
                 for (int j = 0; j < Width; j++)
@@ -163,7 +130,7 @@ namespace Striker_finale
 
                 if (Type)
                 {
-                    sharedFileR = new StreamReader(Host_Path);
+                    sharedFileR = new StreamReader(Host_UpDown);
                 }
                 else
                 {
@@ -172,74 +139,22 @@ namespace Striker_finale
 
                 String x = sharedFileR.ReadLine(), y = sharedFileR.ReadLine();
 
-                if (x != "" && x != "E" && x != "Obs" && x != "Pl" && x != "Enem" && Convert.ToInt32(x) >= 0)
+                if (x != "" && Convert.ToInt32(x) >= 0)
                 {
                     position[0] = Convert.ToInt32(x);
                 }
 
-                if (y != "" && y != "E" && y != "Obs" && y != "Pl" && y != "Enem" && Convert.ToInt32(y) >= 0)
+                if (y != "" && Convert.ToInt32(y) >= 0)
                 {
                     position[1] = Convert.ToInt32(y);
                 }
-
+                sharedFileR.Close();
                 return position;
             }
             catch (IOException)
             {
-                try
-                {
-                    int[] position = new int[2];
-
-                    if (Type)
-                    {
-                        sharedFileR = new StreamReader(Host_UpDown);
-                    }
-                    else
-                    {
-                        sharedFileR = new StreamReader(Guest_UpDown);
-                    }
-
-                    String x = sharedFileR.ReadLine(), y = sharedFileR.ReadLine();
-
-                    if (x != "" && x != "E" && x != "Obs" && x != "Pl" && x != "Enem" && Convert.ToInt32(x) >= 0)
-                    {
-                        position[0] = Convert.ToInt32(x);
-                    }
-
-                    if (y != "" && y != "E" && y != "Obs" && y != "Pl" && y != "Enem" && Convert.ToInt32(y) >= 0)
-                    {
-                        position[1] = Convert.ToInt32(y);
-                    }
-
-                    return position;
-                }
-                catch
-                {
-                    int[] position = new int[2];
-
-                    if (Type)
-                    {
-                        sharedFileR = new StreamReader(Host_Path);
-                    }
-                    else
-                    {
-                        sharedFileR = new StreamReader(Guest_Path);
-                    }
-
-                    String x = sharedFileR.ReadLine(), y = sharedFileR.ReadLine();
-
-                    if (x != "" && x != "E" && x != "Obs" && x != "Pl" && x != "Enem" && Convert.ToInt32(x) >= 0)
-                    {
-                        position[0] = Convert.ToInt32(x);
-                    }
-
-                    if (y != "" && y != "E" && y != "Obs" && y != "Pl" && y != "Enem" && Convert.ToInt32(y) >= 0)
-                    {
-                        position[1] = Convert.ToInt32(y);
-                    }
-
-                    return position;
-                }
+                int[] pos = { 5, 5 };
+                return pos;
             }            
         }
     }
