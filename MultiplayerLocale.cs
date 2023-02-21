@@ -96,9 +96,8 @@ namespace Striker_finale
                 int[] pos = Download_Position();
                 if (pos[0] != -1)
                 {
-                    libero = true;
-                    map[Find_Enem(map)[0], Find_Enem(map)[1]] = "E";
-                    map[pos[0], pos[1]] = "Enem";
+                    Find_Enem(map);
+                    map[pos[1], pos[0]] = "Enem";
                 }
                 else
                 {
@@ -109,17 +108,18 @@ namespace Striker_finale
             
         }
 
-        static int[] Find_Enem(String[,] map)
+        static void Find_Enem(String[,] map)
         {
-            int[] position = { -1, -1 };
             for (int i = 0; i < Height; i++)
             {
                 for (int j = 0; j < Width; j++)
                 {
-                    if (map[i, j] == "Enem") position[0] = i; position[1] = j;
+                    if (map[i,j] == "Enem")
+                    {
+                        map[i, j] = "E";
+                    }
                 }
-            }
-            return position;            
+            }     
         }
 
         static int[] Download_Position()
