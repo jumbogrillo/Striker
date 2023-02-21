@@ -650,7 +650,7 @@ namespace Striker_Finale
             while (player.Life > 0)
             {
                 Console.SetBufferSize(140, 70);
-                if ((Convert.ToInt32(Time.ElapsedMilliseconds / 2) % 2 == 0) == MultiplayerLocale.Type) Update();
+                //if ((Convert.ToInt32(Time.ElapsedMilliseconds / 2) % 2 == 0) == MultiplayerLocale.Type) Update();
                 //if (Time.ElapsedMilliseconds % 5000 < 100) enemies.Add(new Enemy(Map, Width, Height, 2, 1));
                 //MultiplayerLocale.Enemy_Update(Map);
                 if (player.Combo > 0)

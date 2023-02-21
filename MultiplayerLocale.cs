@@ -12,6 +12,8 @@ namespace Striker_finale
         public static int Width;
         public static int Height;
         public static Boolean Type = true;
+        static StreamReader sharedFileR;
+        static StreamWriter sharedFile;
         public static string Host_Path = "C:\\Users\\Public\\sharedFile", Host_UpDown = "C:\\Users\\Public\\sharedFile1";
         public static string Guest_Path = "F:\\Public\\sharedFile", Guest_UpDown = "F:\\Public\\sharedFile1";
         public static Boolean Initialize_Set(String[,] map)
@@ -64,18 +66,8 @@ namespace Striker_finale
         public static Boolean Update(int x, int y)
         {
             try
-            {
-                StreamWriter sharedFile;
-
-                if (Type)
-                {
-                    sharedFile = new StreamWriter(Host_Path);
-                }
-                else
-                {
-                    sharedFile = new StreamWriter(Guest_Path);
-                }
-                
+            {   
+                Writer1();
 
                 sharedFile.WriteLine(x);
                 sharedFile.WriteLine(y);
@@ -85,23 +77,26 @@ namespace Striker_finale
             }
             catch (IOException)
             {
-                StreamWriter sharedFile;
-
-                if (Type)
+                try
                 {
-                    sharedFile = new StreamWriter(Host_UpDown);
+                    Writer2();
+                    sharedFile.WriteLine(x);
+                    sharedFile.WriteLine(y);
+
+                    sharedFile.Close();
+                    return true;
+                    //Striker_Finale.Striker.LM_Game();
                 }
-                else
+                catch
                 {
-                    sharedFile = new StreamWriter(Guest_UpDown);
+                    Writer1();
+
+                    sharedFile.WriteLine(x);
+                    sharedFile.WriteLine(y);
+
+                    sharedFile.Close();
+                    return true;
                 }
-
-                sharedFile.WriteLine(x);
-                sharedFile.WriteLine(y);
-
-                sharedFile.Close();
-                return true;
-                //Striker_Finale.Striker.LM_Game();
             }
         }
 
@@ -144,18 +139,10 @@ namespace Striker_finale
             try
             {
                 int[] position = new int[2];
-                StreamReader sharedFile;
 
-                if (Type)
-                {
-                    sharedFile = new StreamReader(Host_Path);
-                }
-                else
-                {
-                    sharedFile = new StreamReader(Guest_Path);
-                }
+                Reader1();
 
-                String x = sharedFile.ReadLine(), y = sharedFile.ReadLine();
+                String x = sharedFileR.ReadLine(), y = sharedFileR.ReadLine();
 
                 if (x != "" && x != "E" && x != "Obs" && x != "Pl" && x != "Enem" && Convert.ToInt32(x) >= 0)
                 {
@@ -171,32 +158,95 @@ namespace Striker_finale
             }
             catch (IOException)
             {
-                int[] position = new int[2];
-                StreamReader sharedFile;
-
-                if (Type)
+                try
                 {
-                    sharedFile = new StreamReader(Host_UpDown);
+                    int[] position = new int[2];
+
+                    Reader2();
+
+                    String x = sharedFileR.ReadLine(), y = sharedFileR.ReadLine();
+
+                    if (x != "" && x != "E" && x != "Obs" && x != "Pl" && x != "Enem" && Convert.ToInt32(x) >= 0)
+                    {
+                        position[0] = Convert.ToInt32(x);
+                    }
+
+                    if (y != "" && y != "E" && y != "Obs" && y != "Pl" && y != "Enem" && Convert.ToInt32(y) >= 0)
+                    {
+                        position[1] = Convert.ToInt32(y);
+                    }
+
+                    return position;
                 }
-                else
+                catch
                 {
-                    sharedFile = new StreamReader(Guest_UpDown);
+                    int[] position = new int[2];
+
+                    Reader1();
+
+                    String x = sharedFileR.ReadLine(), y = sharedFileR.ReadLine();
+
+                    if (x != "" && x != "E" && x != "Obs" && x != "Pl" && x != "Enem" && Convert.ToInt32(x) >= 0)
+                    {
+                        position[0] = Convert.ToInt32(x);
+                    }
+
+                    if (y != "" && y != "E" && y != "Obs" && y != "Pl" && y != "Enem" && Convert.ToInt32(y) >= 0)
+                    {
+                        position[1] = Convert.ToInt32(y);
+                    }
+
+                    return position;
                 }
-
-                String x = sharedFile.ReadLine(), y = sharedFile.ReadLine();
-
-                if (x != "" && x != "E" && x != "Obs" && x != "Pl" && x != "Enem" && Convert.ToInt32(x) >= 0)
-                {
-                    position[0] = Convert.ToInt32(x);
-                }
-
-                if (y != "" && y != "E" && y != "Obs" && y != "Pl" && y != "Enem" && Convert.ToInt32(y) >= 0)
-                {
-                    position[1] = Convert.ToInt32(y);
-                }
-
-                return position;
             }            
+        }
+
+        static void Writer1()
+        {
+            if (Type)
+            {
+                sharedFile = new StreamWriter(Host_Path);
+            }
+            else
+            {
+                sharedFile = new StreamWriter(Guest_Path);
+            }
+        }
+
+        static void Writer2()
+        {
+            if (Type)
+            {
+                sharedFile = new StreamWriter(Host_UpDown);
+            }
+            else
+            {
+                sharedFile = new StreamWriter(Guest_UpDown);
+            }
+        }
+
+        static void Reader1()
+        {
+            if (Type)
+            {
+                sharedFileR = new StreamReader(Host_Path);
+            }
+            else
+            {
+                sharedFileR = new StreamReader(Guest_Path);
+            }
+        }
+
+        static void Reader2()
+        {
+            if (Type)
+            {
+                sharedFileR = new StreamReader(Host_UpDown);
+            }
+            else
+            {
+                sharedFileR = new StreamReader(Guest_UpDown);
+            }
         }
     }
 }
