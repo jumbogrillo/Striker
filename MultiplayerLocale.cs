@@ -14,6 +14,7 @@ namespace Striker_finale
         public static Boolean Type = true;
         static StreamReader sharedFileR;
         static StreamWriter sharedFile;
+        static int lastX = Height - 2, lastY = Width - 2;
         public static string Host_Path = "C:\\Users\\Public\\sharedFile", Host_UpDown = "C:\\Users\\Public\\sharedFile1";
         public static string Guest_Path = "F:\\Public\\sharedFile", Guest_UpDown = "F:\\Public\\sharedFile1";
         public static Boolean Initialize_Set(String[,] map)
@@ -96,7 +97,8 @@ namespace Striker_finale
                 int[] pos = Download_Position();
                 if (pos[0] != -1)
                 {
-                    Find_Enem(map);
+                    libero = true;
+                    map[lastX, lastY] = "E";
                     map[pos[1], pos[0]] = "Enem";
                 }
                 else
@@ -106,20 +108,6 @@ namespace Striker_finale
             }
             while (!libero);
             
-        }
-
-        static void Find_Enem(String[,] map)
-        {
-            for (int i = 0; i < Height; i++)
-            {
-                for (int j = 0; j < Width; j++)
-                {
-                    if (map[i,j] == "Enem")
-                    {
-                        map[i, j] = "E";
-                    }
-                }
-            }     
         }
 
         static int[] Download_Position()
@@ -142,11 +130,13 @@ namespace Striker_finale
                 if (x != "" && Convert.ToInt32(x) >= 0)
                 {
                     position[0] = Convert.ToInt32(x);
+                    lastX = position[0];
                 }
 
                 if (y != "" && Convert.ToInt32(y) >= 0)
                 {
                     position[1] = Convert.ToInt32(y);
+                    lastY = position[1];
                 }
                 sharedFileR.Close();
                 return position;

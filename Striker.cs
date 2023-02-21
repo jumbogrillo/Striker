@@ -27,7 +27,7 @@ namespace Striker_Finale
             player = new Player(Width, Height);
             Time.Start();
             Console.CursorVisible = false;
-            MultiplayerLocale.Type = true;
+            MultiplayerLocale.Type = false;
             Local_Multiplayer_Start();
 
 
@@ -635,7 +635,7 @@ namespace Striker_Finale
             MultiplayerLocale.Height = Height;
             MultiplayerLocale.Width = Width;
             Graphic.Initialize_Map(Map);
-            Enemy enemy = new Enemy(Map, Width, Height, 0, 5);
+            //Enemy enemy = new Enemy(Map, Width, Height, 0, 5);
             Handshake();
             Console.ReadKey();
             Time.Start();

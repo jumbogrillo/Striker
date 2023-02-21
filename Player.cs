@@ -136,8 +136,8 @@ namespace Striker_Finale
             }
             else
             {
-				player.Position[0] = Width - 4;
-				player.Position[1] = Height - 4;
+				player.Position[0] = Width - 2;
+				player.Position[1] = Height - 2;
 				//for (int i = 1; i <= 5; i++) Striker.Map[Position[0], Position[1] - i] = "E";
 				//for (int i = 1; i <= 5; i++) Striker.Map[Position[0] - i, Position[1]] = "E";
 			}
