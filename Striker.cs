@@ -27,14 +27,9 @@ namespace Striker_Finale
 
         public static void Main(string[] args)
         {
-<<<<<<< Updated upstream
-            player = new Player(Width, Height);
-            Time.Start();
-=======
             //Online_Multiplayer();
             Local_Multiplayer_Start();
             Console.Title = "Striker";
->>>>>>> Stashed changes
             Console.CursorVisible = false;
             MultiplayerLocale.Type = false;
             Local_Multiplayer_Start();
@@ -681,18 +676,11 @@ namespace Striker_Finale
                     player.Life--;
                     Graphic.Draw_Life_Bar(player.Life);
                 }
-<<<<<<< Updated upstream
-                Set_Param();
-                player.Move(Map, musica);
-                Update(Map);
-                if (Position[0] != -1) enemy.LM_Shot(Map, Position, Direction, Alliance, Speed, Damage);
-=======
                 Set_Shoots(Position, ref Direction, ref Alliance, ref Speed, ref Damage);
                 player.Move(Map, musica);
                 Update(Map, player, Position, Direction, Alliance, Speed, Damage);
                 player.LM_Shoots(Map);
                 //if (Position[0] != -1) enemy.LM_Shot(Map, Position, Direction, Alliance, Speed, Damage);
->>>>>>> Stashed changes
                 Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);//Width / 2 - player.Position[0], Height / 2 - player.Position[1], 
                 player.UpdateShots(Map, enemies);
             }
