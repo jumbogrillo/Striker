@@ -720,27 +720,17 @@ namespace Striker_Finale
             }
         }
 
-<<<<<<< Updated upstream
-        static void Update(String[,] Map)
-=======
                 }
             }
             goto Menu;
 
         }
         static void Update(String[,] Map, Player player,int[] Position, String Direction, String Alliance, int Speed, int Damage)
->>>>>>> Stashed changes
         {
             MultiplayerLocale.Update(player.Position[0], player.Position[1], Position[0], Position[1], Direction, Alliance, Speed, Damage);
             MultiplayerLocale.Enemy_Update(Map);
         }
 
-<<<<<<< Updated upstream
-        public static void Set_Param(int shx = -1, int shy = -1, String dir = "//", String alli = "//", int speed = -1, int dam = -1)
-        {
-            Position[0] = MultiplayerLocale.shx;
-            Position[1] = MultiplayerLocale.shy;
-=======
         public static void Set_Shoots(int[] Position,ref String Direction, ref String Alliance, ref int Speed, ref int Damage)
         {
             MultiplayerLocale.shx = -1;
@@ -752,15 +742,10 @@ namespace Striker_Finale
 
             Position[0] =MultiplayerLocale.shx;
             Position[1] =MultiplayerLocale.shy;
->>>>>>> Stashed changes
             Direction = MultiplayerLocale.dir;
             Alliance = MultiplayerLocale.alli;
             Speed = MultiplayerLocale.speed;
             Damage = MultiplayerLocale.dam;
-<<<<<<< Updated upstream
-        }
-=======
         }        
->>>>>>> Stashed changes
     }
 }
