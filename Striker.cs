@@ -17,7 +17,6 @@ namespace Striker_Finale
         public static bool musica = true;
         public static int Level = 1;
         public static string CurrentUser;
-        static Thread update;
         public static Thread sottofondo = new Thread(Music.SoundTrack);
         static Stopwatch Time = new Stopwatch();
         public static String[,] Map = new String[Height, Width];
@@ -28,8 +27,14 @@ namespace Striker_Finale
 
         public static void Main(string[] args)
         {
+<<<<<<< Updated upstream
             player = new Player(Width, Height);
             Time.Start();
+=======
+            //Online_Multiplayer();
+            Local_Multiplayer_Start();
+            Console.Title = "Striker";
+>>>>>>> Stashed changes
             Console.CursorVisible = false;
             MultiplayerLocale.Type = false;
             Local_Multiplayer_Start();
@@ -636,10 +641,12 @@ namespace Striker_Finale
 
         public static void Local_Multiplayer_Start()
         {
+            MultiplayerLocale.Type = true;
             MultiplayerLocale.Height = Height;
             MultiplayerLocale.Width = Width;
             Graphic.Initialize_Map(Map);
-            Enemy enemy = new Enemy(Map, Width, Height, 0, 5);
+            //Enemy enemy = new Enemy(Map, Width, Height, 0, 5);
+            Player player = new Player(Width, Height);
             Handshake();
             Console.ReadKey();
             Time.Start();
@@ -674,10 +681,18 @@ namespace Striker_Finale
                     player.Life--;
                     Graphic.Draw_Life_Bar(player.Life);
                 }
+<<<<<<< Updated upstream
                 Set_Param();
                 player.Move(Map, musica);
                 Update(Map);
                 if (Position[0] != -1) enemy.LM_Shot(Map, Position, Direction, Alliance, Speed, Damage);
+=======
+                Set_Shoots(Position, ref Direction, ref Alliance, ref Speed, ref Damage);
+                player.Move(Map, musica);
+                Update(Map, player, Position, Direction, Alliance, Speed, Damage);
+                player.LM_Shoots(Map);
+                //if (Position[0] != -1) enemy.LM_Shot(Map, Position, Direction, Alliance, Speed, Damage);
+>>>>>>> Stashed changes
                 Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);//Width / 2 - player.Position[0], Height / 2 - player.Position[1], 
                 player.UpdateShots(Map, enemies);
             }
@@ -705,20 +720,47 @@ namespace Striker_Finale
             }
         }
 
+<<<<<<< Updated upstream
         static void Update(String[,] Map)
+=======
+                }
+            }
+            goto Menu;
+
+        }
+        static void Update(String[,] Map, Player player,int[] Position, String Direction, String Alliance, int Speed, int Damage)
+>>>>>>> Stashed changes
         {
             MultiplayerLocale.Update(player.Position[0], player.Position[1], Position[0], Position[1], Direction, Alliance, Speed, Damage);
             MultiplayerLocale.Enemy_Update(Map);
         }
 
+<<<<<<< Updated upstream
         public static void Set_Param(int shx = -1, int shy = -1, String dir = "//", String alli = "//", int speed = -1, int dam = -1)
         {
             Position[0] = MultiplayerLocale.shx;
             Position[1] = MultiplayerLocale.shy;
+=======
+        public static void Set_Shoots(int[] Position,ref String Direction, ref String Alliance, ref int Speed, ref int Damage)
+        {
+            MultiplayerLocale.shx = -1;
+            MultiplayerLocale.shy = -1;
+            MultiplayerLocale.dir = "//";
+            MultiplayerLocale.alli = "//";
+            MultiplayerLocale.speed = -1;
+            MultiplayerLocale.dam = -1;
+
+            Position[0] =MultiplayerLocale.shx;
+            Position[1] =MultiplayerLocale.shy;
+>>>>>>> Stashed changes
             Direction = MultiplayerLocale.dir;
             Alliance = MultiplayerLocale.alli;
             Speed = MultiplayerLocale.speed;
             Damage = MultiplayerLocale.dam;
+<<<<<<< Updated upstream
         }
+=======
+        }        
+>>>>>>> Stashed changes
     }
 }
