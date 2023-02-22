@@ -187,7 +187,7 @@ namespace Striker_Finale
 				for (int j = 0; j < height; j++)
 					if (map[j, i] == "Pl" | map[j, i] == "Sh") map[j, i] = "E";
 
-			var players = AllDoc("multiplayer");
+			var players = Collection.Find(new BsonDocument()).ToList();
 			foreach(var player in players)
 			{
 				if (player["user"] == currentUser)map[Convert.ToInt16(player["posY"]), Convert.ToInt16(player["posX"])] = "Pl";
