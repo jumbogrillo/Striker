@@ -122,20 +122,18 @@ namespace Striker_Finale
             Graphic.Draw_Score(player.Score, 2);
             Graphic.Draw_Frame(fore: ConsoleColor.White);
             Console.CursorVisible = false;
+            Database.Connect("multiplayer");
             while (player.Life > 0)
             {
                 if (player.Combo > 0)
                 {
-                    Console.SetCursorPosition(102, 13);
-                    Console.Write($"Combo X{player.Combo}");
+                    Graphic.Rect(102, 13, $"Combo X{player.Combo}", setBG:false);
                     if (player.Combo % 5 == 0 && player.Life < 5)
                     {
                         player.Life++;
-                        player.Combo++;
+                        //player.Combo++;
                         Graphic.Draw_Life_Bar(player.Life);
                         Music.Title();
-                        Console.SetCursorPosition(90, 16);
-                        Console.WriteLine(" ");
                     }
                 }
                 if (player.Hit(enemies))
@@ -143,11 +141,11 @@ namespace Striker_Finale
                     player.Life--;
                     Graphic.Draw_Life_Bar(player.Life);
                 }
-                Database.Update(CurrentUser, player);
                 Database.UpdateMap(Map, Width, Height, CurrentUser, player);
                 player.UpdateShots(Map, enemies, true);
                 player.Move(Map, musica);
-                Graphic.Draw_Map(Map, ConsoleColor.White, EnemyColor, PlayerColor, ObsColor, ShColor);//Width / 2 - player.Position[0], Height / 2 - player.Position[1], 
+                Graphic.Draw_Map(Map, ConsoleColor.White, EnemyColor, PlayerColor, ObsColor, ShColor);// Per la mappa infinita: Width / 2 - player.Position[0], Height / 2 - player.Position[1], 
+                Database.Update(CurrentUser, player);
             }
             Database.DeletePlayer(CurrentUser);
             GameOver();
@@ -798,7 +796,6 @@ namespace Striker_Finale
             MultiplayerLocale.Update(player.Position[0], player.Position[1], Position[0], Position[1], Direction, Alliance, Speed, Damage);
             MultiplayerLocale.Enemy_Update(Map);
         }
-
         public static void Set_Param(int shx = -1, int shy = -1, String dir = "//", String alli = "//", int speed = -1, int dam = -1)
         {
             Position[0] = MultiplayerLocale.shx;
