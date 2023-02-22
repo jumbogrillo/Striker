@@ -8,17 +8,21 @@ namespace Striker_Finale
 {
     public class Striker
     {
+        public static int[] Position = new int[2]; //per LM_MULTI
+        public static String Direction, Alliance;
+        public static int Speed, Damage;
+
         public const int Height = 25;
         public const int Width = 40;
         public static bool musica = true;
         public static int Level = 1;
         public static string CurrentUser;
+        static Thread update;
         public static Thread sottofondo = new Thread(Music.SoundTrack);
         static Stopwatch Time = new Stopwatch();
         public static String[,] Map = new String[Height, Width];
         static Player player;
         static List<Enemy> enemies = new List<Enemy>();
-        static Boolean Type = false; // true = Host, false = Guest
         static ConsoleColor PlayerColor = ConsoleColor.DarkRed, EnemyColor = ConsoleColor.DarkMagenta,
             BGColor = ConsoleColor.Gray, ObsColor = ConsoleColor.DarkGray, ShColor = ConsoleColor.Black;
 
@@ -40,7 +44,6 @@ namespace Striker_Finale
             Time.Start();
             Music.Title();
             Music.SoundTrack(true);
-            player = new Player(Width, Height);
 
         StartGame:
             Graphic.Initialize_Map(Map);
@@ -663,21 +666,25 @@ namespace Striker_Finale
         }
         public static void Local_Multiplayer_Start()
         {
+            MultiplayerLocale.Height = Height;
+            MultiplayerLocale.Width = Width;
             Graphic.Initialize_Map(Map);
-            Player player = new Player(Width, Height);
             Enemy enemy = new Enemy(Map, Width, Height, 0, 5);
             Handshake();
-            player.LM_Spawn(Type);
+            Console.ReadKey();
+            Time.Start();
+            player.LM_Spawn(player, MultiplayerLocale.Type);
             Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);
             Graphic.Draw_Life_Bar(player.Life);
             Graphic.Draw_Score(player.Score, 2);
             Graphic.Draw_Frame();
+            //update = new Thread(Update);
+            //update.Start();
 
             while (player.Life > 0)
             {
+                MultiplayerLocale multiLocal = new MultiplayerLocale();
                 Console.SetBufferSize(140, 70);
-                //if (Time.ElapsedMilliseconds % 5000 < 100) enemies.Add(new Enemy(Map, Width, Height, 2, 1));
-                MultiplayerLocale.Enemy_Update(Map);
                 if (player.Combo > 0)
                 {
                     Console.SetCursorPosition(102, 13);
@@ -697,24 +704,31 @@ namespace Striker_Finale
                     player.Life--;
                     Graphic.Draw_Life_Bar(player.Life);
                 }
+                Set_Param();
+                player.Move(Map, musica);
+                Update(Map);
+                if (Position[0] != -1) enemy.LM_Shot(Map, Position, Direction, Alliance, Speed, Damage);
                 Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);//Width / 2 - player.Position[0], Height / 2 - player.Position[1], 
                 player.UpdateShots(Map, enemies);
-                player.Move(Map, musica);
-
-                MultiplayerLocale.Update(player.Position[0], player.Position[1]);
             }
-
         }
         public static void Handshake()
         {
-            if (Type)
+            Riprova:
+            if (MultiplayerLocale.Type)
             {
                 Graphic.Draw_Obstacles_Randomly(Map);
-                MultiplayerLocale.Initialize_Set(Map);
+                if(!MultiplayerLocale.Initialize_Set(Map))
+                {
+                    goto Riprova;
+                }
             }
             else
             {
-                MultiplayerLocale.Initialize_Get(Map);
+                if (!MultiplayerLocale.Initialize_Get(Map))
+                {
+                    goto Riprova;
+                }
             }
         }
         public static void GameModeMenu()
@@ -775,6 +789,21 @@ namespace Striker_Finale
                 }
             }
             goto Menu;
+
+        static void Update(String[,] Map)
+        {
+            MultiplayerLocale.Update(player.Position[0], player.Position[1], Position[0], Position[1], Direction, Alliance, Speed, Damage);
+            MultiplayerLocale.Enemy_Update(Map);
+        }
+
+        public static void Set_Param(int shx = -1, int shy = -1, String dir = "//", String alli = "//", int speed = -1, int dam = -1)
+        {
+            Position[0] = MultiplayerLocale.shx;
+            Position[1] = MultiplayerLocale.shy;
+            Direction = MultiplayerLocale.dir;
+            Alliance = MultiplayerLocale.alli;
+            Speed = MultiplayerLocale.speed;
+            Damage = MultiplayerLocale.dam;
         }
     }
 }

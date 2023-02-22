@@ -36,7 +36,7 @@ namespace Striker_Finale
 			
 			Shots = new List<Shoot>();
 		}
-		public void Move(string[,] map, bool musica)
+		public void Move(string[,] map, bool musica,bool lm_multi = false)
 		{
 			if (Console.KeyAvailable)
 			{
@@ -132,21 +132,21 @@ namespace Striker_Finale
 		{
 			Position = new int[] { new Random().Next(0, Width), new Random().Next(0, Height) };
 		}
-		public void LM_Spawn(Boolean type)
+		public void LM_Spawn(Player player, Boolean type)
         {
             if (type)
             {
-				Position[0] = 1;
-				Position[1] = 1;
-				for (int i = 1; i <= 5; i++) Striker.Map[1, i + 1] = "E";
-				for (int i = 1; i <= 5; i++) Striker.Map[i + 1, 1] = "E";
+				player.Position[0] = 1;
+				player.Position[1] = 1;
+				//for (int i = 1; i <= 5; i++) Striker.Map[1, i + 1] = "E";
+				//for (int i = 1; i <= 5; i++) Striker.Map[i + 1, 1] = "E";
             }
             else
             {
-				Position[0] = Width - 2;
-				Position[1] = Height - 2;
-				for (int i = 1; i <= 5; i++) Striker.Map[Position[0], Position[1] - i] = "E";
-				for (int i = 1; i <= 5; i++) Striker.Map[Position[0] - i, Position[1]] = "E";
+				player.Position[0] = Width - 2;
+				player.Position[1] = Height - 2;
+				//for (int i = 1; i <= 5; i++) Striker.Map[Position[0], Position[1] - i] = "E";
+				//for (int i = 1; i <= 5; i++) Striker.Map[Position[0] - i, Position[1]] = "E";
 			}
         }
 	}

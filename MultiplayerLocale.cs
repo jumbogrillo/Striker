@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Striker;
+using Striker_finale;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,78 +11,181 @@ namespace Striker_finale
 {
     class MultiplayerLocale
     {
+        public static List<Shoot> Shots { get; set; }
         public static int Width;
         public static int Height;
-        public static string Host_Path = "C:\\Users\\Public\\sharedFile";
-        public static string Guest_Path = "C:\\Users\\Public\\sharedFile";
-        public static void Initialize_Set(String[,] map)
+        public static Boolean Type = true;
+        static StreamReader sharedFileR;
+        static StreamWriter sharedFile;
+        static int X = 23, Y = 38;
+        public static int shx = -1, shy = -1, speed = -1, dam = -1;
+        public static String dir = "//", alli = "//";
+        public static string Host_Path = "C:\\Users\\Public\\sharedFile", Host_UpDown = "C:\\Users\\Public\\sharedFile1";
+        public static string Guest_Path = "F:\\Public\\sharedFile", Guest_UpDown = "F:\\Public\\sharedFile1";
+
+        public MultiplayerLocale()
         {
-            StreamWriter sharedFile = new StreamWriter(Host_Path);
-
-            for (int i = 0; i < Height; i++)
-            {
-                for (int j = 0; j < Width; j++)
-                {
-                    sharedFile.WriteLine(map[i,j]);
-                }
-            }
-
-            sharedFile.Close();
+            Shots = new List<Shoot>();
         }
 
-        public static void Initialize_Get(String[,] map)
+        public static Boolean Initialize_Set(String[,] map)
         {
-            StreamReader sharedFile = new StreamReader(Guest_Path); //percorso unità condivisa
-
-            for (int i = 0; i < Height; i++)
+            try
             {
-                for (int j = 0; j < Width; j++)
-                {
-                    map[i,j] = sharedFile.ReadLine().ToString();
-                }
-            }
+                StreamWriter sharedFile = new StreamWriter(Host_Path);
 
-            sharedFile.Close();
+                for (int i = 0; i < Height; i++)
+                {
+                    for (int j = 0; j < Width; j++)
+                    {
+                        sharedFile.WriteLine(map[i, j]);
+                    }
+                }
+
+                sharedFile.Close();            
+                return true;
+            }
+            catch (IOException)
+            {
+                return false;
+            }            
         }
 
-        public static void Update(int x, int y)
+        public static Boolean Initialize_Get(String[,] map)
         {
-            StreamWriter sharedFile = new StreamWriter(Host_Path);
+            try
+            {
+                StreamReader sharedFile = new StreamReader(Guest_Path); //percorso unità condivisa
 
-            sharedFile.WriteLine(x);
-            sharedFile.WriteLine(y);
+                for (int i = 0; i < Height; i++)
+                {
+                    for (int j = 0; j < Width; j++)
+                    {
+                        map[i, j] = sharedFile.ReadLine().ToString();
+                    }
+                }
 
-            sharedFile.Close();
+                sharedFile.Close();
+                return true;
+            }
+            catch (IOException)
+            {
+                return false;
+                //Striker_Finale.Striker.LM_Game();
+            }
+        }
+
+        public static Boolean Update(int x, int y, int sh_x,int sh_y, String dir, String alliance, int speed, int damage)
+        {
+            try
+            {
+                if (Type)
+                {
+                    sharedFile = new StreamWriter(Host_Path);
+                }
+                else
+                {
+                    sharedFile = new StreamWriter(Guest_UpDown);
+                }
+
+                sharedFile.WriteLine(x);
+                sharedFile.WriteLine(y);
+
+                if (sh_x != -1)
+                {
+                    sharedFile.WriteLine(sh_x);
+                    sharedFile.WriteLine(sh_y);
+                    sharedFile.WriteLine(dir);
+                    sharedFile.WriteLine(alliance);
+                    sharedFile.WriteLine(speed);
+                    sharedFile.WriteLine(damage);
+                }
+
+                sharedFile.Close();
+                return true;
+            }
+            catch (IOException)
+            {
+                return false;
+            }
         }
 
         public static void Enemy_Update(String[,] map)
         {
-            map[Find_Enem(map)[0], Find_Enem(map)[1]] = "E";
-            map[Download_Position()[0], Download_Position()[1]] = "Enem";
-        }
-
-        static int[] Find_Enem(String[,] map)
-        {
-            int[] position = { -1, -1 };
-            for (int i = 0; i < Height; i++)
+            bool libero = false;
+            do
             {
-                for (int j = 0; j < Width; j++)
+                int[] pos = Download_Position(map);
+                if (pos[0] != -1)
                 {
-                    if (map[i, j] == "Enem") position[0] = i; position[1] = j;
+                    libero = true;
+                    map[pos[1], pos[0]] = "Enem";                    
+                }
+                else
+                {
+                    libero = false;
                 }
             }
-            return position;            
+            while (!libero);
+
         }
 
-        static int[] Download_Position()
+        static int[] Download_Position(String[,] map)
         {
-            int[] position = new int[2];
+            try
+            {
+                int[] position = new int[2];
 
-            StreamReader sharedFile = new StreamReader(Guest_Path);
-            position[0] = Convert.ToInt32(sharedFile.ReadLine());
-            position[1] = Convert.ToInt32(sharedFile.ReadLine());
+                if (Type)
+                {
+                    sharedFileR = new StreamReader(Host_UpDown);
+                }
+                else
+                {
+                    sharedFileR = new StreamReader(Guest_Path);
+                }
 
-            return position;
+                String x = sharedFileR.ReadLine(), y = sharedFileR.ReadLine();
+
+                if (x != "" && Convert.ToInt32(x) >= 0)
+                {
+                    position[0] = Convert.ToInt32(x);
+                    //lastX = position[0];
+                }
+
+                if (y != "" && Convert.ToInt32(y) >= 0)
+                {
+                    position[1] = Convert.ToInt32(y);
+                    //lastY = position[1];
+                }
+                map[X, Y] = "E";
+                X = position[1];
+                Y = position[0];
+
+                String Ssh_x = sharedFileR.ReadLine();
+
+                if (Ssh_x != "" && Convert.ToInt32(Ssh_x) != -1)
+                {
+                    shx = Convert.ToInt32(Ssh_x);
+                    shy = Convert.ToInt32(sharedFileR.ReadLine());
+                    dir = sharedFileR.ReadLine();
+                    alli = sharedFileR.ReadLine();
+                    speed = Convert.ToInt32(sharedFileR.ReadLine());
+                    dam = Convert.ToInt32(sharedFileR.ReadLine());
+
+                    
+                    //Shots.Add(new Shoot(map, Width, Height,new int[] {sh_x, sh_y }, dir, alli, speed, dam));
+                    
+                }
+
+                sharedFileR.Close();
+                return position;
+            }
+            catch (IOException)
+            {
+                int[] pos = { -1, 5 };
+                return pos;
+            }
         }
     }
 }
