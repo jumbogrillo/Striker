@@ -676,7 +676,7 @@ namespace Striker_Finale
                     player.Life--;
                     Graphic.Draw_Life_Bar(player.Life);
                 }
-                Set_Shoots(Position, ref Direction, ref Alliance, ref Speed, ref Damage);
+                Set_Shoots(Position,ref Direction,ref Alliance,ref Speed,ref Damage);
                 player.Move(Map, musica);
                 Update(Map, player, Position, Direction, Alliance, Speed, Damage);
                 player.LM_Shoots(Map);
@@ -719,7 +719,7 @@ namespace Striker_Finale
             MultiplayerLocale.Enemy_Update(Map);
         }
 
-        public static void Set_Shoots(int[] Position,ref String Direction, ref String Alliance, ref int Speed, ref int Damage)
+        public static void Set_Shoots(int[] Position, ref String Direction, ref String Alliance, ref int Speed, ref int Damage)
         {
             MultiplayerLocale.shx = -1;
             MultiplayerLocale.shy = -1;
