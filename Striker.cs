@@ -28,11 +28,11 @@ namespace Striker_Finale
 
         public static void Main(string[] args)
         {
-			Online_Multiplayer();
+            Online_Multiplayer();
             Console.Title = "Striker";
             Console.CursorVisible = false;
             Start();
-			Graphic.Clear(1);
+            Graphic.Clear(1);
             GameModeMenu();
             Graphic.Initialize_Map(Map);
             Graphic.Draw_Obstacles_Randomly(Map);
@@ -106,55 +106,55 @@ namespace Striker_Finale
             Database.DrawClassification();
             Console.ReadKey();
         }
-		static void Online_Multiplayer()
-		{
-			Database.TurnOn();
-			Graphic.WindowSize(140, 70);
-			player = new Player(Width, Height);
-			Graphic.Initialize_Map(Map);
-			Graphic.Draw_Obstacles_Randomly(Map);
-			Graphic.Clear();
-			Console.Clear();
-			Database.Register(ref CurrentUser);
-			Database.Lobby(Map, Width, Height, CurrentUser, player);
-			Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);
-			Graphic.Draw_Life_Bar(player.Life);
-			Graphic.Draw_Score(player.Score, 2);
-			Graphic.Draw_Frame(fore:ConsoleColor.White);
-			Console.CursorVisible = false;
-			while (player.Life > 0)
-			{
-				if (player.Combo > 0)
-				{
-					Console.SetCursorPosition(102, 13);
-					Console.Write($"Combo X{player.Combo}");
-					if (player.Combo % 5 == 0 && player.Life < 5)
-					{
-						player.Life++;
-						player.Combo++;
-						Graphic.Draw_Life_Bar(player.Life);
-						Music.Title();
-						Console.SetCursorPosition(90, 16);
-						Console.WriteLine(" ");
-					}
-				}
-				if (player.Hit(enemies))
-				{
-					player.Life--;
-					Graphic.Draw_Life_Bar(player.Life);
-				}
-				Database.Update(CurrentUser, player);
-				Database.UpdateMap(Map, Width, Height, CurrentUser, player);
-				player.UpdateShots(Map, enemies, true);
-				player.Move(Map, musica);
-				Graphic.Draw_Map(Map, ConsoleColor.White, EnemyColor, PlayerColor, ObsColor, ShColor);//Width / 2 - player.Position[0], Height / 2 - player.Position[1], 
-			}
-			Database.DeletePlayer(CurrentUser);
-			GameOver();
-			Graphic.Word(10, 25, Database.AllDoc("multiplayer").Count.ToString());
-			Database.DrawClassification();
-			Console.ReadKey();
-		}
+        static void Online_Multiplayer()
+        {
+            Database.TurnOn();
+            Graphic.WindowSize(140, 70);
+            player = new Player(Width, Height);
+            Graphic.Initialize_Map(Map);
+            Graphic.Draw_Obstacles_Randomly(Map);
+            Graphic.Clear();
+            Console.Clear();
+            Database.Register(ref CurrentUser);
+            Database.Lobby(Map, Width, Height, CurrentUser, player);
+            Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);
+            Graphic.Draw_Life_Bar(player.Life);
+            Graphic.Draw_Score(player.Score, 2);
+            Graphic.Draw_Frame(fore: ConsoleColor.White);
+            Console.CursorVisible = false;
+            while (player.Life > 0)
+            {
+                if (player.Combo > 0)
+                {
+                    Console.SetCursorPosition(102, 13);
+                    Console.Write($"Combo X{player.Combo}");
+                    if (player.Combo % 5 == 0 && player.Life < 5)
+                    {
+                        player.Life++;
+                        player.Combo++;
+                        Graphic.Draw_Life_Bar(player.Life);
+                        Music.Title();
+                        Console.SetCursorPosition(90, 16);
+                        Console.WriteLine(" ");
+                    }
+                }
+                if (player.Hit(enemies))
+                {
+                    player.Life--;
+                    Graphic.Draw_Life_Bar(player.Life);
+                }
+                Database.Update(CurrentUser, player);
+                Database.UpdateMap(Map, Width, Height, CurrentUser, player);
+                player.UpdateShots(Map, enemies, true);
+                player.Move(Map, musica);
+                Graphic.Draw_Map(Map, ConsoleColor.White, EnemyColor, PlayerColor, ObsColor, ShColor);//Width / 2 - player.Position[0], Height / 2 - player.Position[1], 
+            }
+            Database.DeletePlayer(CurrentUser);
+            GameOver();
+            Graphic.Word(10, 25, Database.AllDoc("multiplayer").Count.ToString());
+            Database.DrawClassification();
+            Console.ReadKey();
+        }
         static void Start()
         {
             Thread title = new Thread(Title);
@@ -545,7 +545,7 @@ namespace Striker_Finale
         }
         public static void Pause()
         {
-            if(musica)Music.SoundTrack();
+            if (musica) Music.SoundTrack();
             bool backmenu = false, next = false;
             int colorindex = 0;
             int index = 0;
@@ -645,9 +645,11 @@ namespace Striker_Finale
                                     goto PauseMenuWritings;
                                 }
                                 Console.ResetColor();
-                                if(input == ConsoleKey.Enter) 
-                                { index = 0; 
-                                  backmenu = true;}
+                                if (input == ConsoleKey.Enter)
+                                {
+                                    index = 0;
+                                    backmenu = true;
+                                }
                                 break;
                             case 2:
                                 Graphic.Clear();
@@ -714,11 +716,11 @@ namespace Striker_Finale
         }
         public static void Handshake()
         {
-            Riprova:
+        Riprova:
             if (MultiplayerLocale.Type)
             {
                 Graphic.Draw_Obstacles_Randomly(Map);
-                if(!MultiplayerLocale.Initialize_Set(Map))
+                if (!MultiplayerLocale.Initialize_Set(Map))
                 {
                     goto Riprova;
                 }
@@ -733,11 +735,11 @@ namespace Striker_Finale
         }
         public static void GameModeMenu()
         {
-            Graphic.Word(Width / 2 - 5, 2, "Game Mode", 2,ConsoleColor.DarkYellow);
+            Graphic.Word(Width / 2 - 5, 2, "Game Mode", 2, ConsoleColor.DarkYellow);
             int index = 0;
             ConsoleKey input;
             string word = "";
-            Menu:
+        Menu:
             for (int i = 0; i < 4; i++)
             {
                 switch (i)
@@ -770,9 +772,9 @@ namespace Striker_Finale
                 index++;
                 goto Menu;
             }
-            else if(input == ConsoleKey.Enter)
+            else if (input == ConsoleKey.Enter)
             {
-                switch (index) 
+                switch (index)
                 {
                     case 0:
                         return;
@@ -790,6 +792,7 @@ namespace Striker_Finale
             }
             goto Menu;
 
+        }
         static void Update(String[,] Map)
         {
             MultiplayerLocale.Update(player.Position[0], player.Position[1], Position[0], Position[1], Direction, Alliance, Speed, Damage);
