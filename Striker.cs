@@ -706,9 +706,10 @@ namespace Striker_Finale
                     player.Life--;
                     Graphic.Draw_Life_Bar(player.Life);
                 }
-                Set_Param();
+                Set_Shoots();
                 player.Move(Map, musica);
                 Update(Map);
+                player.LM_Shoots(Map);
                 if (Position[0] != -1) enemy.LM_Shot(Map, Position, Direction, Alliance, Speed, Damage);
                 Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);//Width / 2 - player.Position[0], Height / 2 - player.Position[1], 
                 player.UpdateShots(Map, enemies);
@@ -799,14 +800,14 @@ namespace Striker_Finale
             MultiplayerLocale.Enemy_Update(Map);
         }
 
-        public static void Set_Param(int shx = -1, int shy = -1, String dir = "//", String alli = "//", int speed = -1, int dam = -1)
+        public static void Set_Shoots()
         {
-            Position[0] = MultiplayerLocale.shx;
-            Position[1] = MultiplayerLocale.shy;
-            Direction = MultiplayerLocale.dir;
-            Alliance = MultiplayerLocale.alli;
-            Speed = MultiplayerLocale.speed;
-            Damage = MultiplayerLocale.dam;
-        }
+            MultiplayerLocale.shx = -1;
+            MultiplayerLocale.shy = -1;
+            MultiplayerLocale.dir = "//";
+            MultiplayerLocale.alli = "//";
+            MultiplayerLocale.speed = -1;
+            MultiplayerLocale.dam = -1;
+        }        
     }
 }
