@@ -122,18 +122,20 @@ namespace Striker_Finale
             Graphic.Draw_Score(player.Score, 2);
             Graphic.Draw_Frame(fore: ConsoleColor.White);
             Console.CursorVisible = false;
-            Database.Connect("multiplayer");
             while (player.Life > 0)
             {
                 if (player.Combo > 0)
                 {
-                    Graphic.Rect(102, 13, $"Combo X{player.Combo}", setBG:false);
+                    Console.SetCursorPosition(102, 13);
+                    Console.Write($"Combo X{player.Combo}");
                     if (player.Combo % 5 == 0 && player.Life < 5)
                     {
                         player.Life++;
-                        //player.Combo++;
+                        player.Combo++;
                         Graphic.Draw_Life_Bar(player.Life);
                         Music.Title();
+                        Console.SetCursorPosition(90, 16);
+                        Console.WriteLine(" ");
                     }
                 }
                 if (player.Hit(enemies))
@@ -141,11 +143,11 @@ namespace Striker_Finale
                     player.Life--;
                     Graphic.Draw_Life_Bar(player.Life);
                 }
+                Database.Update(CurrentUser, player);
                 Database.UpdateMap(Map, Width, Height, CurrentUser, player);
                 player.UpdateShots(Map, enemies, true);
                 player.Move(Map, musica);
-                Graphic.Draw_Map(Map, ConsoleColor.White, EnemyColor, PlayerColor, ObsColor, ShColor);// Per la mappa infinita: Width / 2 - player.Position[0], Height / 2 - player.Position[1], 
-                Database.Update(CurrentUser, player);
+                Graphic.Draw_Map(Map, ConsoleColor.White, EnemyColor, PlayerColor, ObsColor, ShColor);//Width / 2 - player.Position[0], Height / 2 - player.Position[1], 
             }
             Database.DeletePlayer(CurrentUser);
             GameOver();
