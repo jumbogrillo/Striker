@@ -18,8 +18,15 @@ namespace Striker_finale
         static StreamReader sharedFileR;
         static StreamWriter sharedFile;
         static int X = 23, Y = 38;
+        public static int shx = -1, shy = -1, speed = -1, dam = -1;
+        public static String dir = "//", alli = "//";
         public static string Host_Path = "C:\\Users\\Public\\sharedFile", Host_UpDown = "C:\\Users\\Public\\sharedFile1";
         public static string Guest_Path = "F:\\Public\\sharedFile", Guest_UpDown = "F:\\Public\\sharedFile1";
+
+        public MultiplayerLocale()
+        {
+            Shots = new List<Shoot>();
+        }
 
         public static Boolean Initialize_Set(String[,] map)
         {
@@ -159,15 +166,16 @@ namespace Striker_finale
 
                 if (Ssh_x != "" && Convert.ToInt32(Ssh_x) != -1)
                 {
-                    int sh_x = Convert.ToInt32(Ssh_x);
-                    int sh_y = Convert.ToInt32(sharedFileR.ReadLine());
-                    string dir = sharedFileR.ReadLine();
-                    string alli = sharedFileR.ReadLine();
-                    int speed = Convert.ToInt32(sharedFileR.ReadLine());
-                    int dam = Convert.ToInt32(sharedFileR.ReadLine());
+                    shx = Convert.ToInt32(Ssh_x);
+                    shy = Convert.ToInt32(sharedFileR.ReadLine());
+                    dir = sharedFileR.ReadLine();
+                    alli = sharedFileR.ReadLine();
+                    speed = Convert.ToInt32(sharedFileR.ReadLine());
+                    dam = Convert.ToInt32(sharedFileR.ReadLine());
 
-                    Shots = new List<Shoot>();
-                    Shots.Add(new Shoot(map, Width, Height,new int[] {sh_x, sh_y }, dir, alli, speed, dam));
+                    
+                    //Shots.Add(new Shoot(map, Width, Height,new int[] {sh_x, sh_y }, dir, alli, speed, dam));
+                    
                 }
 
                 sharedFileR.Close();
@@ -177,7 +185,7 @@ namespace Striker_finale
             {
                 int[] pos = { -1, 5 };
                 return pos;
-            }            
+            }
         }
     }
 }

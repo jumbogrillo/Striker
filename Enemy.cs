@@ -121,5 +121,9 @@ namespace Striker_finale
 			map[x, y] = "Enem";
 		}
 
+		public void LM_Shot(string[,] map, int[] Position, String Dir, String Alliance, int Speed, int Damage)
+        {
+			Shots.Add(new Shoot(map, Width, Height, Position, Dir, Alliance, Speed, Damage));
+		}
 	}
 }
