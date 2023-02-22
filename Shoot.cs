@@ -21,7 +21,8 @@ namespace Striker
 		public int[] Position { get; set; }
 		public string StateBeforeShot { get; set; }
 		public int Count { get; set; }
-		public Shoot(string[,] map, int width, int height, int[] position, string direction, string alliance, int speed, int damage)
+		private bool Boost { get; set; }
+		public Shoot(string[,] map, int width, int height, int[] position, string direction, string alliance, int speed, int damage, bool boost = false)
 		{
 			Direction = direction;
 			Speed = speed;
@@ -44,8 +45,8 @@ namespace Striker
 		}
 		public void Move()
 		{
-			if( Map[Position[1], Position[0]] == "Sh") Map[Position[1], Position[0]] = "E";
-			for(int i = 0; i < Direction.Length; i++)
+			if (Map[Position[1], Position[0]] == "Sh") Map[Position[1], Position[0]] = "E";
+			for (int i = 0; i < Direction.Length; i++)
 				switch (Direction[i])
 				{
 					case 'L': this.Position[0]--; break;
@@ -53,7 +54,7 @@ namespace Striker
 					case 'U': this.Position[1]--; break;
 					case 'D': this.Position[1]++; break;
 				}
-			if(Collision() == "E")Map[Position[1], Position[0]] = "Sh";
+			if (Collision() == "E") Map[Position[1], Position[0]] = "Sh";
 		}
 		public string Collision()
 		{

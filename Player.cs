@@ -27,32 +27,33 @@ namespace Striker_Finale
 			Height = height;
 			Life = 5;
 			Position = new int[] { Width / 2, Height / 2 };
-			while (Striker.Map[Position[1] + 1, Position[0]] == "Obs" & Striker.Map[Position[1] -1, Position[0]] == "Obs" & Striker.Map[Position[1], Position[0] + 1] == "Obs" & Striker.Map[Position[1], Position[0] - 1] == "Obs")
-            {
+			while (Striker.Map[Position[1] + 1, Position[0]] == "Obs" & Striker.Map[Position[1] - 1, Position[0]] == "Obs" & Striker.Map[Position[1], Position[0] + 1] == "Obs" & Striker.Map[Position[1], Position[0] - 1] == "Obs")
+			{
 				Position[0] = Random.Next(0, Height - 2);
-				Position[1] = Random.Next(0,Width - 2);
-            }
-			
+				Position[1] = Random.Next(0, Width - 2);
+			}
+			Spawn();
+
 			Shots = new List<Shoot>();
 		}
-		public void Move(string[,] map, bool musica,bool lm_multi = false)
+		public void Move(string[,] map, bool musica, bool lm_multi = false)
 		{
 			if (Console.KeyAvailable)
 			{
 				var key = Console.ReadKey(true).Key;
-				if(key == lastKey)
-                {
-					if(!(DateTime.Now > Timestamp.AddSeconds(0.15)))
+				if (key == lastKey)
+				{
+					if (!(DateTime.Now > Timestamp.AddSeconds(0.15)))
 					{
 						keycount++;
 						Timestamp = DateTime.Now;
 					}
-                    else
-                    {
+					else
+					{
 						keycount = 0;
-                    }
-                }
-                else keycount = 0;
+					}
+				}
+				else keycount = 0;
 				if (keycount < 4)
 				{
 					if (key == ConsoleKey.A | key == ConsoleKey.D | key == ConsoleKey.W | key == ConsoleKey.S) { map[Position[1], Position[0]] = "E"; }
@@ -93,7 +94,7 @@ namespace Striker_Finale
 				if (position[0] == enemies[i].Position[0] & position[1] == enemies[i].Position[1]) return i;
 			return 0;
 		}
-		public void UpdateShots(string[,] map, List<Enemy> enemies)
+		public void UpdateShots(string[,] map, List<Enemy> enemies, bool onlineMP = false)
 		{
 			for (int i = 0; i < Shots.Count; i++)
 			{
@@ -134,21 +135,36 @@ namespace Striker_Finale
 		public int Distance(int x1, int y1, int x2, int y2) => (int)Math.Sqrt(Math.Pow(x1 - x2, 2) + Math.Pow(y1 - y2, 2));
 
 		public void LM_Spawn(Player player, Boolean type)
-        {
-            if (type)
-            {
+		{
+			if (type)
+			{
 				player.Position[0] = 1;
 				player.Position[1] = 1;
 				//for (int i = 1; i <= 5; i++) Striker.Map[1, i + 1] = "E";
 				//for (int i = 1; i <= 5; i++) Striker.Map[i + 1, 1] = "E";
-            }
-            else
-            {
+			}
+			else
+			{
 				player.Position[0] = Width - 2;
 				player.Position[1] = Height - 2;
 				//for (int i = 1; i <= 5; i++) Striker.Map[Position[0], Position[1] - i] = "E";
 				//for (int i = 1; i <= 5; i++) Striker.Map[Position[0] - i, Position[1]] = "E";
 			}
-        }
+		}
+
+		public void LM_Shoots(String[,] map)
+		{
+			Striker.Position[0] = MultiplayerLocale.shx;
+			Striker.Position[1] = MultiplayerLocale.shy;
+			Striker.Direction = MultiplayerLocale.dir;
+			Striker.Alliance = MultiplayerLocale.alli;
+			Striker.Speed = MultiplayerLocale.speed;
+			Striker.Damage = MultiplayerLocale.dam;
+
+			if (Position[0] != -1)
+			{
+				Shots.Add(new Shoot(map, Striker.Width, Striker.Height, Striker.Position, Striker.Direction, Striker.Alliance, Striker.Speed, Striker.Damage));
+			}
+		}
 	}
 }

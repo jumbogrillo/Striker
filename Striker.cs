@@ -728,8 +728,8 @@ namespace Striker_Finale
             MultiplayerLocale.speed = -1;
             MultiplayerLocale.dam = -1;
 
-            Position[0] =MultiplayerLocale.shx;
-            Position[1] =MultiplayerLocale.shy;
+            Position[0] = MultiplayerLocale.shx;
+            Position[1] = MultiplayerLocale.shy;
             Direction = MultiplayerLocale.dir;
             Alliance = MultiplayerLocale.alli;
             Speed = MultiplayerLocale.speed;
