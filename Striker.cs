@@ -28,7 +28,7 @@ namespace Striker_Finale
 
         public static void Main(string[] args)
         {
-            Local_Multiplayer_Start();
+			Online_Multiplayer();
             Console.Title = "Striker";
             Console.CursorVisible = false;
             Start();
@@ -105,57 +105,46 @@ namespace Striker_Finale
             Database.Update(CurrentUser, 100 * (Level - 1) + player.Score, Time.ElapsedMilliseconds);
             Database.DrawClassification();
             Console.ReadKey();
-        }
-        static void Online_Multiplayer()
-        {
-            Database.TurnOn();
-            Graphic.WindowSize(140, 70);
-            player = new Player(Width, Height);
-            Graphic.Initialize_Map(Map);
-            Graphic.Draw_Obstacles_Randomly(Map);
-            Graphic.Clear(1);
-            Console.Clear();
-            Database.Register(ref CurrentUser);
-            Database.Lobby(Map, Width, Height, CurrentUser, player);
-            Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);
-            Graphic.Draw_Life_Bar(player.Life);
-            Graphic.Draw_Score(player.Score, 2);
-            Graphic.Draw_Frame(fore: ConsoleColor.White);
-            Console.CursorVisible = false;
-            while (player.Life > 0)
-            {
-                if (player.Combo > 0)
-                {
-                    Console.SetCursorPosition(102, 13);
-                    Console.Write($"Combo X{player.Combo}");
-                    if (player.Combo % 5 == 0 && player.Life < 5)
-                    {
-                        player.Life++;
-                        player.Combo++;
-                        Graphic.Draw_Life_Bar(player.Life);
-                        Music.Title();
-                        Console.SetCursorPosition(90, 16);
-                        Console.WriteLine(" ");
-                    }
-                }
-                if (player.Hit(enemies))
-                {
-                    player.Life--;
-                    Graphic.Draw_Life_Bar(player.Life);
-                }
-                Database.Update(CurrentUser, player);
-                Database.UpdateMap(Map, Width, Height, CurrentUser, player);
-                player.UpdateShots(Map, enemies, true);
-                player.Move(Map, musica);
-                Graphic.Draw_Map(Map, ConsoleColor.White, EnemyColor, PlayerColor, ObsColor, ShColor);//Width / 2 - player.Position[0], Height / 2 - player.Position[1], 
-            }
-            Database.DeletePlayer(CurrentUser);
-            GameOver();
-            Graphic.Word(10, 25, Database.AllDoc("multiplayer").Count.ToString());
-            Database.DrawClassification();
-            Console.ReadKey();
-        }
-        static void Start()
+		}
+		static void Online_Multiplayer()
+		{
+			Database.TurnOn();
+			Graphic.WindowSize(150, 70);
+			player = new Player(Width, Height);
+			Graphic.Clear();
+			Database.Register(ref CurrentUser);
+			Database.Lobby(Map, Width, Height, CurrentUser, player);
+			Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);
+			Graphic.Draw_Life_Bar(player.Life);
+			Graphic.Draw_Frame(width: 71, height: 59, fore: ObsColor, setBG: false);
+			Database.DrawClassification(87, 5, CurrentUser);
+			Database.Chat(CurrentUser);
+			Console.ReadKey();
+			Console.CursorVisible = false;
+			while (player.Life > 0)
+			{
+				if (player.Combo > 0)
+				{
+					//Graphic.Rect(56, 13, $"Combo X{player.Combo}", setBG: false, fg:ConsoleColor.White);
+					if (player.Combo % 5 == 0 && player.Life < 5)
+					{
+						player.Life++;
+						Music.Title();
+					}
+				}
+				player.UpdateShots(Map, enemies, true);
+				player.Move(Map, musica,multiplayerDB: true, currentUser:CurrentUser);
+				Graphic.Draw_Map(Map, ConsoleColor.White, EnemyColor, PlayerColor, ObsColor, ShColor);//Width / 2 - player.Position[0], Height / 2 - player.Position[1], 
+				Database.Update(CurrentUser, player);
+				Database.UpdateMap(Map, Width, Height, CurrentUser, player);
+			}
+			Graphic.Word(10, 25, Database.AllDoc("multiplayer").Count.ToString());
+			Database.DeletePlayer(CurrentUser);
+			GameOver();
+			Database.DrawClassification();
+			Console.ReadKey();
+		}
+		static void Start()
         {
             Thread title = new Thread(Title);
             title.Start();

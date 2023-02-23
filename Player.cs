@@ -16,10 +16,12 @@ namespace Striker_Finale
 		public int[] Position { get; set; }
 		public int Score { get; set; }
 		public int Combo { get; set; }
-		public int Life { get; set; }
+		private int life;
+		public int Life { get=>life; set { life = value;Graphic.Draw_Life_Bar(life); } }
 		public int Width { get; set; }
 		public int Height { get; set; }
 		public int Stamina { get; set; }
+		public int Kills { get; set; }
 		public List<Shoot> Shots { get; set; }
 		public Player(int width, int height)
 		{
@@ -36,7 +38,7 @@ namespace Striker_Finale
 			
 			Shots = new List<Shoot>();
 		}
-		public void Move(string[,] map, bool musica,bool lm_multi = false)
+		public void Move(string[,] map, bool musica,bool lm_multi = false, bool multiplayerDB=false, string currentUser="")
 		{
 			if (Console.KeyAvailable)
 			{
@@ -61,6 +63,7 @@ namespace Striker_Finale
 					if (key == ConsoleKey.D & Position[0] < Width - 1) { if (map[Position[1], Position[0] + 1] == "E") Position[0]++; }
 					if (key == ConsoleKey.W & Position[1] > 0) { if (map[Position[1] - 1, Position[0]] == "E") Position[1]--; }
 					if (key == ConsoleKey.S & Position[1] < Height - 1) { if (map[Position[1] + 1, Position[0]] == "E") Position[1]++; }
+					if (multiplayerDB & key == ConsoleKey.Spacebar) { Console.SetCursorPosition(12, 61); Database.InsertMessage(currentUser, Console.ReadLine()); Database.Chat(currentUser); }
 
 					if (key == ConsoleKey.LeftArrow) { Shots.Add(new Shoot(map, Width, Height, new int[] { Position[0], Position[1] }, "L", "Pl", 20, 1, true)); if (musica) { Music.Shoot(); }
 						LM_Set_Shoot(new int[] { Position[0], Position[1] }, "L", "Pl", 20, 1);}

@@ -140,6 +140,40 @@ namespace Striker_Finale
 			Console.ResetColor();
 		}
 
+		public static void Draw_Life_Classification(int x, int y, int life)
+		{
+			switch (life)
+			{
+				case 1:
+					Console.BackgroundColor = ConsoleColor.DarkRed;
+					break;
+				case 2:
+					Console.BackgroundColor = ConsoleColor.Red;
+					break;
+				case 3:
+					Console.BackgroundColor = ConsoleColor.DarkYellow;
+					break;
+				case 4:
+					Console.BackgroundColor = ConsoleColor.DarkGreen;
+					break;
+				case 5:
+					Console.BackgroundColor = ConsoleColor.Green;
+					break;
+			}
+			Rect(x, y, Space(life * 2), bg: Console.BackgroundColor, size: 1);
+		}
+		public static string Space(int length)
+		{
+			string text = "";
+			for (int i = 0; i < length; i++) text += " ";
+			return text;
+		}
+		public static void Clear(int x, int y, int width, int height)
+		{
+			for (int i = 0; i < height; i++)
+				for (int j = 0; j < width; j++)
+					Rect(x + j, y + i, " ", size: 1, setBG: false);
+		}
 		public static void Draw_Obstacles_Randomly(String[,] map, int min_num_obst = Min_num_obst, int max_num_obst = Max_num_obst)
 		{
 			Random Random = new Random();

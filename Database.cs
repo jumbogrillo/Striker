@@ -19,26 +19,22 @@ namespace Striker_Finale
 			Client = new MongoClient(settings);
 		}
 		public static void Connect(string collection) => Collection = Client.GetDatabase("Striker").GetCollection<BsonDocument>(collection);
-		public static List<BsonDocument> AllDoc(string collection)
-		{
-			Connect(collection);
-			return Collection.Find(new BsonDocument()).ToList();
-		}
+		public static List<BsonDocument> AllDoc(string collection) => Client.GetDatabase("Striker").GetCollection<BsonDocument>(collection).Find(new BsonDocument()).ToList();
 		public static bool IsPresent(string currentUser)
 		{
-			Connect("classification");
+			Connect("users");
 			var filter = Builders<BsonDocument>.Filter.Eq("username", currentUser);
 			return Collection.Find(filter).ToList().Count != 0;
 		}
 		public static BsonDocument GetUser(string currentUser)
 		{
-			Connect("classification");
+			Connect("users");
 			var filter = Builders<BsonDocument>.Filter.Eq("username", currentUser);
 			return Collection.Find(filter).FirstOrDefault();
 		}
 		public static void Update(string currentUser, int highscore, long time)
 		{
-			Connect("classification");
+			Connect("users");
 			var filter = Builders<BsonDocument>.Filter.Eq("username", currentUser);
 			Collection.UpdateOne(filter, Builders<BsonDocument>.Update.Set("score", highscore));
 			Collection.UpdateOne(filter, Builders<BsonDocument>.Update.Set("date", DateTime.Now));
@@ -46,11 +42,10 @@ namespace Striker_Finale
 		}
 		public static void Login(ref string currentUser)
 		{
-			Connect("classification");
+			Connect("users");
 			Graphic.WindowSize(50, 20);
 			Graphic.Draw_Frame(20, 10, 5, 5, setBG: false);
 			Graphic.Word(15, 6, "login", 1);
-			Graphic.Rect(7, 9, "Username: ", fg: ConsoleColor.Black, setBG: false, size: 1);
 			Graphic.Rect(7, 9, "Username: ", fg: ConsoleColor.White, setBG: false, size: 1);
 			Graphic.Rect(7, 11, "Password: ", fg: ConsoleColor.White, setBG: false, size: 1);
 			string password = "";
@@ -70,8 +65,8 @@ namespace Striker_Finale
 				Console.SetCursorPosition(17, 11);
 				Console.Write("                  ");
 			} while (true);
+			Graphic.WindowSize(150, 70);
 			Graphic.Clear();
-			Graphic.WindowSize(140, 70);
 		}
 		public static void Register(ref string currentUser)
 		{
@@ -124,7 +119,7 @@ namespace Striker_Finale
 				{ "shotMissed", 0 }
 			});
 			Graphic.Clear();
-			Graphic.WindowSize(140, 70);
+			Graphic.WindowSize(150, 70);
 		}
 		public static void DrawClassification()
 		{
@@ -158,17 +153,16 @@ namespace Striker_Finale
 			Collection.InsertOne(new BsonDocument
 			{
 				{"user", currentUser },
+				{"life", player.Life },
+				{"kills", player.Kills },
+				{"score", player.Score },
 				{"posX", player.Position[0] },
 				{"posY", player.Position[1] },
 				{"shotsX", new BsonArray(SetShotPosition(player, 0)) },
 				{"shotsY", new BsonArray(SetShotPosition(player, 1)) }
 			});
 		}
-		public static void Clear(string collection)
-		{
-			Connect(collection);
-			Collection.DeleteMany(new BsonDocument() { });
-		}
+		public static void Clear(string collection) => Client.GetDatabase("Striker").GetCollection<BsonDocument>(collection).DeleteMany(new BsonDocument() { });
 		public static void InsertObs(string[,] map, int width, int height)
 		{
 			Connect("obstacles");
@@ -177,13 +171,11 @@ namespace Striker_Finale
 			Graphic.Draw_Obstacles_Randomly(map);
 			List<List<int>> list = GetObstacles(map, width, height);
 			foreach (List<int> item in list)
-			{
 				Collection.InsertOne(new BsonDocument
 				{
 					{"x", item[0] },
 					{"y", item[1] }
 				});
-			}
 		}
 		static List<List<int>> GetObstacles(string[,] map, int width, int height)
 		{
@@ -195,11 +187,11 @@ namespace Striker_Finale
 		}
 		public static void UpdateMap(string[,] map, int width, int height, string currentUser, Player currentPlayer)
 		{
+			var players = AllDoc("multiplayer");
 			for (int i = 0; i < width; i++)
 				for (int j = 0; j < height; j++)
 					if (map[j, i] == "Pl" | map[j, i] == "Sh") map[j, i] = "E";
 
-			var players = AllDoc("multiplayer");
 			foreach(var player in players)
 			{
 				if (player["user"] == currentUser)map[Convert.ToInt16(player["posY"]), Convert.ToInt16(player["posX"])] = "Pl";
@@ -212,10 +204,7 @@ namespace Striker_Finale
 							if (currentPlayer.Position[0] == Convert.ToInt16(player["shotsX"][i]) & currentPlayer.Position[1] == Convert.ToInt16(player["shotsY"][i])) { currentPlayer.Life--; Graphic.Draw_Life_Bar(currentPlayer.Life);}
 					}
 					catch(Exception ex) { }
-
 			}
-			// Update Shot
-
 		}
 		public static void DeletePlayer(string currentUser)
 		{
@@ -223,36 +212,81 @@ namespace Striker_Finale
 			var filter = Builders<BsonDocument>.Filter.Eq("user", currentUser);
 			Collection.DeleteOne(filter);
 		}
-		public static void Update(string currentUser, Player player)
+		public static void Update(string currentUser, Player player) => Client.GetDatabase("Striker").GetCollection<BsonDocument>("multiplayer").ReplaceOne(Builders<BsonDocument>.Filter.Eq("user", currentUser), new BsonDocument
 		{
-			var filter = Builders<BsonDocument>.Filter.Eq("user", currentUser);
-			var update = Builders<BsonDocument>.Update.Set("posX", player.Position[0]);
-			Collection.UpdateOne(filter, update);
-			update = Builders<BsonDocument>.Update.Set("posY", player.Position[1]);
-			Collection.UpdateOne(filter, update);
-			update = Builders<BsonDocument>.Update.Set("shotsX", new BsonArray(SetShotPosition(player, 0)));
-			Collection.UpdateOne(filter, update);
-			update = Builders<BsonDocument>.Update.Set("shotsY", new BsonArray(SetShotPosition(player, 1)));
-			Collection.UpdateOne(filter, update);
-		}
+			{"user", currentUser },
+			{"life", player.Life },
+			{"kills", player.Kills },
+			{"score", player.Score },
+			{"posX", player.Position[0] },
+			{"posY", player.Position[1] },
+			{"shotsX", new BsonArray(SetShotPosition(player, 0)) },
+			{"shotsY", new BsonArray(SetShotPosition(player, 1)) }
+		});
 		static List<int> SetShotPosition(Player player, int index)
 		{
 			List<int> ints = new List<int>();
 			for (int i = 0; i < player.Shots.Count; i++)
-			{
 				ints.Add(player.Shots[i].Position[index]);
-			}
 			return ints;
 		}
 		public static void Lobby(string[,] map, int width, int height, string currentUser, Player player)
 		{
 			Graphic.Initialize_Map(map);
+			Chat(currentUser);
 			Insert(currentUser, player);
 			if (AllDoc("multiplayer").Count == 1)
 				InsertObs(map, width, height);
 			else foreach (var item in AllDoc("obstacles")) map[Convert.ToInt16(item["y"]), Convert.ToInt16(item["x"])] = "Obs";
-			while (AllDoc("multiplayer").Count < 2) Console.WriteLine(AllDoc("multiplayer").Count);
+			while (AllDoc("multiplayer").Count < 2 & AllDoc("multiplayer").Count < 11) Console.WriteLine(AllDoc("multiplayer").Count);
+		}
+		public static void DrawClassification(int x, int y, string currentUser)
+		{
+			// 11 righe, le prime dieci posizioni più la tua posizione attuale
+			Graphic.Rect(x + 6, y, "USER", setBG: false, fg: ConsoleColor.White, size: 1);
+			Graphic.Rect(x + 20, y, "LIFE", setBG: false, fg: ConsoleColor.White, size: 1);
+			Graphic.Rect(x + 32, y, "KILLS", setBG: false, fg: ConsoleColor.White, size: 1);
+			Graphic.Rect(x + 40, y, "SCORE", setBG: false, fg: ConsoleColor.White, size: 1);
+			var players = AllDoc("multiplayer");
+			players.Sort();
+			bool podio = false;
+			for(int i = 0; i < players.Count & i < 10; i++)
+			{
+				if (currentUser == players[i]["user"].ToString()) podio = true;
+				if (podio) Graphic.Rect(x + 1, y + i * 2 + 2, "                                            ", bg: ConsoleColor.White, size: 1);
+				Graphic.Rect(x + 1, y + i * 2 + 2, "#" + (i + 1).ToString("00"), setBG: podio, fg: !podio ? ConsoleColor.White : ConsoleColor.Black, bg: podio ? ConsoleColor.White : ConsoleColor.Black, size: 1);
+				Graphic.Rect(x + 6, y + i * 2 + 2, players[i]["user"].ToString() == currentUser ? "YOU" : players[i]["user"].ToString(), setBG: podio, fg: !podio ? ConsoleColor.White : ConsoleColor.Black, bg: podio ? ConsoleColor.White : ConsoleColor.Black, size: 1);
+				Graphic.Draw_Life_Classification(x + 20, y + i * 2 + 2, Convert.ToInt16(players[i]["life"]));
+				Graphic.Rect(x + 32, y + i * 2 + 2, players[i]["kills"].ToString(), setBG: podio, fg: !podio ? ConsoleColor.White : ConsoleColor.Black, bg: podio ? ConsoleColor.White : ConsoleColor.Black, size: 1);
+				Graphic.Rect(x + 40, y + i * 2 + 2, players[i]["score"].ToString(), setBG: podio, fg: !podio ? ConsoleColor.White : ConsoleColor.Black, bg: podio ? ConsoleColor.White : ConsoleColor.Black, size: 1);
+			}
+		}
+		public static void InsertMessage(string currentUser, string content)
+		{
+			Connect("chat");
+			Collection.InsertOne(new BsonDocument
+			{
+				{"user", currentUser },
+				{"content", content },
+				{"date", DateTime.Now},
+			});
+		}
+		public static void Chat(string currentUser)
+		{
+			Connect("chat");
+			var messages = Collection.Find(new BsonDocument() { }).ToList();
+			Graphic.Clear(8, 29, 71, 31);
+			Graphic.Draw_Frame(40, 3, 60, 10,  fore:ConsoleColor.White, back: ConsoleColor.Black, false);
+			Graphic.Rect(11, 61, "                                                                              ", bg: ConsoleColor.White, fg: ConsoleColor.White, size: 1, 0, 0, false);
+			bool isUser;
+			for(int i = 0; i < messages.Count & i < 10; i++)
+			{
+				isUser = messages[messages.Count - 1 - i]["user"].ToString() == currentUser;
+				int x = isUser ? 71 - (messages[messages.Count - 1 - i]["user"].ToString().Length + messages[messages.Count - 1 - i]["content"].ToString().Length) : 8;
 
+				Graphic.Draw_Frame(((isUser ? 5 : messages[messages.Count - 1 - i]["user"].ToString().Length + 2) + messages[messages.Count - 1 - i]["content"].ToString().Length) / 2 + 5,3, 29 + (9 - i) * 3, x,  setBG:false, fore: isUser ? ConsoleColor.Yellow : ConsoleColor.White);
+				Graphic.Rect(x + 1, 30 + (9 - i) * 3, (isUser ? "You" : messages[messages.Count - 1 - i]["user"]) + ": " + messages[messages.Count - 1 - i]["content"].ToString() + "   " + Convert.ToDateTime(messages[messages.Count - 1 - i]["date"]).ToString("h:mm"), setBG: false, size: 1, fg: isUser ? ConsoleColor.Yellow : ConsoleColor.White);
+			}
 		}
 	}
 }
