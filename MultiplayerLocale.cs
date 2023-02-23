@@ -23,11 +23,6 @@ namespace Striker_finale
         public static string Host_Path = "C:\\Users\\Public\\sharedFile", Host_UpDown = "C:\\Users\\Public\\sharedFile1";
         public static string Guest_Path = "F:\\Public\\sharedFile", Guest_UpDown = "F:\\Public\\sharedFile1";
 
-        public MultiplayerLocale()
-        {
-            Shots = new List<Shoot>();
-        }
-
         public static Boolean Initialize_Set(String[,] map)
         {
             try
@@ -170,6 +165,7 @@ namespace Striker_finale
                     shy = Convert.ToInt32(sharedFileR.ReadLine());
                     dir = sharedFileR.ReadLine();
                     alli = sharedFileR.ReadLine();
+                    alli = "Enem";
                     speed = Convert.ToInt32(sharedFileR.ReadLine());
                     dam = Convert.ToInt32(sharedFileR.ReadLine());
 
@@ -187,5 +183,28 @@ namespace Striker_finale
                 return pos;
             }
         }
+
+        /*public static Boolean Reset()
+        {
+            try
+            {
+                if (Type)
+                {
+                    sharedFile = new StreamWriter(Host_Path);
+                }
+                else
+                {
+                    sharedFile = new StreamWriter(Guest_UpDown);
+                }
+
+                sharedFile.WriteLine("");
+                sharedFile.Close();
+                return true;
+            }
+            catch (IOException)
+            {
+                return false;
+            }
+        }*/
     }
 }

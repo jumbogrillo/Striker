@@ -94,7 +94,7 @@ namespace Striker_Finale
 				if (position[0] == enemies[i].Position[0] & position[1] == enemies[i].Position[1]) return i;
 			return 0;
 		}
-		public void UpdateShots(string[,] map, List<Enemy> enemies, bool onlineMP=false)
+		public void UpdateShots(string[,] map, List<Enemy> enemies, bool onlineMP=false, bool LM_On = false)
 		{
 			for (int i = 0; i < Shots.Count; i++)
 			{
@@ -104,7 +104,7 @@ namespace Striker_Finale
 					if (collision == "Enem")
 					{
 						Score += 5 * (Combo + 1);
-						Combo++;
+						if (!LM_On)Combo++;
 						Graphic.Word(12 + Width * 2, Graphic.Margin_Top, this.Score > 99 ? "   " : "  ");
 						Graphic.Draw_Score(this.Score, 2);
 						if (!onlineMP)

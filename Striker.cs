@@ -688,22 +688,7 @@ namespace Striker_Finale
 
             while (player.Life > 0)
             {
-                MultiplayerLocale multiLocal = new MultiplayerLocale();
                 Console.SetBufferSize(140, 70);
-                if (player.Combo > 0)
-                {
-                    Console.SetCursorPosition(102, 13);
-                    Console.Write($"Combo X{player.Combo}");
-                    if (player.Combo % 5 == 0 && player.Life < 5)
-                    {
-                        player.Life++;
-                        player.Combo++;
-                        Graphic.Draw_Life_Bar(player.Life);
-                        Music.Title();
-                        Console.SetCursorPosition(90, 16);
-                        Console.WriteLine(" ");
-                    }
-                }
                 if (player.Hit(enemies))
                 {
                     player.Life--;
@@ -714,7 +699,7 @@ namespace Striker_Finale
                 Update(Map, player, Position, Direction, Alliance, Speed, Damage);
                 player.LM_Shoot(Map);
                 //if (Position[0] != -1) enemy.LM_Shot(Map, Position, Direction, Alliance, Speed, Damage);
-                player.UpdateShots(Map, enemies);
+                player.UpdateShots(Map, enemies, true, true);
                 Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);//Width / 2 - player.Position[0], Height / 2 - player.Position[1], 
                 
             }
