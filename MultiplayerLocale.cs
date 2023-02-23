@@ -164,7 +164,7 @@ namespace Striker_finale
 
                 String Ssh_x = sharedFileR.ReadLine();
 
-                if (Ssh_x != "" && Convert.ToInt32(Ssh_x) != -1)
+                if (Ssh_x != "" && Convert.ToInt32(Ssh_x) > 0)
                 {
                     shx = Convert.ToInt32(Ssh_x);
                     shy = Convert.ToInt32(sharedFileR.ReadLine());

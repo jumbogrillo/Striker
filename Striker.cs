@@ -711,10 +711,10 @@ namespace Striker_Finale
                 }
                 Set_Param();
                 player.Move(Map, musica);
-                player.UpdateShots(Map, enemies);
                 Update(Map, player, Position, Direction, Alliance, Speed, Damage);
                 player.LM_Shoot(Map);
                 //if (Position[0] != -1) enemy.LM_Shot(Map, Position, Direction, Alliance, Speed, Damage);
+                player.UpdateShots(Map, enemies);
                 Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);//Width / 2 - player.Position[0], Height / 2 - player.Position[1], 
                 
             }
