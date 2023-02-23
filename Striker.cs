@@ -28,6 +28,7 @@ namespace Striker_Finale
 
         public static void Main(string[] args)
         {
+            Local_Multiplayer_Start();
             Console.Title = "Striker";
             Console.CursorVisible = false;
             Start();
@@ -667,10 +668,13 @@ namespace Striker_Finale
         }
         public static void Local_Multiplayer_Start()
         {
+            Console.CursorVisible = false;
+            MultiplayerLocale.Type = true;
             MultiplayerLocale.Height = Height;
             MultiplayerLocale.Width = Width;
             Graphic.Initialize_Map(Map);
-            Enemy enemy = new Enemy(Map, Width, Height, 0, 5);
+            //Enemy enemy = new Enemy(Map, Width, Height, 0, 5);
+            Player player = new Player(Width, Height);
             Handshake();
             Console.ReadKey();
             Time.Start();
@@ -707,10 +711,11 @@ namespace Striker_Finale
                 }
                 Set_Param();
                 player.Move(Map, musica);
-                Update(Map);
-                if (Position[0] != -1) enemy.LM_Shot(Map, Position, Direction, Alliance, Speed, Damage);
+                Update(Map, player, Position, Direction, Alliance, Speed, Damage);
+                player.LM_Shoot(Map);
+                //if (Position[0] != -1) enemy.LM_Shot(Map, Position, Direction, Alliance, Speed, Damage);
                 Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);//Width / 2 - player.Position[0], Height / 2 - player.Position[1], 
-                player.UpdateShots(Map, enemies);
+                
             }
         }
         public static void Handshake()
@@ -795,7 +800,7 @@ namespace Striker_Finale
             goto Menu;
 
         }
-        static void Update(String[,] Map)
+        static void Update(String[,] Map, Player player, int[] Position, String Direction, String Alliance, int Speed, int Damage)
         {
             MultiplayerLocale.Update(player.Position[0], player.Position[1], Position[0], Position[1], Direction, Alliance, Speed, Damage);
             MultiplayerLocale.Enemy_Update(Map);

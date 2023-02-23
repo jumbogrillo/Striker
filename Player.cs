@@ -149,5 +149,10 @@ namespace Striker_Finale
 				//for (int i = 1; i <= 5; i++) Striker.Map[Position[0] - i, Position[1]] = "E";
 			}
         }
+
+		public void LM_Shoot(String [,] map)
+        {
+			if(Striker.Position[0] != -1) Shots.Add(new Shoot(map, Width, Height, Striker.Position, Striker.Direction, Striker.Alliance, Striker.Speed, Striker.Damage));
+        }
 	}
 }
