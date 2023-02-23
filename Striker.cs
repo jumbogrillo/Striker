@@ -711,6 +711,7 @@ namespace Striker_Finale
                 }
                 Set_Param();
                 player.Move(Map, musica);
+                player.UpdateShots(Map, enemies);
                 Update(Map, player, Position, Direction, Alliance, Speed, Damage);
                 player.LM_Shoot(Map);
                 //if (Position[0] != -1) enemy.LM_Shot(Map, Position, Direction, Alliance, Speed, Damage);

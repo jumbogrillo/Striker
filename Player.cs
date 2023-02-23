@@ -152,7 +152,7 @@ namespace Striker_Finale
 
 		public void LM_Shoot(String [,] map)
         {
-			if(Striker.Position[0] != -1) Shots.Add(new Shoot(map, Width, Height, Striker.Position, Striker.Direction, Striker.Alliance, Striker.Speed, Striker.Damage));
+			if(Striker.Position[0] > 0 ) Shots.Add(new Shoot(map, Width, Height, Striker.Position, Striker.Direction, Striker.Alliance, Striker.Speed, Striker.Damage));
         }
 	}
 }
