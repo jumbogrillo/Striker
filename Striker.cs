@@ -21,14 +21,13 @@ namespace Striker_Finale
         public static Thread sottofondo = new Thread(Music.SoundTrack);
         static Stopwatch Time = new Stopwatch();
         public static String[,] Map = new String[Height, Width];
-        static Player player;
+        static Player player = new Player(Width, Height);
         static List<Enemy> enemies = new List<Enemy>();
         static ConsoleColor PlayerColor = ConsoleColor.DarkRed, EnemyColor = ConsoleColor.DarkMagenta,
             BGColor = ConsoleColor.Gray, ObsColor = ConsoleColor.DarkGray, ShColor = ConsoleColor.Black;
 
         public static void Main(string[] args)
         {
-            Online_Multiplayer();
             Console.Title = "Striker";
             Console.CursorVisible = false;
             Start();
@@ -113,7 +112,7 @@ namespace Striker_Finale
             player = new Player(Width, Height);
             Graphic.Initialize_Map(Map);
             Graphic.Draw_Obstacles_Randomly(Map);
-            Graphic.Clear();
+            Graphic.Clear(1);
             Console.Clear();
             Database.Register(ref CurrentUser);
             Database.Lobby(Map, Width, Height, CurrentUser, player);
@@ -532,7 +531,7 @@ namespace Striker_Finale
         public static void GameOver()
         {
             Console.Clear();
-            Graphic.Word(11, 3, "Game Over");
+            Graphic.Word(11, 2, "Game Over");
             if (musica)
             {
                 Music.GameOver();
@@ -783,9 +782,12 @@ namespace Striker_Finale
                         MultiplayerLocale.Height = Height;
                         MultiplayerLocale.Width = Width;
                         MultiplayerLocale.Initialize_Get(Map);
+                        Console.Clear();
                         Local_Multiplayer_Start();
                         break;
                     case 2:
+                        Console.Clear();
+                        Music.level();
                         Online_Multiplayer();
                         break;
 

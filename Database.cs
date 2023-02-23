@@ -50,6 +50,7 @@ namespace Striker_Finale
 			Graphic.WindowSize(50, 20);
 			Graphic.Draw_Frame(20, 10, 5, 5, setBG: false);
 			Graphic.Word(15, 6, "login", 1);
+			Graphic.Rect(7, 9, "Username: ", fg: ConsoleColor.Black, setBG: false, size: 1);
 			Graphic.Rect(7, 9, "Username: ", fg: ConsoleColor.White, setBG: false, size: 1);
 			Graphic.Rect(7, 11, "Password: ", fg: ConsoleColor.White, setBG: false, size: 1);
 			string password = "";
@@ -90,8 +91,19 @@ namespace Striker_Finale
 				Console.WriteLine();
 				Console.SetCursorPosition(17, 11);
 				password = Console.ReadLine();
-				Console.SetCursorPosition(17, 13);
-				if (IsPresent(currentUser)) Console.WriteLine($"{currentUser} already exist");
+				if (IsPresent(currentUser))
+				{
+					Console.SetCursorPosition(13, 12);
+					Console.WriteLine($"{currentUser} already exist");
+					Console.SetCursorPosition(12, 13);
+					Console.Write("You want to login?  Y/N");
+					if (Console.ReadKey().Key == ConsoleKey.Y)
+					{
+						Console.Clear();
+						Login(ref currentUser);
+						return;
+					}
+				}
 				else if (currentUser.Length > 12 | password.Length > 12) Console.WriteLine("The maximum length is 12!!!");
 				else if (currentUser.Length < 5 | password.Length < 5) Console.WriteLine("The minimum length is 5");
 				else break;
