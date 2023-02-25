@@ -22,6 +22,8 @@ namespace Striker_Finale
 		public int Height { get; set; }
 		public int Stamina { get; set; }
 		public int Kills { get; set; }
+		public int AllShot { get; set; }
+		public int ShotNotMissed { get; set; }
 		public List<Shoot> Shots { get; set; }
 		public Player(int width, int height)
 		{
@@ -59,28 +61,32 @@ namespace Striker_Finale
 				if (keycount < 4)
 				{
 					if (key == ConsoleKey.A | key == ConsoleKey.D | key == ConsoleKey.W | key == ConsoleKey.S) { map[Position[1], Position[0]] = "E"; }
+					else if(key == ConsoleKey.LeftArrow | key == ConsoleKey.RightArrow | key == ConsoleKey.UpArrow | key == ConsoleKey.DownArrow | key == ConsoleKey.Q | key == ConsoleKey.E | key == ConsoleKey.C | key == ConsoleKey.Z)
+					{
+						if (musica) Music.Shoot();
+						AllShot++;
+					}
 					if (key == ConsoleKey.A & Position[0] > 0) { if (map[Position[1], Position[0] - 1] == "E") Position[0]--; }
 					if (key == ConsoleKey.D & Position[0] < Width - 1) { if (map[Position[1], Position[0] + 1] == "E") Position[0]++; }
 					if (key == ConsoleKey.W & Position[1] > 0) { if (map[Position[1] - 1, Position[0]] == "E") Position[1]--; }
 					if (key == ConsoleKey.S & Position[1] < Height - 1) { if (map[Position[1] + 1, Position[0]] == "E") Position[1]++; }
-					if (multiplayerDB & key == ConsoleKey.Spacebar) { Console.SetCursorPosition(12, 61); Database.InsertMessage(currentUser, Console.ReadLine()); Database.Chat(currentUser); }
-
-					if (key == ConsoleKey.LeftArrow) { Shots.Add(new Shoot(map, Width, Height, new int[] { Position[0], Position[1] }, "L", "Pl", 20, 1, true)); if (musica) { Music.Shoot(); }
+					if (multiplayerDB & key == ConsoleKey.Spacebar) { Console.SetCursorPosition(12, 61); Console.CursorVisible = true; Database.InsertMessage(currentUser, Console.ReadLine()); }
+					if (key == ConsoleKey.LeftArrow) { Shots.Add(new Shoot(map, Width, Height, new int[] { Position[0], Position[1] }, "L", "Pl", 20, 1, true)); 
 						LM_Set_Shoot(new int[] { Position[0], Position[1] }, "L", "Pl", 20, 1);}
-					if (key == ConsoleKey.RightArrow) { Shots.Add(new Shoot(map, Width, Height, new int[] { Position[0], Position[1] }, "R", "Pl", 20, 1, true)); if (musica) { Music.Shoot(); }
+					if (key == ConsoleKey.RightArrow) { Shots.Add(new Shoot(map, Width, Height, new int[] { Position[0], Position[1] }, "R", "Pl", 20, 1, true));
 						LM_Set_Shoot(new int[] { Position[0], Position[1] }, "R", "Pl", 20, 1);}
-					if (key == ConsoleKey.UpArrow) { Shots.Add(new Shoot(map, Width, Height, new int[] { Position[0], Position[1] }, "U", "Pl", 20, 1, true)); if (musica) { Music.Shoot(); }
+					if (key == ConsoleKey.UpArrow) { Shots.Add(new Shoot(map, Width, Height, new int[] { Position[0], Position[1] }, "U", "Pl", 20, 1, true)); 
 						LM_Set_Shoot(new int[] { Position[0], Position[1] }, "U", "Pl", 20, 1);}
-					if (key == ConsoleKey.DownArrow) { Shots.Add(new Shoot(map, Width, Height, new int[] { Position[0], Position[1] }, "D", "Pl", 20, 1, true)); if (musica) { Music.Shoot(); }
+					if (key == ConsoleKey.DownArrow) { Shots.Add(new Shoot(map, Width, Height, new int[] { Position[0], Position[1] }, "D", "Pl", 20, 1, true));
 						LM_Set_Shoot(new int[] { Position[0], Position[1] }, "D", "Pl", 20, 1);}
 
-					if (key == ConsoleKey.Q) { Shots.Add(new Shoot(map, Width, Height, new int[] { Position[0], Position[1] }, "LU", "Pl", 20, 1, true)); if (musica) { Music.Shoot(); }
+					if (key == ConsoleKey.Q) {Shots.Add(new Shoot(map, Width, Height, new int[] { Position[0], Position[1] }, "LU", "Pl", 20, 1, true));
 						LM_Set_Shoot(new int[] { Position[0], Position[1] }, "LU", "Pl", 20, 1);}
-					if (key == ConsoleKey.E) { Shots.Add(new Shoot(map, Width, Height, new int[] { Position[0], Position[1] }, "RU", "Pl", 20, 1, true)); if (musica) { Music.Shoot(); }
+					if (key == ConsoleKey.E) { Shots.Add(new Shoot(map, Width, Height, new int[] { Position[0], Position[1] }, "RU", "Pl", 20, 1, true)); 
 						LM_Set_Shoot(new int[] { Position[0], Position[1] }, "RU", "Pl", 20, 1);}
-					if (key == ConsoleKey.C) { Shots.Add(new Shoot(map, Width, Height, new int[] { Position[0], Position[1] }, "RD", "Pl", 20, 1, true)); if (musica) { Music.Shoot(); }
+					if (key == ConsoleKey.C) { Shots.Add(new Shoot(map, Width, Height, new int[] { Position[0], Position[1] }, "RD", "Pl", 20, 1, true));
 						LM_Set_Shoot(new int[] { Position[0], Position[1] }, "RD", "Pl", 20, 1);}
-					if (key == ConsoleKey.Z) { Shots.Add(new Shoot(map, Width, Height, new int[] { Position[0], Position[1] }, "LD", "Pl", 20, 1, true)); if (musica) { Music.Shoot(); }
+					if (key == ConsoleKey.Z) { Shots.Add(new Shoot(map, Width, Height, new int[] { Position[0], Position[1] }, "LD", "Pl", 20, 1, true));
 						LM_Set_Shoot(new int[] { Position[0], Position[1] }, "LD", "Pl", 20, 1);}
 					if (key == ConsoleKey.P)
 					{ Striker.Pause(); 
@@ -108,10 +114,10 @@ namespace Striker_Finale
 					{
 						Score += 5 * (Combo + 1);
 						if (!LM_On)Combo++;
-						Graphic.Word(12 + Width * 2, Graphic.Margin_Top, this.Score > 99 ? "   " : "  ");
-						Graphic.Draw_Score(this.Score, 2);
 						if (!onlineMP)
 						{
+							Graphic.Word(12 + Width * 2, Graphic.Margin_Top, Graphic.Space(Score.ToString().Length));
+							Graphic.Draw_Score(this.Score, 2);
 							int enemyIndex = FindEnemy(enemies, Shots[i].Position);
 							if (enemies[enemyIndex].Life > 1) enemies[enemyIndex].Life--;
 							else

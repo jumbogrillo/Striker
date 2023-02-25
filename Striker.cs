@@ -21,7 +21,7 @@ namespace Striker_Finale
         public static Thread sottofondo = new Thread(Music.SoundTrack);
         static Stopwatch Time = new Stopwatch();
         public static String[,] Map = new String[Height, Width];
-        static Player player = new Player(Width, Height);
+        static Player player;
         static List<Enemy> enemies = new List<Enemy>();
         static ConsoleColor PlayerColor = ConsoleColor.DarkRed, EnemyColor = ConsoleColor.DarkMagenta,
             BGColor = ConsoleColor.Gray, ObsColor = ConsoleColor.DarkGray, ShColor = ConsoleColor.Black;
@@ -32,6 +32,7 @@ namespace Striker_Finale
             Console.Title = "Striker";
             Console.CursorVisible = false;
             Start();
+			player = new Player(Width, Height);
             Graphic.Clear(1);
             GameModeMenu();
             Graphic.Initialize_Map(Map);
@@ -102,7 +103,7 @@ namespace Striker_Finale
                 player.Move(Map, musica);
             }
             GameOver();
-            Database.Update(CurrentUser, 100 * (Level - 1) + player.Score, Time.ElapsedMilliseconds);
+			Database.Insert(CurrentUser, player.Score, player.AllShot / Convert.ToDouble(player.ShotNotMissed) * 100, Convert.ToInt32(Time.ElapsedMilliseconds / 1000));
             Database.DrawClassification();
             Console.ReadKey();
 		}
@@ -115,12 +116,10 @@ namespace Striker_Finale
 			Database.Register(ref CurrentUser);
 			Database.Lobby(Map, Width, Height, CurrentUser, player);
 			Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);
-			Graphic.Draw_Life_Bar(player.Life);
-			Graphic.Draw_Frame(width: 71, height: 59, fore: ObsColor, setBG: false);
-			Database.DrawClassification(87, 5, CurrentUser);
-			Database.Chat(CurrentUser);
+			Graphic.Draw_Frame(width: 67, height: 59, fore: ObsColor, setBG: false);
 			Console.ReadKey();
 			Console.CursorVisible = false;
+			Time.Start();
 			while (player.Life > 0)
 			{
 				if (player.Combo > 0)
@@ -137,11 +136,11 @@ namespace Striker_Finale
 				Graphic.Draw_Map(Map, ConsoleColor.White, EnemyColor, PlayerColor, ObsColor, ShColor);//Width / 2 - player.Position[0], Height / 2 - player.Position[1], 
 				Database.Update(CurrentUser, player);
 				Database.UpdateMap(Map, Width, Height, CurrentUser, player);
+				if(Time.ElapsedMilliseconds % 2000 < 100)Database.Chat(CurrentUser);
 			}
-			Graphic.Word(10, 25, Database.AllDoc("multiplayer").Count.ToString());
 			Database.DeletePlayer(CurrentUser);
 			GameOver();
-			Database.DrawClassification();
+			Graphic.Word(10, 25, Database.AllDoc("multiplayer").Count.ToString());
 			Console.ReadKey();
 		}
 		static void Start()

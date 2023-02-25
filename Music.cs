@@ -23,7 +23,6 @@ namespace Striker_Finale
         }
         public static void SoundTrack()
         {
-            
             sottofondo.Play();
         }
         public static void SoundTrack(bool stop)
