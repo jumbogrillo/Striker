@@ -127,6 +127,7 @@ namespace Striker_Finale
 								enemies.RemoveAt(enemyIndex);
 							}
 						}
+						ShotNotMissed++;
 					}
 					else Combo = 0;
 					Shots.RemoveAt(i);

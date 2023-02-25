@@ -111,20 +111,18 @@ namespace Striker_Finale
 		{
 			Database.TurnOn();
 			Graphic.WindowSize(150, 70);
-			player = new Player(Width, Height);
 			Graphic.Clear();
 			Database.Register(ref CurrentUser);
+			player = new Player(Width, Height);
 			Database.Lobby(Map, Width, Height, CurrentUser, player);
 			Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);
-			Graphic.Draw_Frame(width: 67, height: 59, fore: ObsColor, setBG: false);
-			Console.ReadKey();
-			Console.CursorVisible = false;
+			Graphic.Draw_Frame(width: 65, height: 59, fore: ObsColor, setBG: false);
+			player.Life = 5;// Per disegnare la barra della vita
 			Time.Start();
 			while (player.Life > 0)
 			{
 				if (player.Combo > 0)
 				{
-					//Graphic.Rect(56, 13, $"Combo X{player.Combo}", setBG: false, fg:ConsoleColor.White);
 					if (player.Combo % 5 == 0 && player.Life < 5)
 					{
 						player.Life++;
@@ -136,7 +134,7 @@ namespace Striker_Finale
 				Graphic.Draw_Map(Map, ConsoleColor.White, EnemyColor, PlayerColor, ObsColor, ShColor);//Width / 2 - player.Position[0], Height / 2 - player.Position[1], 
 				Database.Update(CurrentUser, player);
 				Database.UpdateMap(Map, Width, Height, CurrentUser, player);
-				if(Time.ElapsedMilliseconds % 2000 < 100)Database.Chat(CurrentUser);
+				if(Time.ElapsedMilliseconds % 3000 < 100)Database.Chat(CurrentUser);
 			}
 			Database.DeletePlayer(CurrentUser);
 			GameOver();

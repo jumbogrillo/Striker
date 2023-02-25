@@ -104,7 +104,7 @@ namespace Striker_Finale
 			Console.SetBufferSize(width, height);
 			Console.SetWindowPosition(0, 0);
 		}
-		public static void Draw_Frame(int width = Striker.Width + 1, int height = Striker.Height + 2, int margin_top = Margin_Top, int margin_left = Margin_Left, ConsoleColor fore = ConsoleColor.DarkYellow, ConsoleColor back = ConsoleColor.DarkGray, bool setBG=true)
+		public static void Draw_Frame(double width = Striker.Width + 1, int height = Striker.Height + 2, int margin_top = Margin_Top, int margin_left = Margin_Left, ConsoleColor fore = ConsoleColor.DarkYellow, ConsoleColor back = ConsoleColor.DarkGray, bool setBG=true)
 		{
 			//Console.BackgroundColor = ConsoleColor.Black;
 			if(setBG)Console.BackgroundColor = back;
@@ -129,12 +129,12 @@ namespace Striker_Finale
 				Console.Write("═");
 			}
 			Console.Write("╝");
-			Console.SetCursorPosition(margin_left + width - 1, margin_top);
+			Console.SetCursorPosition(margin_left + (int)width - 1, margin_top);
 			Console.Write("╗");
 			Console.SetCursorPosition(Console.CursorLeft - 1, Console.CursorTop - 1);
 			for (int i = 1; i < height - 1; i++)
 			{
-				Console.SetCursorPosition(margin_left + width - 1, margin_top + i);
+				Console.SetCursorPosition(margin_left + (int)width - 1, margin_top + i);
 				Console.Write("║");
 			}
 			Console.ResetColor();
