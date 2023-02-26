@@ -1,17 +1,31 @@
-﻿using Striker_finale;
+﻿using MongoDB.Bson;
+using MongoDB.Driver;
+using Striker_finale;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Threading;
 
 namespace Striker_Finale
 {
-    public class Striker
-    {
-        public static int[] Position = new int[2]; //per LM_MULTI
+	enum CtrlType
+	{
+		CTRL_C_EVENT = 0,
+		CTRL_BREAK_EVENT = 1,
+		CTRL_CLOSE_EVENT = 2,
+		CTRL_LOGOFF_EVENT = 5,
+		CTRL_SHUTDOWN_EVENT = 6
+	}
+	public class Striker
+	{
+		[DllImport("kernel32.dll", SetLastError = true)]
+		private static extern bool SetConsoleCtrlHandler(EventHandler callback, bool add);
+		private delegate bool EventHandler(CtrlType sig);
+		static EventHandler _handler;
+		public static int[] Position = new int[2]; //per LM_MULTI
         public static String Direction, Alliance;
         public static int Speed, Damage;
-
         public const int Height = 25;
         public const int Width = 40;
         public static bool musica = true;
@@ -109,6 +123,7 @@ namespace Striker_Finale
 		}
 		static void Online_Multiplayer()
 		{
+
 			Database.TurnOn();
 			Graphic.WindowSize(150, 70);
 			Graphic.Clear();
@@ -117,6 +132,8 @@ namespace Striker_Finale
 			Database.Lobby(Map, Width, Height, CurrentUser, player);
 			Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);
 			Graphic.Draw_Frame(width: 65, height: 59, fore: ObsColor, setBG: false);
+			_handler += new EventHandler(Handler);
+			SetConsoleCtrlHandler(_handler, true);
 			player.Life = 5;// Per disegnare la barra della vita
 			Time.Start();
 			while (player.Life > 0)
@@ -140,6 +157,11 @@ namespace Striker_Finale
 			GameOver();
 			Graphic.Word(10, 25, (Database.AllDoc("multiplayer").Count + 2).ToString());
 			Console.ReadKey();
+		}
+		private static bool Handler(CtrlType sig)
+		{
+			if (sig == CtrlType.CTRL_CLOSE_EVENT) Database.DeletePlayer(CurrentUser);
+			return true;
 		}
 		static void Start()
         {
