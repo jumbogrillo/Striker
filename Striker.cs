@@ -129,11 +129,11 @@ namespace Striker_Finale
 			Graphic.Clear();
 			Database.Register(ref CurrentUser);
 			player = new Player(Width, Height);
+			_handler += new EventHandler(Handler);
+			SetConsoleCtrlHandler(_handler, true);
 			Database.Lobby(Map, Width, Height, CurrentUser, player);
 			Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);
 			Graphic.Draw_Frame(width: 65, height: 59, fore: ObsColor, setBG: false);
-			_handler += new EventHandler(Handler);
-			SetConsoleCtrlHandler(_handler, true);
 			player.Life = 5;// Per disegnare la barra della vita
 			Time.Start();
 			while (player.Life > 0)
@@ -160,7 +160,7 @@ namespace Striker_Finale
 		}
 		private static bool Handler(CtrlType sig)
 		{
-			if (sig == CtrlType.CTRL_CLOSE_EVENT) Database.DeletePlayer(CurrentUser);
+			if (sig == CtrlType.CTRL_CLOSE_EVENT | sig == CtrlType.CTRL_BREAK_EVENT | sig == CtrlType.CTRL_SHUTDOWN_EVENT | sig == CtrlType.CTRL_LOGOFF_EVENT | sig == CtrlType.CTRL_C_EVENT) Database.DeletePlayer(CurrentUser);
 			return true;
 		}
 		static void Start()
