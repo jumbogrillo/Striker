@@ -205,7 +205,7 @@ namespace Striker_Finale
 					catch(Exception ex) { }
 			}
 		}
-		public static void UpdateEnemy(string user, int kills) => Collection.UpdateOne(Builders<BsonDocument>.Filter.Eq("user", user), Builders<BsonDocument>.Update.Set("kills", kills));
+		public static void UpdateEnemy(string user, int kills) => Client.GetDatabase("Striker").GetCollection<BsonDocument>("multiplayer").UpdateOne(Builders<BsonDocument>.Filter.Eq("user", user), Builders<BsonDocument>.Update.Set("kills", kills));
 		public static void DeletePlayer(string currentUser)
 		{
 			Connect("multiplayer");
@@ -235,7 +235,7 @@ namespace Striker_Finale
 			Graphic.Initialize_Map(map);
 			Chat(currentUser);
 			Insert(currentUser, player);
-			if (AllDoc("multiplayer").Count == 1)
+			if (AllDoc("multiplayer").Count < 2)
 				InsertObs(map, width, height);
 			else foreach (var item in AllDoc("obstacles")) map[Convert.ToInt16(item["y"]), Convert.ToInt16(item["x"])] = "Obs";
 			while (AllDoc("multiplayer").Count < 2 & AllDoc("multiplayer").Count < 11) Console.WriteLine(AllDoc("multiplayer").Count);

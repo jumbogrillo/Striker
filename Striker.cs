@@ -138,7 +138,7 @@ namespace Striker_Finale
 			}
 			Database.DeletePlayer(CurrentUser);
 			GameOver();
-			Graphic.Word(10, 25, Database.AllDoc("multiplayer").Count.ToString());
+			Graphic.Word(10, 25, (Database.AllDoc("multiplayer").Count + 2).ToString());
 			Console.ReadKey();
 		}
 		static void Start()
