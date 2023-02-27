@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Threading;
 
 namespace Striker_Finale
 {
@@ -74,7 +76,7 @@ namespace Striker_Finale
 		public static void Register(ref string currentUser)
 		{
 			Connect("users");
-			Graphic.WindowSize(100, 20);
+			Graphic.WindowSize(50, 20);
 			Graphic.Draw_Frame(20, 10, 5, 5, setBG: false);
 			Graphic.Word(10, 6, "register", 1);
 			Graphic.Rect(7, 9, "Username: ", fg: ConsoleColor.White, setBG: false, size: 1);
@@ -127,8 +129,9 @@ namespace Striker_Finale
 			int[] indexes = SortPlayers(users);
 			Graphic.Rect(0, 4, "Username", setBG: false, fg: ConsoleColor.White);
 			Graphic.Rect(12, 4, "Score", setBG: false, fg: ConsoleColor.White);
-			Graphic.Rect(22, 4, "Time", setBG: false, fg: ConsoleColor.White);
-			Graphic.Rect(28, 4, "Last game", setBG: false, fg: ConsoleColor.White);
+			Graphic.Rect(20, 4, "Accuracy", setBG: false, fg: ConsoleColor.White);
+			Graphic.Rect(26, 4, "Time", setBG: false, fg: ConsoleColor.White);
+			Graphic.Rect(32, 4, "Date", setBG: false, fg: ConsoleColor.White);
 			for (int i = 0; i < users.Count; i++)
 			{
 				Graphic.Rect(0, 6 + i, (1 + i).ToString(" 0"), fg: ConsoleColor.White);
@@ -149,7 +152,7 @@ namespace Striker_Finale
 			{
 				{"user", currentUser },
 				{"life", player.Life },
-				{"kills", player.Kills },
+				{"kills", 0 },
 				{"score", player.Score },
 				{"posX", player.Position[0] },
 				{"posY", player.Position[1] },
@@ -160,8 +163,8 @@ namespace Striker_Finale
 		public static void Clear(string collection) => Client.GetDatabase("Striker").GetCollection<BsonDocument>(collection).DeleteMany(Builders<BsonDocument>.Filter.Empty);
 		public static void InsertObs(string[,] map, int width, int height)
 		{
-			Connect("obstacles");
 			Clear("obstacles");
+			Connect("obstacles");
 			Graphic.Initialize_Map(map);
 			Graphic.Draw_Obstacles_Randomly(map);
 			List<List<int>> list = GetObstacles(map, width, height);
@@ -180,29 +183,34 @@ namespace Striker_Finale
 					if (map[i, j] == "Obs") list.Add(new List<int> { j, i });
 			return list;
 		}
-		public static void UpdateMap(string[,] map, int width, int height, string currentUser, Player currentPlayer)
+		public static void UpdateMap(string[,] map, int width, int height, string currentUser, Player currentPlayer, ref bool winner)
 		{
 			var players = AllDoc("multiplayer");
-			DrawClassification(87, 5, currentUser, players);
-			for (int i = 0; i < width; i++)
-				for (int j = 0; j < height; j++)
-					if (map[j, i] == "Pl" | map[j, i] == "Sh" | map[j, i] == "Enem") map[j, i] = "E";
-			foreach(var player in players)
+			if (players.Count == 1) winner = true;
+			else
 			{
-				if (player["user"] == currentUser)map[Convert.ToInt16(player["posY"]), Convert.ToInt16(player["posX"])] = "Pl";
-				else map[Convert.ToInt16(player["posY"]), Convert.ToInt16(player["posX"])] = "Enem";
-				for (int i = 0; i < player["shotsX"].AsBsonArray.Count; i++)
-					try
-					{
-						if (map[Convert.ToInt16(player["shotsY"][i]), Convert.ToInt16(player["shotsX"][i])] == "E" )map[Convert.ToInt16(player["shotsY"][i]), Convert.ToInt16(player["shotsX"][i])] = "Sh";
-						if (player["user"] != currentUser)
-							if (currentPlayer.Position[0] == Convert.ToInt16(player["shotsX"][i]) & currentPlayer.Position[1] == Convert.ToInt16(player["shotsY"][i]))
-							{
-								currentPlayer.Life--;
-								if (currentPlayer.Life <= 0) UpdateEnemy(player["user"].ToString(), Convert.ToInt16(player["kills"]) + 1);
-							}
-					}
-					catch(Exception ex) { }
+				DrawClassification(87, 5, currentUser, players);
+				for (int i = 0; i < width; i++)
+					for (int j = 0; j < height; j++)
+						if (map[j, i] == "Pl" | map[j, i] == "Sh" | map[j, i] == "Enem") map[j, i] = "E";
+				foreach(var player in players)
+				{
+					if (player["user"] == currentUser)map[Convert.ToInt16(player["posY"]), Convert.ToInt16(player["posX"])] = "Pl";
+					else map[Convert.ToInt16(player["posY"]), Convert.ToInt16(player["posX"])] = "Enem";
+					for (int i = 0; i < player["shotsX"].AsBsonArray.Count; i++)
+						try
+						{
+							if (map[Convert.ToInt16(player["shotsY"][i]), Convert.ToInt16(player["shotsX"][i])] == "E" )map[Convert.ToInt16(player["shotsY"][i]), Convert.ToInt16(player["shotsX"][i])] = "Sh";
+							if (player["user"] != currentUser)
+								if (currentPlayer.Position[0] == Convert.ToInt16(player["shotsX"][i]) & currentPlayer.Position[1] == Convert.ToInt16(player["shotsY"][i]))
+								{
+									currentPlayer.Life--;
+									Graphic.Draw_Life_Bar(currentPlayer.Life);
+									if (currentPlayer.Life <= 0) UpdateEnemy(player["user"].ToString(), Convert.ToInt16(player["kills"]) + 1);
+								}
+						}
+						catch(Exception ex) { }
+				}
 			}
 		}
 		public static void UpdateEnemy(string user, int kills) => Client.GetDatabase("Striker").GetCollection<BsonDocument>("multiplayer").UpdateOne(Builders<BsonDocument>.Filter.Eq("user", user), Builders<BsonDocument>.Update.Set("kills", kills));
@@ -216,7 +224,7 @@ namespace Striker_Finale
 		{
 			{"user", currentUser },
 			{"life", player.Life },
-			{"kills", player.Kills },
+			{"kills", Client.GetDatabase("Striker").GetCollection<BsonDocument>("multiplayer").Find(Builders<BsonDocument>.Filter.Eq("user", currentUser)).FirstOrDefault()["kills"] },
 			{"score", player.Score },
 			{"posX", player.Position[0] },
 			{"posY", player.Position[1] },
@@ -232,15 +240,29 @@ namespace Striker_Finale
 		}
 		public static void Lobby(string[,] map, int width, int height, string currentUser, Player player)
 		{
-			Graphic.Initialize_Map(map);
-			Chat(currentUser);
-			Insert(currentUser, player);
-			if (AllDoc("multiplayer").Count < 2)
-				InsertObs(map, width, height);
-			else foreach (var item in AllDoc("obstacles")) map[Convert.ToInt16(item["y"]), Convert.ToInt16(item["x"])] = "Obs";
-			while (AllDoc("multiplayer").Count < 2 & AllDoc("multiplayer").Count < 11) Console.WriteLine(AllDoc("multiplayer").Count);
-			Chat(currentUser);
-			DrawClassification(87, 5, currentUser, AllDoc("multiplayer"));
+			if (AllDoc("multiplayer").Count < 11)
+			{
+				Graphic.Initialize_Map(map);
+				Insert(currentUser, player);
+				if (AllDoc("multiplayer").Count < 2)
+					InsertObs(map, width, height);// Insert the obstacles into DB
+				else foreach (var item in AllDoc("obstacles")) map[Convert.ToInt16(item["y"]), Convert.ToInt16(item["x"])] = "Obs";// insert the obstacles into the map
+				Stopwatch clock = new Stopwatch();
+				clock.Start();
+				while (AllDoc("multiplayer").Count < 2) Graphic.Draw_Progress_Bar(4, 4, (AllDoc("multiplayer").Count - 1) * 50 + (clock.ElapsedMilliseconds / Convert.ToDouble(1200) > 50 ? 50 : clock.ElapsedMilliseconds / Convert.ToDouble(1200)), 100);
+				Graphic.Draw_Progress_Bar(4, 4, (AllDoc("multiplayer").Count - 1) * 50 + (clock.ElapsedMilliseconds / Convert.ToDouble(1200) > 50 ? 50 : clock.ElapsedMilliseconds / Convert.ToDouble(1200)), 100);
+				Thread.Sleep(1000);
+				Graphic.Clear(1);
+				Chat(currentUser);
+				DrawClassification(87, 5, currentUser, AllDoc("multiplayer"));
+			}
+			else
+			{
+				Graphic.Word(0, 0, "Try again",font: 2,  delay: 1);
+				Graphic.Word(0, 0, "you will be luckier",font: 2,  delay: 1);
+				Graphic.Clear(1, 1);
+				Striker.Main(new string[] { });
+			}
 		}
 		public static int[] SortPlayers(List<BsonDocument> players)
 		{

@@ -16,8 +16,7 @@ namespace Striker_Finale
 		public int[] Position { get; set; }
 		public int Score { get; set; }
 		public int Combo { get; set; }
-		private int life;
-		public int Life { get=>life; set { life = value;Graphic.Draw_Life_Bar(life); } }
+		public int Life { get; set; }
 		public int Width { get; set; }
 		public int Height { get; set; }
 		public int Stamina { get; set; }
@@ -25,7 +24,11 @@ namespace Striker_Finale
 		public int AllShot { get; set; }
 		public int ShotNotMissed { get; set; }
 		public List<Shoot> Shots { get; set; }
-		public Player(int width, int height)
+		public Player()
+		{
+
+		}
+		public Player(string[,] map, int width, int height)
 		{
 			Width = width;
 			Height = height;
@@ -37,7 +40,7 @@ namespace Striker_Finale
 				Position[1] = Random.Next(0,Width - 2);
             }
 			Spawn();
-			
+			map[Position[1], Position[0]] = "Pl";
 			Shots = new List<Shoot>();
 		}
 		public void Move(string[,] map, bool musica,bool lm_multi = false, bool multiplayerDB=false, string currentUser="")

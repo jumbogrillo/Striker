@@ -28,7 +28,7 @@ namespace Striker_Finale
         public static int Speed, Damage;
         public const int Height = 25;
         public const int Width = 40;
-        public static bool musica = true;
+        public static bool musica = true, isLogged = false;
         public static int Level = 1;
         public static string CurrentUser;
         static Thread update;
@@ -42,19 +42,26 @@ namespace Striker_Finale
 
         public static void Main(string[] args)
         {
-			Online_Multiplayer();
+			Database.TurnOn();
+			Database.DrawClassification();
+			Console.ReadKey();
             Console.Title = "Striker";
             Console.CursorVisible = false;
-            Start();
-			player = new Player(Width, Height);
+			if(!isLogged)
+			{
+				Database.TurnOn();
+				Database.Register(ref CurrentUser);
+				isLogged = true;
+			}
+			_handler += new EventHandler(Handler);
+			SetConsoleCtrlHandler(_handler, true);
+			Start();
+			player = new Player(Map, Width, Height);
             Graphic.Clear(1);
             GameModeMenu();
             Graphic.Initialize_Map(Map);
             Graphic.Draw_Obstacles_Randomly(Map);
-
-            Console.SetBufferSize(140, 70);
-            Console.SetWindowSize(140, 70);
-            Console.SetWindowPosition(0, 0);
+			Graphic.WindowSize(140, 35);
             Console.Clear();
             Time.Start();
             Music.Title();
@@ -73,14 +80,12 @@ namespace Striker_Finale
             }
             if (musica) Music.Sound("level");
             Graphic.Clear();
-            Console.Clear();
             Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);
-            Graphic.Draw_Life_Bar(player.Life);
             Graphic.Draw_Score(player.Score, 2);
+			Graphic.Draw_Life_Bar(player.Life);
             Graphic.Draw_Frame();
             while (player.Life > 0)
             {
-                Console.SetBufferSize(140, 70);
                 if (Time.ElapsedMilliseconds % 5000 < 100) enemies.Add(new Enemy(Map, Width, Height, 2, 1));
                 if (player.Combo > 0)
                 {
@@ -117,50 +122,54 @@ namespace Striker_Finale
                 player.Move(Map, musica);
             }
             GameOver();
-			Database.Insert(CurrentUser, player.Score, player.AllShot / Convert.ToDouble(player.ShotNotMissed) * 100, Convert.ToInt32(Time.ElapsedMilliseconds / 1000));
+			Database.Insert(CurrentUser, player.Score, player.ShotNotMissed / Convert.ToDouble(player.AllShot) * 100, Convert.ToInt32(Time.ElapsedMilliseconds / 1000));
             Database.DrawClassification();
             Console.ReadKey();
+			Main(args);
 		}
 		static void Online_Multiplayer()
 		{
-
+			bool Winner = false;
 			Database.TurnOn();
 			Graphic.WindowSize(150, 70);
+			player = new Player(Map, Width, Height);
 			Graphic.Clear();
-			Database.Register(ref CurrentUser);
-			player = new Player(Width, Height);
-			_handler += new EventHandler(Handler);
-			SetConsoleCtrlHandler(_handler, true);
 			Database.Lobby(Map, Width, Height, CurrentUser, player);
 			Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);
 			Graphic.Draw_Frame(width: 65, height: 59, fore: ObsColor, setBG: false);
 			player.Life = 5;// Per disegnare la barra della vita
 			Time.Start();
-			while (player.Life > 0)
+			while (player.Life > 0 & !Winner)
 			{
 				if (player.Combo > 0)
 				{
 					if (player.Combo % 5 == 0 && player.Life < 5)
 					{
+						Graphic.Draw_Life_Bar(player.Life);
 						player.Life++;
 						Music.Title();
 					}
 				}
 				player.UpdateShots(Map, enemies, true);
 				player.Move(Map, musica,multiplayerDB: true, currentUser:CurrentUser);
-				Graphic.Draw_Map(Map, ConsoleColor.White, EnemyColor, PlayerColor, ObsColor, ShColor);//Width / 2 - player.Position[0], Height / 2 - player.Position[1], 
+				Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);//Width / 2 - player.Position[0], Height / 2 - player.Position[1], 
 				Database.Update(CurrentUser, player);
-				Database.UpdateMap(Map, Width, Height, CurrentUser, player);
-				if(Time.ElapsedMilliseconds % 3000 < 100)Database.Chat(CurrentUser);
+				Database.UpdateMap(Map, Width, Height, CurrentUser, player, ref Winner);
+				if(Time.ElapsedMilliseconds % 3000 < 150)Database.Chat(CurrentUser);
 			}
 			Database.DeletePlayer(CurrentUser);
-			GameOver();
-			Graphic.Word(10, 25, (Database.AllDoc("multiplayer").Count + 2).ToString());
+			Graphic.Clear(1, 1);
+			if (!Winner)
+			{
+				GameOver();
+				Graphic.Word(10, 25, (Database.AllDoc("multiplayer").Count + 1).ToString());
+			}
+			else { Graphic.Word(5, 15, "You are", fg: PlayerColor); Graphic.Word(0, 27, "the champion", fg: PlayerColor); }
 			Console.ReadKey();
 		}
 		private static bool Handler(CtrlType sig)
 		{
-			if (sig == CtrlType.CTRL_CLOSE_EVENT | sig == CtrlType.CTRL_BREAK_EVENT | sig == CtrlType.CTRL_SHUTDOWN_EVENT | sig == CtrlType.CTRL_LOGOFF_EVENT | sig == CtrlType.CTRL_C_EVENT) Database.DeletePlayer(CurrentUser);
+			if (sig == CtrlType.CTRL_CLOSE_EVENT | sig == CtrlType.CTRL_BREAK_EVENT | sig == CtrlType.CTRL_SHUTDOWN_EVENT | sig == CtrlType.CTRL_C_EVENT | sig == CtrlType.CTRL_LOGOFF_EVENT) if(CurrentUser != "")Database.DeletePlayer(CurrentUser);
 			return true;
 		}
 		static void Start()
@@ -308,7 +317,7 @@ namespace Striker_Finale
             Map = new String[Height, Width];
             Graphic.Initialize_Map(Map);
             Graphic.Draw_Obstacles_Randomly(Map);
-            player = new Player(Width, Height);
+            player = new Player(Map, Width, Height);
             player.Life = lastLife;
             enemies = new List<Enemy>();
             Map[player.Position[1], player.Position[0]] = "Pl";
@@ -682,7 +691,7 @@ namespace Striker_Finale
             MultiplayerLocale.Width = Width;
             Graphic.Initialize_Map(Map);
             //Enemy enemy = new Enemy(Map, Width, Height, 0, 5);
-            Player player = new Player(Width, Height);
+            Player player = new Player(Map, Width, Height);
             Handshake();
             Console.ReadKey();
             Time.Start();

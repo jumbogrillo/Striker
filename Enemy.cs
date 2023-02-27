@@ -13,8 +13,7 @@ namespace Striker_finale
 	{
 		public int Speed { get; set; }
 		private int Count { get; set; }
-
-		public Enemy(string[,] map, int width, int height, int speed, int life) : base(width, height)
+		public Enemy(string[,] map, int width, int height, int speed, int life)
 		{
 			Count = 0;
 			Speed = speed;

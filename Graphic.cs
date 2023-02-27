@@ -162,6 +162,14 @@ namespace Striker_Finale
 			}
 			Rect(x, y, Space(life * 2), bg: Console.BackgroundColor, size: 1);
 		}
+		public static void Draw_Progress_Bar(int x, int y, double percentage, int width)
+		{
+			Console.CursorVisible = false;
+			Draw_Frame(width / Convert.ToDouble(2) + 4, 3, y, x, setBG: false, fore: ConsoleColor.DarkGray);
+			Rect(x + width - percentage.ToString("0").Length + 5, y + 1, percentage.ToString("0") + "%", fg: ConsoleColor.White, setBG: false, size: 1);
+			for (int i = 0; i < width * percentage / Convert.ToDouble(100); i++)
+				Rect(x + i + 1, y + 1, " ", ConsoleColor.Blue, size: 1);
+		}
 		public static string Space(int length)
 		{
 			string text = "";
