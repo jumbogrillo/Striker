@@ -761,8 +761,8 @@ namespace Striker_Finale
                         break;
                     case 1:
                         word = "Online";
-                        if (index == i) Graphic.Word(Width + 33, 9, word, 2, PlayerColor);
-                        else Graphic.Word(Width + 33, 9, word, 2);
+                        if (index == i) Graphic.Word(Width + 27, 9, word, 2, PlayerColor);
+                        else Graphic.Word(Width + 27, 9, word, 2);
                         break;
                     case 2:
                         word = "Local" +
