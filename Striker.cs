@@ -99,6 +99,7 @@ namespace Striker_Finale
                 }
                 if (player.Hit(enemies))
                 {
+                    Music.Sound("hit");
                     player.Life--;
                     Graphic.Draw_Life_Bar(player.Life);
                 }
