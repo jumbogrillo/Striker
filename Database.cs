@@ -124,26 +124,25 @@ namespace Striker_Finale
 		{
 			Graphic.WindowSize(140, 70);
 			Graphic.Clear(0, 0);
-			Graphic.Word(0, 0, "Classification", 1);
 			var users = Client.GetDatabase("Striker").GetCollection<BsonDocument>("classification").Find(new BsonDocument()).ToList();
+			Graphic.Draw_Frame(65, users.Count + 4, 0, 0, setBG: false);
+			Graphic.Word(0, 1, "Classification", 1);
 			int[] indexes = SortPlayers(users);
-			Graphic.Rect(0, 4, "Username", setBG: false, fg: ConsoleColor.White);
-			Graphic.Rect(12, 4, "Score", setBG: false, fg: ConsoleColor.White);
-			Graphic.Rect(20, 4, "Accuracy", setBG: false, fg: ConsoleColor.White);
-			Graphic.Rect(26, 4, "Time", setBG: false, fg: ConsoleColor.White);
-			Graphic.Rect(32, 4, "Date", setBG: false, fg: ConsoleColor.White);
+			Graphic.Rect(1, 5, "Username", setBG: false, fg: ConsoleColor.White);
+			Graphic.Rect(13, 5, "Score", setBG: false, fg: ConsoleColor.White);
+			Graphic.Rect(21, 5, "Accuracy", setBG: false, fg: ConsoleColor.White);
+			Graphic.Rect(27, 5, "Time", setBG: false, fg: ConsoleColor.White);
+			Graphic.Rect(33, 5, "Date", setBG: false, fg: ConsoleColor.White);
 			for (int i = 0; i < users.Count; i++)
 			{
-				Graphic.Rect(0, 6 + i, (1 + i).ToString(" 0"), fg: ConsoleColor.White);
-				Graphic.Rect(2, 6 + i, users[indexes[i]]["username"].ToString(), setBG: false, fg: ConsoleColor.White);
-				Graphic.Rect(12, 6 + i, users[indexes[i]]["score"].ToString(), setBG: false, fg: ConsoleColor.White);
-				Graphic.Rect(20, 6 + i, Convert.ToDouble(users[indexes[i]]["accuracy"]).ToString("0.00") + "%", fg: ConsoleColor.White);
-				Graphic.Rect(26, 6 + i, (Convert.ToDouble(users[indexes[i]]["time"]) / Convert.ToDouble(1000)).ToString("0.00s"), setBG: false, fg: ConsoleColor.White);
-				Graphic.Rect(32, 6 + i, Convert.ToDateTime(users[indexes[i]]["date"]).ToString("HH:mm - dd/MM/yy"), setBG: false, fg: ConsoleColor.White);
+				Graphic.Rect(1, 7 + i, (1 + i).ToString(" 0"), fg: ConsoleColor.White);
+				Graphic.Rect(3, 7 + i, users[indexes[i]]["username"].ToString(), setBG: false, fg: ConsoleColor.White);
+				Graphic.Rect(13, 7 + i, users[indexes[i]]["score"].ToString(), setBG: false, fg: ConsoleColor.White);
+				Graphic.Rect(21, 7 + i, Convert.ToDouble(users[indexes[i]]["accuracy"]).ToString("0.00") + "%", fg: ConsoleColor.White);
+				Graphic.Rect(27, 7 + i, (Convert.ToDouble(users[indexes[i]]["time"]) / Convert.ToDouble(1000)).ToString("0.00s"), setBG: false, fg: ConsoleColor.White);
+				Graphic.Rect(33, 7 + i, Convert.ToDateTime(users[indexes[i]]["date"]).ToString("HH:mm - dd/MM/yy"), setBG: false, fg: ConsoleColor.White);
 			}
-			Console.SetWindowSize(140, 50);
-			Console.SetWindowPosition(0, 0);
-			Console.SetWindowSize(140, 50);
+			Graphic.WindowSize(140, 70);
 		}
 		public static void Insert(string currentUser, Player player)
 		{

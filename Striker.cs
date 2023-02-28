@@ -39,12 +39,8 @@ namespace Striker_Finale
         static List<Enemy> enemies = new List<Enemy>();
         static ConsoleColor PlayerColor = ConsoleColor.DarkRed, EnemyColor = ConsoleColor.DarkMagenta,
             BGColor = ConsoleColor.Gray, ObsColor = ConsoleColor.DarkGray, ShColor = ConsoleColor.Black;
-
         public static void Main(string[] args)
         {
-			Database.TurnOn();
-			Database.DrawClassification();
-			Console.ReadKey();
             Console.Title = "Striker";
             Console.CursorVisible = false;
 			if(!isLogged)
