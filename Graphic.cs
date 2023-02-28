@@ -98,13 +98,30 @@ namespace Striker_Finale
 				Console.SetCursorPosition(Margin_Left + 1, Console.CursorTop + 1);
 			}
 		}
-		public static void WindowSize(int width, int height)
-		{
-			Console.SetWindowSize(width, height);
-			Console.SetBufferSize(width, height);
-			Console.SetWindowPosition(0, 0);
-		}
-		public static void Draw_Frame(double width = Striker.Width + 1, int height = Striker.Height + 2, int margin_top = Margin_Top, int margin_left = Margin_Left, ConsoleColor fore = ConsoleColor.DarkYellow, ConsoleColor back = ConsoleColor.DarkGray, bool setBG=true)
+        public static void WindowSize(int width, int height)
+        {
+            try
+            {
+                if (width > Console.LargestWindowWidth) width = Console.LargestWindowWidth;
+                if (height > Console.LargestWindowHeight) height = Console.LargestWindowWidth;
+                if (Console.BufferHeight < height)
+                {
+                    Console.SetBufferSize(width, height);
+                    Console.SetWindowSize(width, height);
+                }
+                else
+                {
+                    Console.SetWindowSize(width, height);
+                    Console.SetBufferSize(width, height);
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            Console.SetWindowPosition(0, 0);
+        }
+        public static void Draw_Frame(double width = Striker.Width + 1, int height = Striker.Height + 2, int margin_top = Margin_Top, int margin_left = Margin_Left, ConsoleColor fore = ConsoleColor.DarkYellow, ConsoleColor back = ConsoleColor.DarkGray, bool setBG=true)
 		{
 			//Console.BackgroundColor = ConsoleColor.Black;
 			if(setBG)Console.BackgroundColor = back;

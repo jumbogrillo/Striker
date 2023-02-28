@@ -51,13 +51,13 @@ namespace Striker_Finale
 			}
 			_handler += new EventHandler(Handler);
 			SetConsoleCtrlHandler(_handler, true);
+			Graphic.WindowSize(140, 35);
 			Start();
 			player = new Player(Map, Width, Height);
             Graphic.Clear(1);
             GameModeMenu();
             Graphic.Initialize_Map(Map);
             Graphic.Draw_Obstacles_Randomly(Map);
-			Graphic.WindowSize(140, 35);
             Console.Clear();
             Time.Start();
             Music.Title();
