@@ -31,7 +31,6 @@ namespace Striker_Finale
         public static bool musica = true, isLogged = false;
         public static int Level = 1;
         public static string CurrentUser;
-        static Thread update;
         public static Thread sottofondo = new Thread(Music.SoundTrack);
         static Stopwatch Time = new Stopwatch();
         public static String[,] Map = new String[Height, Width];
@@ -43,13 +42,15 @@ namespace Striker_Finale
         {
             Console.Title = "Striker";
             Console.CursorVisible = false;
-			if(!isLogged)
+            if (!isLogged)
 			{
+                Graphic.Clear(1);
 				Database.TurnOn();
-				Database.Register(ref CurrentUser);
+				Database.Login(ref CurrentUser);
 				isLogged = true;
 			}
-			_handler += new EventHandler(Handler);
+            Console.CursorVisible = false;
+            _handler += new EventHandler(Handler);
 			SetConsoleCtrlHandler(_handler, true);
 			Graphic.WindowSize(140, 35);
 			Start();
@@ -130,7 +131,7 @@ namespace Striker_Finale
 			Database.TurnOn();
 			Graphic.WindowSize(150, 70);
 			player = new Player(Map, Width, Height);
-			Graphic.Clear();
+			Console.Clear();
 			Database.Lobby(Map, Width, Height, CurrentUser, player);
 			Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);
 			Graphic.Draw_Frame(width: 65, height: 59, fore: ObsColor, setBG: false);
@@ -370,6 +371,7 @@ namespace Striker_Finale
         public static void Title()
         {
             //Title LOGO
+            Music.Title();
             int Title_color = 0;
             Console.ForegroundColor = ConsoleColor.Yellow;
             while (true)
@@ -639,7 +641,7 @@ namespace Striker_Finale
                         {
                             case 0:
                                 backmenu = true;
-                                Graphic.Clear();
+                                Graphic.Clear(1);
                                 Graphic.Draw_Life_Bar(player.Life);
                                 Graphic.Draw_Score(player.Score, 2);
                                 Graphic.Draw_Frame();
@@ -758,12 +760,13 @@ namespace Striker_Finale
                         else Graphic.Word(Width - 33, 9, word, 2);
                         break;
                     case 1:
-                        word = "Local";
+                        word = "Online";
                         if (index == i) Graphic.Word(Width + 33, 9, word, 2, PlayerColor);
                         else Graphic.Word(Width + 33, 9, word, 2);
                         break;
                     case 2:
-                        word = "Online";
+                        word = "Local" +
+                            "";
                         if (index == i) Graphic.Word((Width / 2) + 13, 20, word, 2, PlayerColor);
                         else Graphic.Word((Width / 2) + 13, 20, word, 2);
                         break;
@@ -786,19 +789,18 @@ namespace Striker_Finale
                 {
                     case 0:
                         return;
-                    case 1:
+                    case 2:
                         MultiplayerLocale.Height = Height;
                         MultiplayerLocale.Width = Width;
                         MultiplayerLocale.Initialize_Get(Map);
                         Console.Clear();
                         Local_Multiplayer_Start();
                         break;
-                    case 2:
+                    case 1:
                         Console.Clear();
                         Music.level();
                         Online_Multiplayer();
                         break;
-
                 }
             }
             goto Menu;

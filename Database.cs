@@ -61,8 +61,19 @@ namespace Striker_Finale
                 currentUser = Console.ReadLine();
                 Console.SetCursorPosition(17, 11);
                 password = Console.ReadLine();
-                Console.SetCursorPosition(7, 13);
-                if (GetUser(currentUser) == null) Console.WriteLine("Error 404: Account not found!");
+                Console.SetCursorPosition(7, 12);
+                if (GetUser(currentUser) == null)
+                {
+                    Console.WriteLine("Error 404: Account not found!");
+                    Console.SetCursorPosition(7, 13);
+                    Console.WriteLine("Do you want to register? (Y/N)");
+                    if (Console.ReadKey().Key == ConsoleKey.Y)
+                    {
+                        Console.Clear();
+                        Register(ref currentUser);
+                        return;
+                    }
+                }
                 else if (GetUser(currentUser)["password"] == password) break;
                 else Console.WriteLine("Password or username is invalid! Please enter the correct username or password!!!");
                 Console.SetCursorPosition(17, 9);
@@ -71,7 +82,7 @@ namespace Striker_Finale
                 Console.Write("                  ");
             } while (true);
             Graphic.WindowSize(150, 68);
-            Graphic.Clear();
+            Console.Clear();
         }
         public static void Register(ref string currentUser)
         {
@@ -82,7 +93,7 @@ namespace Striker_Finale
             Graphic.Rect(7, 9, "Username: ", fg: ConsoleColor.White, setBG: false, size: 1);
             Graphic.Rect(7, 11, "Password: ", fg: ConsoleColor.White, setBG: false, size: 1);
             string password = "";
-            Console.CursorVisible = true;
+            Console.CursorVisible = false;
             do
             {
                 Console.SetCursorPosition(17, 9);
