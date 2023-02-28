@@ -41,9 +41,9 @@ namespace Striker_Finale
             BGColor = ConsoleColor.Gray, ObsColor = ConsoleColor.DarkGray, ShColor = ConsoleColor.Black;
         public static void Main(string[] args)
         {
-            Console.Title = "Striker";
-            Console.CursorVisible = false;
-			if(!isLogged)
+			Console.Title = "Striker";
+			Console.CursorVisible = false;
+			if (!isLogged)
 			{
 				Database.TurnOn();
 				Database.Register(ref CurrentUser);
@@ -54,74 +54,74 @@ namespace Striker_Finale
 			Graphic.WindowSize(140, 35);
 			Start();
 			player = new Player(Map, Width, Height);
-            Graphic.Clear(1);
-            GameModeMenu();
-            Graphic.Initialize_Map(Map);
-            Graphic.Draw_Obstacles_Randomly(Map);
-            Console.Clear();
-            Time.Start();
-            Music.Title();
-            Music.SoundTrack(true);
+			Graphic.Clear(1);
+			GameModeMenu();
+			Graphic.Initialize_Map(Map);
+			Graphic.Draw_Obstacles_Randomly(Map);
+			Console.Clear();
+			Time.Start();
+			Music.Title();
+			Music.SoundTrack(true);
 
-        StartGame:
-            Graphic.Initialize_Map(Map);
-            Graphic.Draw_Obstacles_Randomly(Map);
-            player.Combo = 0;
-            Graphic.Clear(1);
-            for (int i = 0; i < 6; i++)
-            {
-                LevelScreen(i % 2 == 0 ? ConsoleColor.Yellow : ConsoleColor.DarkYellow);
-                Console.BackgroundColor = ConsoleColor.Black;
-                Thread.Sleep(300);
-            }
-            if (musica) Music.Sound("level");
-            Graphic.Clear();
-            Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);
-            Graphic.Draw_Score(player.Score, 2);
+		StartGame:
+			Graphic.Initialize_Map(Map);
+			Graphic.Draw_Obstacles_Randomly(Map);
+			player.Combo = 0;
+			Graphic.Clear(1);
+			for (int i = 0; i < 6; i++)
+			{
+				LevelScreen(i % 2 == 0 ? ConsoleColor.Yellow : ConsoleColor.DarkYellow);
+				Console.BackgroundColor = ConsoleColor.Black;
+				Thread.Sleep(300);
+			}
+			if (musica) Music.Sound("level");
+			Graphic.Clear();
+			Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);
+			Graphic.Draw_Score(player.Score, 2);
 			Graphic.Draw_Life_Bar(player.Life);
-            Graphic.Draw_Frame();
-            while (player.Life > 0)
-            {
-                if (Time.ElapsedMilliseconds % 5000 < 100) enemies.Add(new Enemy(Map, Width, Height, 2, 1));
-                if (player.Combo > 0)
-                {
-                    Console.SetCursorPosition(102, 13);
-                    Console.Write($"Combo X{player.Combo}");
-                    if (player.Combo % 5 == 0 && player.Life < 5)
-                    {
-                        player.Life++;
-                        player.Combo++;
-                        Graphic.Draw_Life_Bar(player.Life);
-                        Music.Title();
-                        Console.SetCursorPosition(90, 16);
-                        Console.WriteLine(" ");
-                    }
-                }
-                if (player.Hit(enemies))
-                {
-                    Music.Sound("hit");
-                    player.Life--;
-                    Graphic.Draw_Life_Bar(player.Life);
-                }
-                foreach (Enemy enemy in enemies)
-                {
-                    enemy.Update(Map, player);
-                    enemy.UpdateShots(Map);
-                }
-                if (player.Score > 99)
-                {
-                    Level++;
-                    Reset();
-                    goto StartGame;
-                }
-                Graphic.Draw_Map(Map, ConsoleColor.White, EnemyColor, PlayerColor, ObsColor, ShColor);//Width / 2 - player.Position[0], Height / 2 - player.Position[1], 
-                player.UpdateShots(Map, enemies);
-                player.Move(Map, musica);
-            }
-            GameOver();
+			Graphic.Draw_Frame();
+			while (player.Life > 0)
+			{
+				if (Time.ElapsedMilliseconds % 5000 < 100) enemies.Add(new Enemy(Map, Width, Height, 2, 1));
+				if (player.Combo > 0)
+				{
+					Console.SetCursorPosition(102, 13);
+					Console.Write($"Combo X{player.Combo}");
+					if (player.Combo % 5 == 0 && player.Life < 5)
+					{
+						player.Life++;
+						player.Combo++;
+						Graphic.Draw_Life_Bar(player.Life);
+						Music.Title();
+						Console.SetCursorPosition(90, 16);
+						Console.WriteLine(" ");
+					}
+				}
+				if (player.Hit(enemies))
+				{
+					Music.Sound("hit");
+					player.Life--;
+					Graphic.Draw_Life_Bar(player.Life);
+				}
+				foreach (Enemy enemy in enemies)
+				{
+					enemy.Update(Map, player);
+					enemy.UpdateShots(Map);
+				}
+				if (player.Score > 99)
+				{
+					Level++;
+					Reset();
+					goto StartGame;
+				}
+				Graphic.Draw_Map(Map, ConsoleColor.White, EnemyColor, PlayerColor, ObsColor, ShColor);//Width / 2 - player.Position[0], Height / 2 - player.Position[1], 
+				player.UpdateShots(Map, enemies);
+				player.Move(Map, musica);
+			}
+			GameOver();
 			Database.Insert(CurrentUser, player.Score, player.ShotNotMissed / Convert.ToDouble(player.AllShot) * 100, Convert.ToInt32(Time.ElapsedMilliseconds / 1000));
-            Database.DrawClassification();
-            Console.ReadKey();
+			Database.DrawClassification();
+			Console.ReadKey();
 			Main(args);
 		}
 		static void Online_Multiplayer()
@@ -133,8 +133,8 @@ namespace Striker_Finale
 			Graphic.Clear();
 			Database.Lobby(Map, Width, Height, CurrentUser, player);
 			Graphic.Draw_Map(Map, BGColor, EnemyColor, PlayerColor, ObsColor, ShColor);
-			Graphic.Draw_Frame(width: 65, height: 59, fore: ObsColor, setBG: false);
-			player.Life = 5;// Per disegnare la barra della vita
+			Graphic.Draw_Frame(width: 65, height: 58, fore: ObsColor, setBG: false);
+			Graphic.Draw_Life_Bar(player.Life);
 			Time.Start();
 			while (player.Life > 0 & !Winner)
 			{
@@ -167,6 +167,7 @@ namespace Striker_Finale
                 Graphic.Word(0, 27, "the champion", fg: PlayerColor);
             }
 			Console.ReadKey();
+			Striker.Main(new string[] { });
 		}
 		private static bool Handler(CtrlType sig)
 		{

@@ -152,7 +152,7 @@ namespace Striker_Finale
                 {"user", currentUser },
                 {"life", player.Life },
                 {"kills", 0 },
-                {"score", player.Score },
+                {"score", -1 },
                 {"posX", player.Position[0] },
                 {"posY", player.Position[1] },
                 {"shotsX", new BsonArray(SetShotPosition(player, 0)) },
@@ -162,7 +162,7 @@ namespace Striker_Finale
         public static void Clear(string collection) => Client.GetDatabase("Striker").GetCollection<BsonDocument>(collection).DeleteMany(Builders<BsonDocument>.Filter.Empty);
         public static void InsertObs(string[,] map, int width, int height)
         {
-            Clear("obstacles");
+				Clear("obstacles");
             Connect("obstacles");
             Graphic.Initialize_Map(map);
             Graphic.Draw_Obstacles_Randomly(map);
@@ -237,30 +237,54 @@ namespace Striker_Finale
                 ints.Add(player.Shots[i].Position[index]);
             return ints;
         }
+		static bool IsAccessible()
+		{
+			Connect("multiplayer");
+			var players = AllDoc("multiplayer");
+			if (players.Count == 0) return true;
+			else return Convert.ToInt16(players[0]["score"]) == -1;
+		}
         public static void Lobby(string[,] map, int width, int height, string currentUser, Player player)
         {
-            if (AllDoc("multiplayer").Count < 11)
-            {
-                Graphic.Initialize_Map(map);
-                Insert(currentUser, player);
-                if (AllDoc("multiplayer").Count < 2)
-                    InsertObs(map, width, height);// Insert the obstacles into DB
-                else foreach (var item in AllDoc("obstacles")) map[Convert.ToInt16(item["y"]), Convert.ToInt16(item["x"])] = "Obs";// insert the obstacles into the map
-                Stopwatch clock = new Stopwatch();
-                clock.Start();
-                while (AllDoc("multiplayer").Count < 2) Graphic.Draw_Progress_Bar(4, 4, (AllDoc("multiplayer").Count - 1) * 50 + (clock.ElapsedMilliseconds / Convert.ToDouble(1200) > 50 ? 50 : clock.ElapsedMilliseconds / Convert.ToDouble(1200)), 100);
-                Graphic.Draw_Progress_Bar(4, 4, (AllDoc("multiplayer").Count - 1) * 50 + (clock.ElapsedMilliseconds / Convert.ToDouble(1200) > 50 ? 50 : clock.ElapsedMilliseconds / Convert.ToDouble(1200)), 100);
-                Thread.Sleep(1000);
-                Graphic.Clear(1);
-                Chat(currentUser);
-                DrawClassification(87, 5, currentUser, AllDoc("multiplayer"));
-            }
-            else
-            {
-                Graphic.Word(0, 0, "Too much player", 1);
-                Graphic.Clear(1, 1);
-                Striker.Main(new string[] { });
-            }
+			Graphic.WindowSize(115, 20);
+			Graphic.Word(35, 4, "Lobby", 2);
+			if (IsAccessible())
+			{
+				Graphic.Initialize_Map(map);
+				if (IsPresent(currentUser)) DeletePlayer(currentUser);
+				Insert(currentUser, player);
+				if (AllDoc("multiplayer").Count < 2)
+					InsertObs(map, width, height);// Insert the obstacles into DB
+				else foreach (var item in AllDoc("obstacles")) map[Convert.ToInt16(item["y"]), Convert.ToInt16(item["x"])] = "Obs";// insert the obstacles into the map
+				Stopwatch clock = new Stopwatch();
+				clock.Start();
+				while (AllDoc("multiplayer").Count < 2)
+				{
+					Graphic.Draw_Progress_Bar(4, 15, (AllDoc("multiplayer").Count - 1) * 50 + (clock.ElapsedMilliseconds / Convert.ToDouble(1200) > 50 ? 50 : clock.ElapsedMilliseconds / Convert.ToDouble(1200)), 100);
+					Graphic.Rect(4, 14, $"Player: {AllDoc("multiplayer").Count}/5", setBG:false, fg:ConsoleColor.White);
+					Graphic.Rect(20, 18, "Waiting for other players", setBG: false, fg: ConsoleColor.White);
+					Graphic.Rect(33, 18, ".", setBG: false, fg: ConsoleColor.White);
+					Thread.Sleep(300);
+					Graphic.Rect(34, 18, ".", setBG: false, fg: ConsoleColor.White);
+					Thread.Sleep(300);
+					Graphic.Rect(35, 18, ".", setBG: false, fg: ConsoleColor.White);
+					Thread.Sleep(300);
+					Graphic.Rect(33, 18, "      ", setBG: false, fg: ConsoleColor.White);
+				}
+				Graphic.Draw_Progress_Bar(4, 15, 100, 100);
+				foreach (var playerM in AllDoc("multiplayer"))
+					Client.GetDatabase("Striker").GetCollection<BsonDocument>("multiplayer").UpdateOne(Builders<BsonDocument>.Filter.Eq("user", playerM["user"]), Builders<BsonDocument>.Update.Set("score", 0));
+				Thread.Sleep(1000);
+				Graphic.Clear(1);
+				Chat(currentUser);
+				DrawClassification(87, 5, currentUser, AllDoc("multiplayer"));
+			}
+			else
+			{
+				Graphic.Clear(1);
+				Striker.Main(new string[] { });
+			}
+			Graphic.WindowSize(150, 69);
         }
         public static int[] SortPlayers(List<BsonDocument> players)
         {
@@ -339,8 +363,8 @@ namespace Striker_Finale
         public static void Chat(string currentUser)
         {
             var messages = (Client.GetDatabase("Striker").GetCollection<BsonDocument>("chat").Find(new BsonDocument() { })).ToList();
-            Graphic.Draw_Frame(40, 3, 60, 10, fore: ConsoleColor.White, back: ConsoleColor.Black, false);
-            Graphic.Clear(11, 61, 78, 1);
+            Graphic.Draw_Frame(40, 3, 59, 10, fore: ConsoleColor.White, back: ConsoleColor.Black, false);
+            Graphic.Clear(11, 60, 78, 1);
             //Graphic.Clear(8, 29, 71, 30);
             bool isUser;
             for (int i = 0; i < messages.Count & i < 10; i++)

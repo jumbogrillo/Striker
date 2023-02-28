@@ -335,7 +335,7 @@ namespace Striker_Finale
 			const string alphabet = "abcdefghijklmnopqrstuvwxyz 0123456789";
 			for (int i = 0; i < alphabet.Length; i++)
 				if (alphabet[i].ToString().ToLower() == letter.ToString().ToLower()) return i;
-			return -1;
+			return 26;
 		}
 		static bool UpperCase(char letter)
 		{
