@@ -139,7 +139,6 @@ namespace Striker_Finale
 			}
 			Console.ResetColor();
 		}
-
 		public static void Draw_Life_Classification(int x, int y, int life)
 		{
 			switch (life)
@@ -235,7 +234,6 @@ namespace Striker_Finale
 			int margin_left_bar = Margin_Left + Convert.ToInt32((Width - life_bar_width) / 2);
 			int margin_top_bar = Margin_Top - 2;
 			int life_bar_unit = life_bar_width / 5;
-
 			Console.SetCursorPosition(margin_left_bar, margin_top_bar);
 			Console.BackgroundColor = ConsoleColor.Black;
 			for (int i = 0; i < life_bar_width * 2 + 3; i++)

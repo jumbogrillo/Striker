@@ -160,7 +160,11 @@ namespace Striker_Finale
 				GameOver();
 				Graphic.Word(10, 25, (Database.AllDoc("multiplayer").Count + 1).ToString());
 			}
-			else { Graphic.Word(5, 15, "You are", fg: PlayerColor); Graphic.Word(0, 27, "the champion", fg: PlayerColor); }
+			else
+            {
+                Graphic.Word(5, 15, "You are", fg: PlayerColor);
+                Graphic.Word(0, 27, "the champion", fg: PlayerColor);
+            }
 			Console.ReadKey();
 		}
 		private static bool Handler(CtrlType sig)

@@ -257,8 +257,7 @@ namespace Striker_Finale
 			}
 			else
 			{
-				Graphic.Word(0, 0, "Try again",font: 2,  delay: 1);
-				Graphic.Word(0, 0, "you will be luckier",font: 2,  delay: 1);
+				Graphic.Word(0, 0, "Too much player", 1);
 				Graphic.Clear(1, 1);
 				Striker.Main(new string[] { });
 			}
@@ -322,7 +321,9 @@ namespace Striker_Finale
 			Graphic.Draw_Life_Classification(x + 20, y + 23, Convert.ToInt16(players[indexes[indexOfUser]]["life"]));
 			Graphic.Rect(x + 37, y + 23, players[indexes[indexOfUser]]["kills"].ToString(), fg: ConsoleColor.Black, bg: ConsoleColor.White, size: 1);
 			Graphic.Rect(x + 46 - players[indexes[indexOfUser]]["score"].ToString().Length, y + 23, players[indexes[indexOfUser]]["score"].ToString(), fg: ConsoleColor.Black, bg: ConsoleColor.White, size: 1);
-		}
+			if(players.Count < 10)
+                Graphic.Rect(x + 1, y + (players.Count + 2) * 2, "                                              ", setBG:false, size: 1);
+        }
 		public static void InsertMessage(string currentUser, string content)
 		{
 			Console.CursorVisible = false;
